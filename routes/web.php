@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',[DashboardController::class, 'index']);
+Route::get('/dashboard_kanan',[DashboardController::class, 'dashboard_kanan']);
+
+// TRANSAKSI
+Route::get('/index', [TransaksiController::class, 'index'])->name('transaksi.index');
+Route::get('/create', [TransaksiController::class, 'create'])->name('transaksi.create');
+
+// MANAGE_USER
+Route::get('/manage_user', [UserController::class, 'index'])->name('manage_user.user');
