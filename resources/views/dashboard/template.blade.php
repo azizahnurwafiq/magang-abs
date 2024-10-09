@@ -227,6 +227,18 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{route('stok_barang.barang')}}" class="nav-link">
+                <i class="fa-solid fa-users"></i>
+              <p class="mx-2">Stok Barang</p>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                  <a class="collapse-item" href="{{ route('stok_barang.barang') }}">Stok Barang Masuk</a>
+                  <a class="collapse-item" href="{{ route('stok_barang.barang') }}">Stok keseluruhan</a>
+              </div>
+          </div>
+          </li>
+          <li class="nav-item">
             <a href="{{route('manage_user.user')}}" class="nav-link">
                 <i class="fa-solid fa-users"></i>
               <p class="mx-2">Manage User</p>
@@ -261,6 +273,7 @@
     <section class="content">
         @yield('dashboard_kanan')
         @yield('transaksi')
+        @yield('stok_barang')
         @yield('manage_user')
 
     </section>
