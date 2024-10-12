@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',[DashboardController::class, 'index']);
-Route::get('/dashboard_kanan',[DashboardController::class, 'dashboard_kanan']);
+Route::get('/', [DashboardController::class, 'index']);
+Route::get('/dashboard_kanan', [DashboardController::class, 'dashboard_kanan']);
 
 // TRANSAKSI
 Route::get('/index', [TransaksiController::class, 'index'])->name('transaksi.index');

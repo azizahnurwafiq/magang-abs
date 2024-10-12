@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="{{asset('../assets/plugins/daterangepicker/daterangepicker.css')}}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{asset('../assets/plugins/summernote/summernote-bs4.min.css')}}">
+  @stack('css')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -215,7 +216,6 @@
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
-                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
           </li>
@@ -263,6 +263,8 @@
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
+
+    
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
@@ -278,6 +280,9 @@
 
     </section>
     <!-- /.content -->
+
+
+
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
@@ -330,5 +335,6 @@
 <script src="{{asset('../assets/dist/js/demo.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('../assets/dist/js/pages/dashboard.js')}}"></script>
+@stack('scripts')
 </body>
 </html>
