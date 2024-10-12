@@ -182,6 +182,7 @@
       <span class="brand-text font-weight-light">AdminLTE 3</span>
     </a>
 
+    
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
@@ -220,24 +221,31 @@
             </a>
           </li>
           <li class="nav-header">DATA MASTER</li>
+
           <li class="nav-item">
-            <a href="{{route('transaksi.index')}}" class="nav-link">
-                <i class="fa-solid fa-sack-dollar"></i>
-              <p class="mx-2">Transaksi</p>
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-users"></i>
+              <p class="mx-2">Pelanggan</p>
             </a>
           </li>
+
           <li class="nav-item">
             <a href="{{route('stok_barang.barang')}}" class="nav-link">
                 <i class="fa-solid fa-users"></i>
               <p class="mx-2">Stok Barang</p>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-              <div class="bg-white py-2 collapse-inner rounded">
-                  <a class="collapse-item" href="{{ route('stok_barang.barang') }}">Stok Barang Masuk</a>
-                  <a class="collapse-item" href="{{ route('stok_barang.barang') }}">Stok keseluruhan</a>
-              </div>
-          </div>
+            </div>
           </li>
+
+          <li class="nav-item">
+            <a href="{{route('transaksi.index')}}" class="nav-link">
+                <i class="fa-solid fa-sack-dollar"></i>
+              <p class="mx-2">Transaksi</p>
+            </a>
+          </li>
+
+
           <li class="nav-item">
             <a href="{{route('manage_user.user')}}" class="nav-link">
                 <i class="fa-solid fa-users"></i>
@@ -274,8 +282,9 @@
     <!-- Main content -->
     <section class="content">
         @yield('dashboard_kanan')
-        @yield('transaksi')
+        @yield('pelanggan')
         @yield('stok_barang')
+        @yield('transaksi')
         @yield('manage_user')
 
     </section>

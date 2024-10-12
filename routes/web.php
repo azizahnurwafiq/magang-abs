@@ -32,6 +32,7 @@ Route::get('/manage_user', [UserController::class, 'index'])->name('manage_user.
 // STOK_BARANG
 Route::get('/stok_barang', [Stok_barangController::class, 'index'])->name('stok_barang.barang');
 Route::get('/createbarang', [Stok_barangController::class, 'createbarang'])->name('stok_barang.create');
+Route::post('/createbarang', [Stok_barangController::class, 'store'])->name('stok_barang.store');
 
 
 //LOGIN

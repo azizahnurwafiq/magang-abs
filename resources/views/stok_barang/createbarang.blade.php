@@ -1,7 +1,7 @@
 @extends('dashboard.template')
 @section('stok_barang')
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-4 ">
     <div class="row">
       <!-- left column -->
       <div class="col-md-12">
@@ -15,83 +15,100 @@
           </div>
           <!-- /.card-header -->
 
-          <div id="stokBaru">
-            <form method="POST">
-              @csrf
-              <div class="card-body">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">SKU</label>
-                  <input type="text" name="nama_stok" class="form-control" id="exampleInputEmail1" placeholder="SKU">
+            <div id="stokBaru">
+              <form action="{{route('stok_barang.store')}}" id="stokBaruForm" method="POST">
+                @csrf
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="SKU">SKU</label>
+                    <input type="text" name="SKU" class="form-control" placeholder="SKU" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="kategori">Kategori</label>
+                    <input type="text" name="kategori" class="form-control" placeholder="kategori" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="item">Item</label>
+                    <input type="text" name="item" class="form-control" placeholder="item" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="warna">Warna</label>
+                    <input type="text" name="warna" placeholder="warna" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="jumlah">Jumlah</label>
+                    <input type="number" name="jumlah" min="0" class="form-control" placeholder="jumlah" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="tanggal_masuk">Tanggal Masuk</label>
+                    <input type="date" name="tanggal_masuk" class="form-control" placeholder="tanggal masuk" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="harga_beli">Harga Beli</label>
+                    <input type="number" name="harga_beli" min="0" class="form-control" placeholder="harga beli">
+                  </div>
+                  <div class="form-group">
+                    <label for="harga_jual">Harga Jual</label>
+                    <input type="number" name="harga_jual" min="0" class="form-control" placeholder="harga jual" required>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Kategori</label>
-                  <input type="text" name="model" class="form-control" id="exampleInputEmail1" placeholder="kategori">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Item</label>
-                  <input type="text" name="model" class="form-control" id="exampleInputEmail1" placeholder="item">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Warna</label>
-                  <input type="text" name="warna" class="form-control" id="exampleInputEmail1" placeholder="warna">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Jumlah</label>
-                  <input type="number" name="jumlah" min="0" class="form-control" id="exampleInputEmail1" placeholder="jumlah">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Tanggal Masuk</label>
-                  <input type="date" name="date" class="form-control" id="exampleInputEmail1" placeholder="tanggal masuk">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Harga Beli</label>
-                  <input type="number" name="date" min="0" class="form-control" id="exampleInputEmail1" placeholder="harga beli">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Harga Jual</label>
-                  <input type="number" name="date" min="0" class="form-control" id="exampleInputEmail1" placeholder="harga jual">
-                </div>
-              </div>
-                <button type="submit" class="btn btn-primary ml-3 mt-3">Submit</button>
-            </form>
-          </div>
-
+                  <button type="submit" class="btn btn-primary ml-3 mt-3">Submit</button>
+              </form>
+            </div>
           
           <div id="stokLama">
-            <form method="POST">
+            <form id="stokLamaForm" method="POST">
               @csrf
               <div class="card-body">
+                
                 <div class="form-group">
-                  <label for="exampleInputEmail1">SKU</label>
-                  <input type="text" name="nama_stok" class="form-control" id="exampleInputEmail1" placeholder="SKU">
+                  <label for="SKU" class="form-label d-block">kategori</label>
+                  <select class="form-control" aria-label="Default select example" name="SKU" id="SKU">
+                    <option selected>Pilih kategori</option>
+                    @foreach ($datas as $data)
+                        <option value={{$data->kategori}}>{{$data->kategori}}</option>    
+                    @endforeach
+                    </select>
                 </div>
+                
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Kategori</label>
-                  <input type="text" name="model" class="form-control" id="exampleInputEmail1" placeholder="kategori">
+                  <label for="SKU" class="form-label d-block">item</label>
+                  <select class="form-control" aria-label="Default select example" name="SKU" id="SKU">
+                    <option selected>Pilih item</option>
+                    @foreach ($datas as $data)
+                        <option value={{$data->item}}>{{$data->item}}</option>    
+                    @endforeach
+                    </select>
                 </div>
+
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Item</label>
-                  <input type="text" name="model" class="form-control" id="exampleInputEmail1" placeholder="item">
+                  <label for="SKU" class="form-label d-block">warna</label>
+                  <select class="form-control" aria-label="Default select example" name="SKU" id="SKU">
+                    <option selected>Pilih warna</option>
+                    @foreach ($datas as $data)
+                        <option value={{$data->warna}}>{{$data->warna}}</option>    
+                    @endforeach
+                    </select>
                 </div>
+              
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Warna</label>
-                  <input type="text" name="warna" class="form-control" id="exampleInputEmail1" placeholder="warna">
+                  <label for="SKU" class="form-label d-block">Jumlah</label>
+                  <select class="form-control" aria-label="Default select example" name="SKU" id="SKU">
+                    <option selected>pilih jumlah</option>
+                    @foreach ($datas as $data)
+                        <option value={{$data->jumlah}}>{{$data->jumlah}}</option>    
+                    @endforeach
+                    </select>
                 </div>
+
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Jumlah</label>
-                  <input type="number" name="jumlah" min="0" class="form-control" id="exampleInputEmail1" placeholder="jumlah">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Tanggal Masuk</label>
-                  <input type="date" name="date" class="form-control" id="exampleInputEmail1" placeholder="tanggal masuk">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Harga Beli</label>
-                  <input type="number" name="date" min="0" class="form-control" id="exampleInputEmail1" placeholder="harga beli">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Harga Jual</label>
-                  <input type="number" name="date" min="0" class="form-control" id="exampleInputEmail1" placeholder="harga jual">
+                  <label for="SKU" class="form-label d-block">Tanggal Masuk</label>
+                  <select class="form-control" aria-label="Default select example" name="SKU" id="SKU">
+                    <option selected>Pilih tanggal masuk</option>
+                    @foreach ($datas as $data)
+                        <option value={{$data->tanggal_masuk}}>{{$data->tanggal_masuk}}</option>    
+                    @endforeach
+                    </select>
                 </div>
               </div>
                 <button type="submit" class="btn btn-primary ml-3 mt-3">Submit</button>
@@ -147,6 +164,10 @@
         }
       });
 
+      // document.getElementById('stokBaruForm').addEventListener('submit', function(e){
+      //   e.preventDefault();
+      // });
+
       document.getElementById('showFormStokLama').addEventListener('click', function() {
         let form = document.getElementById('stokLama');
         if (!form.classList.contains('active')) {
@@ -155,5 +176,12 @@
           form.classList.remove('active');
         }
       });
+
+      document.getElementById('stokLamaForm').addEventListener('submit', function(e){
+        e.preventDefault();
+      });
+
+      
+
     </script>
 @endpush
