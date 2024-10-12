@@ -9,4 +9,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Stok extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $table = 'stoks';
+    protected $fillable = [
+        'SKU',
+        'kategori',
+        'item',
+        'warna',
+        'jumlah',
+        'tanggal_masuk',
+        'harga_beli',
+        'harga_jual',
+    ];
 }

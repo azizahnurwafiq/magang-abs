@@ -20,9 +20,9 @@ class CreateStoksTable extends Migration
             $table->string('item');
             $table->string('warna');
             $table->unsignedBigInteger('jumlah');
-            $table->date('tanggal_masuk');
+            $table->date('tanggal_masuk')->nullable();
             $table->unsignedBigInteger('harga_beli')->nullable();
-            $table->unsignedBigInteger('harga_jual');
+            $table->unsignedBigInteger('harga_jual')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
