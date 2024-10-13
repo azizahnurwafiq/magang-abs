@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\PelangganControlller;
 use App\Http\Controllers\Stok_barangController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
@@ -19,11 +20,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Dashboard
 Route::get('/', [DashboardController::class, 'index']);
-Route::get('/dashboard_kanan', [DashboardController::class, 'dashboard_kanan']);
+
+// Pelanggan
+Route::get('/pelanggan', [PelangganControlller::class, 'index'])->name('pelanggan');
+Route::get('/pelanggan/create', [PelangganControlller::class, 'create'])->name('pelanggan.create');
+Route::post('/pelanggan/create', [PelangganControlller::class, 'store'])->name('pelanggan.store');
+Route::get('/pelanggan/edit/{id}', [PelangganControlller::class, 'edit'])->name('pelanggan.edit');
+Route::put('/pelanggan/update/{id}', [PelangganControlller::class, 'update'])->name('pelanggan.update');
+Route::delete('/delete/{id}', [PelangganControlller::class, 'destroy'])->name('pelanggan.destroy');
 
 // TRANSAKSI
-Route::get('/index', [TransaksiController::class, 'index'])->name('transaksi.index');
+Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.transaksi');
 Route::get('/create', [TransaksiController::class, 'create'])->name('transaksi.create');
 
 // MANAGE_USER
@@ -37,7 +46,3 @@ Route::post('/createbarang', [Stok_barangController::class, 'store'])->name('sto
 
 //LOGIN
 Route::get('/login', [loginController::class, 'index'])->name('indekslogin.index');
-
-// Route::get('/login', function () {
-//     return view ('login');
-// });

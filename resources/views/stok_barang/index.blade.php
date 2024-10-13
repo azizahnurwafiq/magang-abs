@@ -1,5 +1,7 @@
 @extends('dashboard.template')
-@section('stok_barang')
+@section('title', 'Stok Barang')
+
+@section('content')
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-md-12">

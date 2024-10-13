@@ -9,4 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Pelanggan extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $table = 'pelanggans';
+    protected $fillable = [
+        'nama',
+        'email',
+        'no_WA',
+        'alamat',
+        'note',
+    ];
 }

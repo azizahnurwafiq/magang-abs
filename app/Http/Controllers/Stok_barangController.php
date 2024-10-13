@@ -23,24 +23,22 @@ class Stok_barangController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'SKU' => 'required',
             'kategori' => 'required',
             'item' => 'required',
             'warna' => 'required',
             'jumlah' => 'required',
             'tanggal_masuk' => 'required',
-            'harga_beli' => 'required',
             'harga_jual' => 'required',
         ], [
-            'sku.required' => 'sku wajib diisi',
-            'kategori.required' => 'kategori wajib diisi',
-            'item.required' => 'item wajib diisi',
-            'warna.required' => 'warna wajib diisi',
-            'jumlah.required' => 'jumlah wajib diisi',
-            'tanggal_masuk.required' => 'tanggal masuk wajib diisi',
-            'harga_beli.required' => 'harga beli wajib diisi',
-            'harga_jual.required' => 'harga jual wajib diisi',
+            'SKU.required' => 'sku wajib diisi !!',
+            'kategori.required' => 'kategori wajib diisi !!',
+            'item.required' => 'item wajib diisi !!',
+            'warna.required' => 'warna wajib diisi !!',
+            'jumlah.required' => 'jumlah wajib diisi !!',
+            'tanggal_masuk.required' => 'tanggal masuk wajib diisi !!',
+            'harga_jual.required' => 'harga jual wajib diisi !!',
         ]);
 
         $data = [
