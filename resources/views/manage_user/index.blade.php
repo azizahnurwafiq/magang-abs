@@ -1,5 +1,7 @@
 @extends('dashboard.template')
-@section('manage_user')
+@section('title', 'Manage user')
+
+@section('content')
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-md-12">
