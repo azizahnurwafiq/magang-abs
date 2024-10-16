@@ -24,7 +24,7 @@ class Stok_barangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'SKU' => 'required',
+            'SKU' => 'required|unique:stoks,SKU',
             'kategori' => 'required',
             'item' => 'required',
             'warna' => 'required',
@@ -33,6 +33,7 @@ class Stok_barangController extends Controller
             'harga_jual' => 'required',
         ], [
             'SKU.required' => 'sku wajib diisi !!',
+            'SKU.unique' => 'kode sudah digunakan, silahkan masukkan kode yang berbeda',
             'kategori.required' => 'kategori wajib diisi !!',
             'item.required' => 'item wajib diisi !!',
             'warna.required' => 'warna wajib diisi !!',
@@ -54,6 +55,43 @@ class Stok_barangController extends Controller
 
         Stok::create($data);
 
-        return redirect()->route('stok_barang.barang')->with('success', 'Stok berhasil ditambahkan');
+        return redirect()->route('stok_barang.barang')->with('success', 'Data stok berhasil ditambahkan');
+    }
+
+    public function edit($id)
+    {
+        $stok = Stok::find($id);
+        return view('stok_barang.edit', compact('stok'));
+    }
+
+    public function show($id)
+    {
+        $stok = Stok::find($id);
+        return view('stok_barang.details', compact('stok'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $stok = Stok::find($id);
+
+        $data = [
+            'kategori' => $request->kategori,
+            'item' => $request->item,
+            'warna' => $request->warna,
+            'jumlah' => $request->jumlah,
+            'harga_beli' => $request->harga_beli,
+            'harga_jual' => $request->harga_jual,
+        ];
+
+        $stok->update($data);
+
+        return redirect()->route('stok_barang.barang')->with('success', 'Data stok berhasil diupdate');
+    }
+
+    public function destroy($id)
+    {
+        $hapus = Stok::find($id);
+        $hapus->delete();
+        return redirect()->route('stok_barang.barang')->with('success', 'Data stok berhasil dihapus');
     }
 }

@@ -10,7 +10,7 @@
                 <h3 class="card-title">Stok Barang</h3>
             </div>
             @if (session('success'))
-              <div class="alert alert-success">
+              <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
                   {{ session('success') }}
               </div>
             @endif
@@ -22,35 +22,55 @@
           <div class="card-body">
             <table class="table table-bordered">
               <thead>
-                <tr>
+                <tr class="text-center">
                   <th>No</th>
                   <th>SKU</th>
                   <th>kategori</th>
                   <th>Item</th>
                   <th>Warna</th>
-                  <th>Jumlah</th>
-                  <th>Tanggal Masuk</th>
-                  <th>Harga Beli</th>
-                  <th>Harga Jual</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 @forelse ($datas as $index => $data)
-                  <tr>
+                  <tr class="text-center">
                     <td>{{$index + $datas->firstItem()}}</td>
                     <td>{{$data->SKU}}</td>
                     <td>{{$data->kategori}}</td>
                     <td>{{$data->item}}</td>
                     <td>{{$data->warna}}</td>
-                    <td>{{$data->jumlah}}</td>
-                    <td>{{$data->tanggal_masuk}}</td>
-                    <td>{{$data->harga_beli}}</td>
-                    <td>{{$data->harga_jual}}</td>
                     <td>
-                      <a href="#" class="btn btn-secondary"><i class="fa fa-eye"></i></a>
-                      <a href="#" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                      <a href="#" class="btn btn-danger m-1"><i class="fa fa-trash"></i></a>
+                      <a href="{{route('stok_barang.show', $data->id)}}" class="btn btn-secondary"><i class="fa fa-eye"></i> Details</a>
+                      <a href="{{route('stok_barang.edit', $data->id)}}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                      <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
+
+                      <!-- Modal Konfirmasi Hapus -->
+                      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Apakah anda yakin ingin menghapus data ini ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+
+                                    <!-- Form Hapus -->
+                                    <form action="{{route('stok_barang.destroy', $data->id)}}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+
                     </td>
                 @empty
                   <td colspan="9" class="text-center">Data Stok Belum Ada !</td>
@@ -59,10 +79,10 @@
               </tbody>
             </table>
           </div>
-           <!-- Pagination Link -->
-           <div class="d-flex justify-content-end mx-5">
+          <!-- Pagination Link -->
+          <div class="d-flex justify-content-end mx-5">
             {{ $datas->links() }}
-        </div>
+          </div>
         </div>
       </div>
     </div>
