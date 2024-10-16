@@ -27,9 +27,9 @@ Route::get('/', [DashboardController::class, 'index']);
 Route::get('/pelanggan', [PelangganControlller::class, 'index'])->name('pelanggan');
 Route::get('/pelanggan/create', [PelangganControlller::class, 'create'])->name('pelanggan.create');
 Route::post('/pelanggan/create', [PelangganControlller::class, 'store'])->name('pelanggan.store');
-Route::get('/pelanggan/edit/{id}', [PelangganControlller::class, 'edit'])->name('pelanggan.edit');
-Route::put('/pelanggan/update/{id}', [PelangganControlller::class, 'update'])->name('pelanggan.update');
-Route::delete('/delete/{id}', [PelangganControlller::class, 'destroy'])->name('pelanggan.destroy');
+Route::get('/pelanggan/{id}/edit', [PelangganControlller::class, 'edit'])->name('pelanggan.edit');
+Route::put('/pelanggan/{id}', [PelangganControlller::class, 'update'])->name('pelanggan.update');
+Route::delete('/pelanggan/{id}', [PelangganControlller::class, 'destroy'])->name('pelanggan.destroy');
 
 // TRANSAKSI
 Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.transaksi');
@@ -42,6 +42,10 @@ Route::get('/manage_user', [UserController::class, 'index'])->name('manage_user.
 Route::get('/stok_barang', [Stok_barangController::class, 'index'])->name('stok_barang.barang');
 Route::get('/createbarang', [Stok_barangController::class, 'createbarang'])->name('stok_barang.create');
 Route::post('/createbarang', [Stok_barangController::class, 'store'])->name('stok_barang.store');
+Route::get('/stok_barang/{id}', [Stok_barangController::class, 'show'])->name('stok_barang.show');
+Route::get('stok_barang/{id}/edit', [Stok_barangController::class, 'edit'])->name('stok_barang.edit');
+Route::put('stok_barang/{id}', [Stok_barangController::class, 'update'])->name('stok_barang.update');
+Route::delete('/stok_barang/{id}', [Stok_barangController::class, 'destroy'])->name('stok_barang.destroy');
 
 
 //LOGIN

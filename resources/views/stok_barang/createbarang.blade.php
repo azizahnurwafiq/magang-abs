@@ -22,7 +22,7 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label for="SKU">SKU</label>
-                    <input type="text" name="SKU" id="SKU" class="form-control" placeholder="SKU" required>
+                    <input type="text" name="SKU" id="SKU" class="form-control" placeholder="SKU" required @error('SKU') is-invalid @enderror value="{{old('SKU')}}">
                     {{-- @error('SKU')
                       <div class="form-text text-danger">{{$message}}</div>
                     @enderror --}}
@@ -194,10 +194,8 @@
       // let harga_beli = document.getElementById('harga_beli');
       // let harga_jual = document.getElementById('harga_jual');
 
-      // document.getElementById('stokBaruForm').addEventListener('submit', function(e){
-      //   if(!SKU || !kategori || !item || !warna || !jumlah || !tanggal_masuk || !harga_beli || !harga_jual){
-      //     e.preventDefault();
-      //   } 
+      //   document.getElementById('stokBaruForm').addEventListener('submit', function(e){
+      //   e.preventDefault();
       // });
 
 

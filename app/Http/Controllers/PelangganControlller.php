@@ -9,8 +9,8 @@ class PelangganControlller extends Controller
 {
     public function index()
     {
-        $pelanggans = Pelanggan::paginate(2);
-        return view('pelanggan.index', compact('pelanggans'));
+        $data['pelanggans'] = Pelanggan::paginate(2);
+        return view('pelanggan.index', $data);
     }
 
     public function create()
@@ -36,7 +36,7 @@ class PelangganControlller extends Controller
 
         Pelanggan::create($validatedData);
 
-        return redirect()->route('pelanggan')->with('success', 'Data berhasil ditambahkan');
+        return redirect()->route('pelanggan')->with('success', 'Data pelanggan berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -65,13 +65,13 @@ class PelangganControlller extends Controller
 
         Pelanggan::where('id', $request->id)->update($data);
 
-        return redirect()->route('pelanggan')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('pelanggan')->with('success', 'Data pelanggan berhasil diupdate');
     }
 
     public function destroy($id)
     {
         $hapus = Pelanggan::find($id);
         $hapus->delete();
-        return redirect()->route('pelanggan')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('pelanggan')->with('success', 'Data pelanggan berhasil dihapus');
     }
 }

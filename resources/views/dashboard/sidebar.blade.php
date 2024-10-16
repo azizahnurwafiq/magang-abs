@@ -42,7 +42,7 @@
 
           <li class="nav-item">
             <a href="{{route('stok_barang.barang')}}" class="nav-link">
-                <i class="fa-solid fa-users"></i>
+                <i class="fas fa-archive"></i>
               <p class="mx-2">Stok Barang</p>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -51,15 +51,15 @@
 
           <li class="nav-item">
             <a href="{{route('transaksi.transaksi')}}" class="nav-link">
-                <i class="fa-solid fa-sack-dollar"></i>
-              <p class="mx-2">Transaksi</p>
+                <i class="fas fa-file-invoice"></i>
+              <p class="mx-2">Invoice</p>
             </a>
           </li>
 
 
           <li class="nav-item">
             <a href="{{route('manage_user.user')}}" class="nav-link">
-                <i class="fa-solid fa-users"></i>
+                <i class="fas fa-address-card"></i>
               <p class="mx-2">Manage User</p>
             </a>
           </li>
