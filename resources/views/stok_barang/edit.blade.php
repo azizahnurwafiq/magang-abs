@@ -12,11 +12,9 @@
                         @csrf
                         @method('PUT')
                         <div class="mb-3">
-                            <label for="nama" class="form-label">SKU</label>
-                            <p>
-                                {{$stok->SKU}}
-                            </p>
-                            @error('nama')
+                            <label class="form-label">SKU</label>
+                            <input type="text" class="form-control" name="SKU" id="SKU" value="{{$stok->SKU}}" aria-describedby="emailHelp">
+                            @error('SKU')
                                 <div class="form-text text-danger">{{$message}}</div>
                             @enderror
                         </div>
@@ -50,10 +48,8 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tanggal Masuk</label>
-                            <p>
-                                {{$stok->tanggal_masuk}}
-                            </p>
-                            @error('nama')
+                            <input type="date" class="form-control" name="tanggal_masuk" id="tanggal_masuk" value="{{$stok->tanggal_masuk}}" aria-describedby="emailHelp">
+                            @error('tanggal_masuk')
                                 <div class="form-text text-danger">{{$message}}</div>
                             @enderror
                         </div>

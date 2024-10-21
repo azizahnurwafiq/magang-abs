@@ -50,7 +50,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="{{route('transaksi.transaksi')}}" class="nav-link">
+            <a href="{{route('invoice.index')}}" class="nav-link">
                 <i class="fas fa-file-invoice"></i>
               <p class="mx-2">Invoice</p>
             </a>

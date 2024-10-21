@@ -47,13 +47,13 @@
                     <div class="mb-3">
                         <label for="note" class="form-label">Harga beli</label>
                         <p>
-                            {{$stok->harga_beli}}
+                            @rupiah($stok->harga_beli)
                         </p>
                     </div>
                     <div class="mb-3">
                         <label for="note" class="form-label">Harga jual</label>
                         <p>
-                            {{$stok->harga_jual}}
+                            @rupiah($stok->harga_jual)
                         </p>
                     </div>
                 </div>
