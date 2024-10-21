@@ -90,7 +90,7 @@
                     @foreach ($datas as $data)
                         <option value={{$data->kategori}}>{{$data->kategori}}</option>    
                     @endforeach
-                    </select>
+                  </select>
                 </div>
                 
                 <div class="form-group">
@@ -184,23 +184,6 @@
           form.classList.remove('active');
         }
       });
-
-      // let SKU = document.getElementById('SKU');
-      // let kategori = document.getElementById('kategori');
-      // let item = document.getElementById('item');
-      // let warna = document.getElementById('warna');
-      // let jumlah = document.getElementById('jumlah');
-      // let tanggal_masuk = document.getElementById('tanggal_masuk');
-      // let harga_beli = document.getElementById('harga_beli');
-      // let harga_jual = document.getElementById('harga_jual');
-
-      //   document.getElementById('stokBaruForm').addEventListener('submit', function(e){
-      //   e.preventDefault();
-      // });
-
-
-
-
 
       document.getElementById('showFormStokLama').addEventListener('click', function() {
         let form = document.getElementById('stokLama');
