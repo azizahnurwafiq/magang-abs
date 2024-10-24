@@ -52,7 +52,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3><span>Rp.</span>15.000.000</h3>
+                    <h3><span>Rp.</span>100.000.000</h3>
                     <p>
                         <span>Income Perusahaan A</span><br>
                         <span>Pada Tahun : </span>
