@@ -8,6 +8,8 @@
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  {{-- bootstrap --}}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{asset('../assets/plugins/fontawesome-free/css/all.min.css')}}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -27,17 +29,23 @@
   <link rel="stylesheet" href="{{asset('../assets/plugins/daterangepicker/daterangepicker.css')}}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{asset('../assets/plugins/summernote/summernote-bs4.min.css')}}">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+  {{-- jangan diubah-ubah --}}
+  @livewireStyles
   @stack('css')
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
 
-    <!-- Preloader -->
-    <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-    </div>
+  {{-- <!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+  </div> --}}
+
 
     @include('dashboard.navbar')
     @include('dashboard.sidebar')
@@ -106,7 +114,11 @@
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
   <script src="{{asset('../assets/dist/js/pages/dashboard.js')}}"></script>
 
-  @stack('scripts')
-</body>
+<script src="/livewire/livewire.js"></script>
 
+{{-- jangan dirubah --}}
+@livewireScripts
+@stack('scripts')
+
+</body>
 </html>

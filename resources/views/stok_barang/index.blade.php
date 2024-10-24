@@ -40,10 +40,16 @@
                     <td>{{$data->item}}</td>
                     <td>{{$data->warna}}</td>
                     <td>
-                      <a href="{{route('stok_barang.show', $data->id)}}" class="btn btn-secondary"><i class="fa fa-eye"></i> Details</a>
-                      <a href="{{route('stok_barang.edit', $data->id)}}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
-                      <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
-
+                      <div class="dropdown">
+                        <button class="btn btn-primary" data-toggle="dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
+                        </button>
+                          <div class="dropdown-menu">
+                              <a href="{{route('stok_barang.show', $data->id)}}" class="btn btn-secondary dropdown-item "><i class="fa fa-eye"></i> Details</a>
+                              <a href="{{route('stok_barang.edit', $data->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
+                              <button class="btn btn-danger dropdown-item" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
+                          </div>
+                        </div>
                       <!-- Modal Konfirmasi Hapus -->
                       <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -88,3 +94,33 @@
     </div>
 </div>
 @endsection
+
+@push('css')
+    <style>
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 100px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 99;
+        border-radius: 4px;
+      }
+
+      .dropdown-item {
+        color: black;
+        padding: 10px 20px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .dropdown-item:hover {
+        background-color: #ddd;
+      }
+    </style>
+@endpush
