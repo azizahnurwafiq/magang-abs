@@ -16,9 +16,8 @@ class CreateStoksTable extends Migration
         Schema::create('stoks', function (Blueprint $table) {
             $table->id();
             $table->string('SKU');
-            $table->string('kategori');
+            $table->foreignId('kategori_id')->constrained()->cascadeOnDelete();
             $table->string('item');
-            $table->string('warna');
             $table->unsignedBigInteger('jumlah');
             $table->date('tanggal_masuk')->nullable();
             $table->unsignedBigInteger('harga_beli')->nullable();

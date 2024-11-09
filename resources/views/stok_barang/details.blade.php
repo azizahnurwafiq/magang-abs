@@ -17,19 +17,13 @@
                     <div class="mb-3">
                         <label for="email" class="form-label">Kategori</label>
                         <p>
-                            {{$stok->kategori}}
+                            {{$stok->kategori->kategori}}
                         </p>
                     </div>
                     <div class="mb-3">
                         <label for="no_WA" class="form-label">Item</label>
                         <p>
                             {{$stok->item}}
-                        </p>
-                    </div>
-                    <div class="mb-3">
-                        <label for="alamat" class="form-label">Warna</label>
-                        <p>
-                            {{$stok->warna}}
                         </p>
                     </div>
                     <div class="mb-3">
@@ -58,6 +52,7 @@
                     </div>
                 </div>
             </div>
+            <a href="{{route('stok_barang.barang')}}" class="btn btn-primary m-2">Kembali</a>
         </div>
     </div>
 </div>

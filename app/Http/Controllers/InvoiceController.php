@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
-use App\Models\Invoice_tax;
 use App\Models\Pelanggan;
 use App\Models\Stok;
 use Illuminate\Http\Request;
@@ -62,48 +61,62 @@ class InvoiceController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'kode' => 'required',
-        //     'no_invoice' => 'required',
-        //     'pelanggan_id' => 'required',
-        //     'alamat' => 'required',
-        //     'tanggal' => 'required',
-        //     'judul' => 'required',
-        //     'stok_id' => 'required',
-        //     'harga' => 'required',
-        //     'jumlah' => 'required',
-        //     'pembayaran_awal' => 'required',
-        //     'status' => 'required',
-        // ], [
-        //     'kode.required' => 'Kode wajib diisi!',
-        //     'no_invoice.required' => 'Nomor invoice wajib diisi!',
-        //     'pelanggan_id.required' => 'Pelanggan wajib diisi!',
-        //     'alamat.required' => 'Alamat wajib diisi!',
-        //     'tanggal.required' => 'Tanggal wajib diisi!',
-        //     'judul.required' => 'Judul wajib diisi!',
-        //     'stok_id.required' => 'Item wajib diisi!',
-        //     'harga.required' => 'Harga wajib diisi!',
-        //     'jumlah.required' => 'Jumlah wajib diisi!',
-        //     'pembayaran_awal.required' => 'Pembayaran wajib diisi!',
-        //     'status.required' => 'Status wajib diisi!',
-        // ]);
 
-        $no_invoice = $this->generateInvoiceNumber($request);
+        // $no_invoice = $this->generateInvoiceNumber($request);
 
-        Invoice::create([
+        // $total = $request->total;
+        $kekuranganBayar = $request->down_payment;
+        // $kekuranganBayar = $total - $down_payment;
+
+        if ($kekuranganBayar == 0) {
+            $status = "LUNAS";
+        } else {
+            $status = "BELUM LUNAS";
+        }
+
+        $invoice = Invoice::create([
             'kode' => $request->kode,
             'no_invoice' => $request->no_invoice,
             'pelanggan_id' => $request->pelanggan_id,
             'alamat' => $request->alamat,
             'tanggal' => $request->tanggal,
             'judul' => $request->judul,
-            'stok_id' => $request->stok_id,
-            'harga' => $request->harga,
-            'jumlah' => $request->jumlah,
-            'pembayaran_awal' => $request->pembayaran_awal,
-            'status' => "BELUM LUNAS",
+            'down_payment' => $request->down_payment,
+            'total_invoice' => $request->total,
+            'kekurangan_bayar' => $kekuranganBayar,
+            'status' => $status,
         ]);
 
+        // ambil data dari request
+        $item = $request->item;
+        $harga = $request->harga;
+        $jumlah = $request->jumlah;
+
+        if (count($item) === count($harga) && count($harga) === count($jumlah)) {
+            $attachData = [];
+
+            foreach ($item as $index => $stokId) {
+                $attachData[$stokId] = [
+                    'harga' => intval($harga[$index]),
+                    'jumlah' => intval($jumlah[$index]),
+                ];
+            }
+            $invoice->stoks()->attach($attachData);
+        } else {
+            return response()->json(['error' => 'Data item, harga, dan jumlah harus memiliki panjang yang sama.'], 400);
+        }
         return redirect()->route('invoice.index')->with('success', 'Data invoice berhasil ditambahkan');
+    }
+
+    public function getHargaItem($id)
+    {
+        $stok = Stok::find($id);
+        return response()->json(['harga_jual' =>  $stok->harga_jual]);
+    }
+
+    public function payment($id)
+    {
+        $payment = Invoice::find($id);
+        return view('invoice.payment', compact('payment'));
     }
 }

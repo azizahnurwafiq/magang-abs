@@ -7,20 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Pelanggan extends Model
+class Kategori extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'pelanggans';
     protected $fillable = [
-        'nama',
-        'email',
-        'no_WA',
-        'alamat',
-        'note',
+        'kategori',
     ];
 
-    public function invoices(): HasMany
+    public function stoks(): HasMany
     {
-        return $this->hasMany(Invoice::class);
+        return $this->hasMany(Stok::class);
     }
 }

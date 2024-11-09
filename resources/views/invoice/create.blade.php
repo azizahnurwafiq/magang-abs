@@ -49,35 +49,44 @@
                                 <div class="form-text text-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="mb-3">
-                            <label for="stok_id" class="form-label">Item</label>
-                            <select class="form-control" name="stok_id" id="stok_id">
-                                <option selected>Pilih Item</option>
-                                @foreach ($stoks as $stok)
-                                    <option value={{$stok->id}}>{{$stok->item}}</option>    
-                                @endforeach
-                            </select>
+
+                        <div id="dynamicForm">
+                            <div class="form-group d-flex">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="item" class="form-label">Item</label>
+                                        <select class="form-control item-select" name="item[]" id="item">
+                                            <option selected></option>
+                                            @foreach ($stoks as $stok)
+                                                <option value="{{$stok->id}}">{{$stok->item}}</option>    
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>  
+                                <div class="col-md-4">
+                                    <div class="form-harga mb-3"> 
+                                        <label for="harga" class="form-label">Harga</label>
+                                        <input type="text" class="form-control" name="harga[]" id="harga" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="jumlah" class="form-label">Jumlah</label>
+                                        <input type="number" id="jumlah" min="0" class="form-control" name="jumlah[]" required>
+                                    </div>
+                                </div>
+                                <button class="btn btn-success btn-add" style="height: 50%; margin-top:32px; margin-left: 5px;">+</button>
+                            </div>
                         </div>
+
                         <div class="mb-3">
-                            <label for="harga" class="form-label">Harga</label>
-                            <select class="form-control" name="harga" id="harga" required>
-                                <option selected>Pilih Harga</option>
-                                @foreach ($stoks as $stok)
-                                    <option value={{$stok->harga_jual}}>{{($stok->harga_jual)}}</option>    
-                                @endforeach
-                            </select>
+                            <label for="jumlah" class="form-label">Total</label>
+                            <input type="text" class="form-control" name="total" id="total" readonly>
                         </div>
+
                         <div class="mb-3">
-                            <label for="jumlah" class="form-label">Jumlah</label>
-                            <input type="number" id="jumlah" min="0" class="form-control" name="jumlah" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="total">Total</label>
-                            <input type="text" id="total" name="total" class="form-control" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="pembayaran_awal" class="form-label">Pembayaran</label>
-                            <input type="number" class="form-control" name="pembayaran_awal" id="pembayaran_awal" required>
+                            <label for="down_payment" class="form-label">Down Payment</label>
+                            <input type="number" class="form-control" name="down_payment" id="down_payment">
                             @error('note')
                                 <div class="form-text text-danger">{{$message}}</div>
                             @enderror
@@ -91,10 +100,23 @@
 </div>
 @endsection
 
+@push('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.3/select2.min.css">
+@endpush
+
 
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.3/select2.min.js"></script>
     <script>
+
+        $(document).ready(function(){
+            $('#item').select2({
+                placeholder: 'Pilih item',
+                allowClear: true
+            })
+        });
+
 
         document.getElementById('kode').addEventListener('change', function() {
             const tipeKode = this.value;
@@ -118,6 +140,7 @@
             }
         });
 
+        // mengambil alamat otomatis berdasarkan pelanggan yang dipilih 
         $(document).ready(function() {
             $('#pelanggan_id').change(function(){
                 let pelangganId = $(this).val();
@@ -136,35 +159,82 @@
             }); 
         });
 
-        // menghitung harga dan jumlah
-        document.addEventListener('DOMContentLoaded', function() {
-            const hargaSelect = document.getElementById('harga');
-            const jumlahInput = document.getElementById('jumlah');
-            const total = document.getElementById('total');
-    
-            function hitungTotal(){
-                const harga = parseInt(hargaSelect.value);
-                const jumlah = parseInt(jumlahInput.value);
-    
-                console.log("harga:", harga); // Debug harga
-                console.log("jumlah:", jumlah); // Debug harga
-                
+        $(document).ready(function() {
 
-                if (!isNaN(harga) && !isNaN(jumlah > 0)) {
-                    const total = harga * jumlah;
-                    // total.value = `Rp ${total.toLocaleString()}`;
-                    console.log("total:", total);
-                } else {
-                    total.value = '';
-                }
-    
+            // Fungsi untuk memperbarui harga dan total
+            function updateTotal() {
+                let total = 0;
+                $('#dynamicForm .form-group').each(function() {
+                    const harga = parseInt($(this).find('#harga').val()) || 0;
+                    const jumlah = parseInt($(this).find('#jumlah').val()) || 0;
+                    total += harga * jumlah;
+                });
+                $('#total').val(total);
             }
-            
-            hargaSelect.addEventListener('change', hitungTotal);
-            jumlahInput.addEventListener('input', hitungTotal);
-    
-            hitungTotal();
+
+            // repeater data item, harga, dan jumlah
+            $('#dynamicForm').on('click', '.btn-add', function() {
+                let newField = `<div class="form-group d-flex">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <select class="form-control item-select" name="item[]" id="item">
+                                                <option selected></option>
+                                                @foreach ($stoks as $stok)
+                                                    <option value="{{$stok->id}}">{{$stok->item}}</option>    
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-harga mb-3"> 
+                                            <input type="text" class="form-control" name="harga[]" id="harga" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <input type="number" id="jumlah" min="0" class="form-control" name="jumlah[]" required>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-danger btn-remove" style="height: 50%; margin-left: 5px;">-</button>
+                                </div>`;
+                                
+                                $('#dynamicForm').append(newField);
+
+                                $('#dynamicForm').find('select').last().select2({
+                                    placeholder: 'Pilih item',
+                                    allowClear: true
+                                });
+            });
+
+            $('#dynamicForm').on('click', '.btn-remove', function(){
+                $(this).closest('.d-flex').remove();
+                updateTotal();
+            });
+
+
+            // mengambil harga otomatis berdasarkan item yang dipilih
+            $('#dynamicForm').on('change', '.item-select', function() {
+                let stokId =  $(this).val();
+                let harga = $(this).closest('.form-group').find('#harga');
+
+                $.ajax({
+                    url: '/get-harga-item/' + stokId,
+                    type: 'GET',
+                    data: {id: stokId},
+                    success: function(response){
+                        harga.val(response.harga_jual);
+                    },
+                    error: function() {
+                        alert('Gagal mengambil harga item');
+                    }
+                })
+            });
+
+            // Event listener untuk perubahan jumlah
+            $('#dynamicForm').on('input', '#jumlah', function() {
+                updateTotal();
+            });
         });
-        
+
     </script>
 @endpush
