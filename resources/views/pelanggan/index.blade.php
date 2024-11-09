@@ -22,14 +22,9 @@
                     </div>
                 </div>
                 
-                
                 @livewire('pelanggan-search')
 
-
-                <!-- Pagination Link -->
-                <div class="d-flex justify-content-end mx-5">
-                    {{ $pelanggans->links() }}
-                </div>
+                
             </div>
         </div>
     </div>

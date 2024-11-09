@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use App\Models\Stok;
 use Illuminate\Http\Request;
 
@@ -11,32 +12,35 @@ class Stok_barangController extends Controller
 
     public function index()
     {
-        $datas = Stok::paginate(3);
+        $datas = Stok::paginate(6);
         return view('stok_barang.index', compact('datas'));
     }
 
-    public function createbarang()
+    public function addItem()
     {
+        $kategoris = Kategori::all();
+        return view('stok_barang.add_item', compact('kategoris'));
+    }
+
+    public function addStok()
+    {
+        $kategoris = Kategori::all();
         $datas = Stok::all();
-        return view('stok_barang.createbarang', compact('datas'));
+        return view('stok_barang.add_stok', compact('datas', 'kategoris'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'SKU' => 'required|unique:stoks,SKU',
-            'kategori' => 'required',
             'item' => 'required',
-            'warna' => 'required',
             'jumlah' => 'required',
             'tanggal_masuk' => 'required',
             'harga_jual' => 'required',
         ], [
             'SKU.required' => 'sku wajib diisi !!',
             'SKU.unique' => 'kode sudah digunakan, silahkan masukkan kode yang berbeda',
-            'kategori.required' => 'kategori wajib diisi !!',
             'item.required' => 'item wajib diisi !!',
-            'warna.required' => 'warna wajib diisi !!',
             'jumlah.required' => 'jumlah wajib diisi !!',
             'tanggal_masuk.required' => 'tanggal masuk wajib diisi !!',
             'harga_jual.required' => 'harga jual wajib diisi !!',
@@ -44,9 +48,8 @@ class Stok_barangController extends Controller
 
         $data = [
             'SKU' => $request->SKU,
-            'kategori' => $request->kategori,
+            'kategori_id' => $request->kategori,
             'item' => $request->item,
-            'warna' => $request->warna,
             'jumlah' => $request->jumlah,
             'tanggal_masuk' => $request->tanggal_masuk,
             'harga_beli' => $request->harga_beli,
@@ -55,7 +58,7 @@ class Stok_barangController extends Controller
 
         Stok::create($data);
 
-        return redirect()->route('stok_barang.barang')->with('success', 'Data stok berhasil ditambahkan');
+        return redirect()->route('stok_barang.barang')->with('success', 'Data item baru berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -92,6 +95,7 @@ class Stok_barangController extends Controller
     {
         $hapus = Stok::find($id);
         $hapus->delete();
-        return redirect()->route('stok_barang.barang')->with('success', 'Data stok berhasil dihapus');
+
+        return response()->json(['status' => 'Data stok barang berhasil dihapus!']);
     }
 }

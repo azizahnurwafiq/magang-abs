@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
@@ -18,9 +20,6 @@ class Invoice extends Model
         'tanggal',
         'alamat',
         'judul',
-        'stok_id',
-        'harga',
-        'jumlah',
         'down_payment',
         'kekurangan_bayar',
         'total_invoice',
@@ -32,8 +31,8 @@ class Invoice extends Model
         return $this->belongsTo(Pelanggan::class, 'pelanggan_id');
     }
 
-    public function stok(): BelongsTo
+    public function stoks(): BelongsToMany
     {
-        return $this->belongsTo(Stok::class, 'stok_id');
+        return $this->belongsToMany(Stok::class, 'invoice_stoks');
     }
 }

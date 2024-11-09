@@ -9,25 +9,9 @@ class PelangganControlller extends Controller
 {
     public function index()
     {
-        // $pelanggans = Pelanggan::paginate(2);
-        // return view('livewire.pelanggan-search', compact('pelanggans'));
-        $pelanggans = Pelanggan::paginate(2);
+        $pelanggans = Pelanggan::all();
         return view('pelanggan.index', compact('pelanggans'));
     }
-
-    // public function search(Request $request)
-    // {
-    //     if ($request->search != null) {
-    //         $pelanggans = Pelanggan::where('nama', 'like', '%' . $request->search . '%')
-    //             ->orWhere('email', 'like', '%' . $request->search . '%')
-    //             ->orWhere('no_WA', 'like', '%' . $request->search . '%')
-    //             ->orWhere('alamat', 'like', '%' . $request->search . '%')
-    //             ->paginate(3);
-    //     } else {
-    //         $pelanggans = Pelanggan::paginate(2);
-    //     }
-    //     return view('pelanggan.index', compact('pelanggans'))->render();
-    // }
 
     public function create()
     {
@@ -88,6 +72,7 @@ class PelangganControlller extends Controller
     {
         $hapus = Pelanggan::find($id);
         $hapus->delete();
-        return redirect()->route('pelanggan')->with('success', 'Data pelanggan berhasil dihapus');
+
+        return response()->json(['status' => 'Data pelanggan berhasil dihapus!']);
     }
 }

@@ -41,6 +41,13 @@
           </li>
 
           <li class="nav-item">
+            <a href="{{route('kategori.index')}}" class="nav-link">
+                <i class="fas fa-tags"></i>
+              <p class="mx-2">Kategori</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="{{route('stok_barang.barang')}}" class="nav-link">
                 <i class="fas fa-archive"></i>
               <p class="mx-2">Stok Barang</p>

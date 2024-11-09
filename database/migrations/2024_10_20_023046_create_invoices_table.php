@@ -21,9 +21,6 @@ class CreateInvoicesTable extends Migration
             $table->string('alamat');
             $table->date('tanggal');
             $table->string('judul');
-            $table->foreignId('stok_id')->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger('harga');
-            $table->unsignedBigInteger('jumlah');
             $table->unsignedBigInteger('down_payment')->nullable();
             $table->unsignedBigInteger('kekurangan_bayar')->nullable();
             $table->unsignedBigInteger('total_invoice')->nullable();
