@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title')</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -29,8 +30,6 @@
   <link rel="stylesheet" href="{{asset('../assets/plugins/daterangepicker/daterangepicker.css')}}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{asset('../assets/plugins/summernote/summernote-bs4.min.css')}}">
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   {{-- jangan diubah-ubah --}}
   @livewireStyles
@@ -114,7 +113,11 @@
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
   <script src="{{asset('../assets/dist/js/pages/dashboard.js')}}"></script>
 
-<script src="/livewire/livewire.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  
+  <script src="/livewire/livewire.js"></script>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 {{-- jangan dirubah --}}
 @livewireScripts

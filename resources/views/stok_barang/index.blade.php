@@ -14,9 +14,9 @@
                   {{ session('success') }}
               </div>
             @endif
-
-            <div class="col-2">
-                <a href="{{route('stok_barang.create')}}" class="btn btn-primary m-2">+ Tambah Data</a>
+            <div class="d-flex col-4">
+                <a href="{{route('stok_barang.addItem')}}" class="btn btn-primary m-2">+ Add Item</a>
+                <a href="{{route('stok_barang.addStok')}}" class="btn btn-primary m-2">+ Add Stok</a>
             </div>
           <!-- /.card-header -->
           <div class="card-body">
@@ -27,56 +27,39 @@
                   <th>SKU</th>
                   <th>kategori</th>
                   <th>Item</th>
-                  <th>Warna</th>
+                  <th>Jumlah</th>
+                  <th>Harga Jual</th>
+                  <th>Harga Beli</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 @forelse ($datas as $index => $data)
                   <tr class="text-center">
+                    <input type="hidden" class="delete_id" value="{{$data->id}}">
                     <td>{{$index + $datas->firstItem()}}</td>
                     <td>{{$data->SKU}}</td>
-                    <td>{{$data->kategori}}</td>
+                    <td>{{$data?->kategori->kategori ?? 'Kategori tidak tersedia'}}</td>
                     <td>{{$data->item}}</td>
-                    <td>{{$data->warna}}</td>
+                    <td>{{$data->jumlah}}</td>
+                    <td>@rupiah($data->harga_jual)</td>
+                    <td>@rupiah($data->harga_beli)</td>
                     <td>
                       <div class="dropdown">
                         <button class="btn btn-primary" data-toggle="dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                           <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
                         </button>
                           <div class="dropdown-menu">
-                              <a href="{{route('stok_barang.show', $data->id)}}" class="btn btn-secondary dropdown-item "><i class="fa fa-eye"></i> Details</a>
+                              <a href="{{route('stok_barang.show', $data->id)}}" class="btn btn-secondary dropdown-item"><i class="fa fa-eye"></i> Details</a>
                               <a href="{{route('stok_barang.edit', $data->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
-                              <button class="btn btn-danger dropdown-item" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
+
+                              <form action="{{route('stok_barang.destroy', $data->id)}}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger dropdown-item confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
+                              </form>
                           </div>
-                        </div>
-                      <!-- Modal Konfirmasi Hapus -->
-                      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    Apakah anda yakin ingin menghapus data ini ?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-
-                                    <!-- Form Hapus -->
-                                    <form action="{{route('stok_barang.destroy', $data->id)}}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Ya, Hapus</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                       </div>
-
                     </td>
                 @empty
                   <td colspan="9" class="text-center">Data Stok Belum Ada !</td>
@@ -85,6 +68,10 @@
               </tbody>
             </table>
           </div>
+
+
+          
+
           <!-- Pagination Link -->
           <div class="d-flex justify-content-end mx-5">
             {{ $datas->links() }}
@@ -124,3 +111,51 @@
       }
     </style>
 @endpush
+
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('.confirm-delete').click(function (e) {
+            e.preventDefault();
+
+            var deletedid = $(this).closest("tr").find('.delete_id').val();
+
+            swal({
+                    title: "Apakah anda yakin?",
+                    text: "Setelah dihapus, Anda tidak dapat memulihkan data ini lagi!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var data = {
+                            "_token": $('input[name=_token]').val(),
+                            'id': deletedid,
+                        };
+                        $.ajax({
+                            type: "DELETE",
+                            url: 'stok_barang/' + deletedid,
+                            data: data,
+                            success: function (response) {
+                                swal(response.status, {
+                                    icon: "success",
+                                })
+                                .then((result) => {
+                                    location.reload();
+                                });
+                            }
+                        });
+                    }
+                });
+        })
+    })
+</script>
+@endpush
+

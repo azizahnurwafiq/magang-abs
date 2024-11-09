@@ -33,13 +33,6 @@
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Warna</label>
-                            <input type="text" class="form-control" name="warna" id="warna" value="{{$stok->warna}}" aria-describedby="emailHelp">
-                            @error('alamat')
-                                <div class="form-text text-danger">{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
                             <label class="form-label">Jumlah</label>
                             <input type="text" class="form-control" name="jumlah" id="jumalh" value="{{$stok->jumlah}}" aria-describedby="emailHelp">
                             @error('note')
