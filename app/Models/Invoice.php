@@ -35,4 +35,14 @@ class Invoice extends Model
     {
         return $this->belongsToMany(Stok::class, 'invoice_stoks');
     }
+
+    public function invoice_stoks(): HasMany
+    {
+        return $this->hasMany(InvoiceStok::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(InvoicePayment::class);
+    }
 }

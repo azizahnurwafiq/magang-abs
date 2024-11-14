@@ -10,88 +10,91 @@
                 <div class="m-4">
                     <form action="{{route('invoice.store')}}" method="POST">
                         @csrf
-                        <div class="mb-3">
-                            <label for="kode" class="form-label">Kode</label>
-                            <select class="form-control" name="kode" id="kode" required>
-                                <option selected>Pilih Kode</option>
-                                    <option value="tax">TAX</option> 
-                                    <option value="non_tax">NON TAX</option> 
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="no_invoice" class="form-label">Nomor Invoice</label>
-                            <input type="text" class="form-control" name="no_invoice" id="no_invoice" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="pelanggan_id" class="form-label">Nama</label>
-                            <select class="form-control" name="pelanggan_id" id="pelanggan_id" required>
-                                <option selected>Pilih Pelanggan</option>
-                                @foreach ($pelanggans as $pelanggan)
-                                    <option value={{$pelanggan->id}}>{{$pelanggan->nama}}</option>    
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="alamat" class="form-label">Alamat</label>
-                            <input type="text" class="form-control" name="alamat" id="alamat" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="tanggal" class="form-label">Tanggal</label>
-                            <input type="date" class="form-control" name="tanggal" id="tanggal" required>
-                            @error('note')
-                                <div class="form-text text-danger">{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="judul" class="form-label">Judul</label>
-                            <input type="text" class="form-control" name="judul" id="judul" required>
-                            @error('note')
-                                <div class="form-text text-danger">{{$message}}</div>
-                            @enderror
-                        </div>
-
-                        <div id="dynamicForm">
-                            <div class="form-group d-flex">
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="item" class="form-label">Item</label>
-                                        <select class="form-control item-select" name="item[]" id="item">
-                                            <option selected></option>
-                                            @foreach ($stoks as $stok)
-                                                <option value="{{$stok->id}}">{{$stok->item}}</option>    
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>  
-                                <div class="col-md-4">
-                                    <div class="form-harga mb-3"> 
-                                        <label for="harga" class="form-label">Harga</label>
-                                        <input type="text" class="form-control" name="harga[]" id="harga" readonly>
+                        <div class="d-flex col-md-12">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="kode" class="form-label">Kode</label>
+                                    <select class="form-control  form-select" name="kode" id="kode" required>
+                                        <option selected>--Pilih kode--</option>
+                                            <option value="tax">TAX</option> 
+                                            <option value="non_tax">NON TAX</option> 
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="no_invoice" class="form-label">Nomor Invoice</label>
+                                    <input type="text" class="form-control" name="no_invoice" id="no_invoice" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pelanggan_id" class="form-label">Nama</label>
+                                    <select class="form-control form-select" name="pelanggan_id" id="pelanggan_id" required>
+                                        <option selected>--Pilih pelanggan--</option>
+                                        @foreach ($pelanggans as $pelanggan)
+                                            <option value={{$pelanggan->id}}>{{$pelanggan->nama}}</option>    
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="alamat" class="form-label">Alamat</label>
+                                    <input type="text" class="form-control" name="alamat" id="alamat" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tanggal" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" name="tanggal" id="tanggal" required>
+                                    @error('note')
+                                        <div class="form-text text-danger">{{$message}}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="judul" class="form-label">Judul</label>
+                                    <input type="text" class="form-control" name="judul" id="judul" required>
+                                    @error('note')
+                                        <div class="form-text text-danger">{{$message}}</div>
+                                    @enderror
+                                </div>
+                                <div id="dynamicForm">
+                                    <div class="form-group d-flex">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="item" class="form-label">Item</label>
+                                                <select class="form-control item-select" name="item[]" id="item">
+                                                    <option selected></option>
+                                                    @foreach ($stoks as $stok)
+                                                        <option value="{{$stok->id}}">{{$stok->item}}</option>    
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>  
+                                        <div class="col-md-4">
+                                            <div class="form-harga mb-3"> 
+                                                <label for="harga" class="form-label">Harga</label>
+                                                <input type="number" class="form-control" name="harga[]" id="harga" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label for="jumlah" class="form-label">Jumlah</label>
+                                                <input type="number" id="jumlah" min="0" class="form-control" name="jumlah[]" required>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-success btn-add" style="height: 50%; margin-top:32px; margin-left: 5px;">+</button>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="mb-3">
-                                        <label for="jumlah" class="form-label">Jumlah</label>
-                                        <input type="number" id="jumlah" min="0" class="form-control" name="jumlah[]" required>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="total" class="form-label">Total</label>
+                                    <input type="number" class="form-control" name="total" id="total" readonly>
                                 </div>
-                                <button class="btn btn-success btn-add" style="height: 50%; margin-top:32px; margin-left: 5px;">+</button>
+                                <div class="mb-3">
+                                    <label for="down_payment" class="form-label">Down Payment</label>
+                                    <input type="number" class="form-control" name="down_payment" id="down_payment">
+                                    @error('note')
+                                        <div class="form-text text-danger">{{$message}}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="jumlah" class="form-label">Total</label>
-                            <input type="text" class="form-control" name="total" id="total" readonly>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="down_payment" class="form-label">Down Payment</label>
-                            <input type="number" class="form-control" name="down_payment" id="down_payment">
-                            @error('note')
-                                <div class="form-text text-danger">{{$message}}</div>
-                            @enderror
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary m-3">Submit</button>
                     </form>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 <div>
-    <div class="col-md-3 mx-2">
+    <div class="d-flex col-md-3 mx-2" style="justify-self:right; margin-top:-63px;">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Cari..." wire:model.live="kataKunci">
             <button class="btn btn-primary"><i class="fas fa-search"></i></button>
@@ -89,7 +89,6 @@
         }
 </style>
 @endpush
-
 
 @push('scripts')
 <script>

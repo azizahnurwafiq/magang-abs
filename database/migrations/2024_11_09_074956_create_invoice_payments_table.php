@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInvoiceStoksTable extends Migration
+class CreateInvoicePaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateInvoiceStoksTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoice_stoks', function (Blueprint $table) {
+        Schema::create('invoice_payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('invoice_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('stok_id')->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger('harga');
-            $table->unsignedBigInteger('jumlah');
-            $table->unsignedBigInteger('total');
+            $table->unsignedBigInteger('payment');
+            $table->date('tanggal');
+            $table->string('via');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,6 +31,6 @@ class CreateInvoiceStoksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoice_stoks');
+        Schema::dropIfExists('invoice_payments');
     }
 }

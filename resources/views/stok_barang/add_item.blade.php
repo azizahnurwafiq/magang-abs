@@ -18,8 +18,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="kategori" class="form-label">Kategori</label>
-                                        <select class="form-control" name="kategori" id="kategori">
-                                            <option selected>Pilih Kategori</option>
+                                        <select class="form-control form-select" name="kategori" id="kategori">
+                                            <option selected>--Pilih kategori--</option>
                                             @foreach ($kategoris as $kategori)
                                                 <option value={{$kategori->id}}>{{$kategori->kategori}}</option>    
                                             @endforeach

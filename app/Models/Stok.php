@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Stok extends Model
@@ -31,5 +32,10 @@ class Stok extends Model
     public function invoices(): BelongsToMany
     {
         return $this->belongsToMany(Invoice::class, 'invoice_stoks');
+    }
+
+    public function invoice_stoks(): HasMany
+    {
+        return $this->hasMany(InvoiceStok::class);
     }
 }
