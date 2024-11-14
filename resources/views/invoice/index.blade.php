@@ -13,11 +13,22 @@
                         {{ session('success') }}
                     </div>
                 @endif
-                <div class="col-2">
-                    <a href="{{route('invoice.create')}}" class="btn btn-primary m-2">+ Buat Invoice</a>
+                <div class=" d-flex col-md-12 mt-3 justify-content-between ">
+                    <div class="col-md-8">
+                        <a href="{{route('invoice.create')}}" class="btn btn-primary m-2">+ Buat Invoice</a>
+                    </div>
+                    <div class="col-md-3 mt-1 mx-1">
+                        <form action="" method="GET">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" placeholder="Cari...">
+                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+                
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" style="margin-top: -10px;">
                         <thead>
                             <tr class="text-center">
                                 <th>No</th>
@@ -36,7 +47,7 @@
                                 <td>{{$index + $invoices->firstItem()}}</td>
                                 <td>{{$invoice->kode}}</td>
                                 <td>{{$invoice->no_invoice}}</td>
-                                <td>{{$invoice->pelanggan->nama}}</td>
+                                <td>{{$invoice?->pelanggan->nama ?? 'pelanggan tidak tersedia'}}</td>
                                 <td>@rupiah($invoice->total_invoice)</td>
                                 <td>@rupiah($invoice->kekurangan_bayar)</td>
                                 <td>
@@ -55,8 +66,8 @@
                                             <div class="dropdown-menu">
                                                 <a href="#" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
                                                 <a href="{{route('invoice.payment', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-money-bill-wave"></i> Payment</a>
-                                                <a href="#" class="btn btn-primary dropdown-item "><i class="fa fa-history"></i> History</a>
-                                                <a href="#" class="btn btn-primary dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
+                                                <a href="{{route('invoice.history', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-history"></i> History</a>
+                                                <a href="{{route('invoice.exportPdf', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
                                                 <a href="#" class="btn btn-primary dropdown-item "><i class="fa fa-file"></i> Archive</a>
                                             </div>
                                     </div>
@@ -90,7 +101,7 @@
             display: none;
             position: absolute;
             background-color: #f1f1f1;
-            margin-left: -30px;
+            margin-left: -40px;
             min-width: 110px; 
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 99;

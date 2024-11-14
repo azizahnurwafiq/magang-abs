@@ -10,9 +10,21 @@ class Stok_barangController extends Controller
 {
     protected $paginationTheme = 'bootstrap';
 
-    public function index()
+    public function index(Request $request)
     {
-        $datas = Stok::paginate(6);
+        $keyword = $request->keyword;
+
+        if ($keyword != null) {
+            $datas = Stok::with('kategori')
+                ->where('SKU', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('item', 'LIKE', '%' . $keyword . '%')
+                ->orWhereHas('kategori', function ($query) use ($keyword) {
+                    $query->where('kategori', 'LIKE', '%' . $keyword . '%');
+                })
+                ->paginate(3);
+        } else {
+            $datas = Stok::paginate(3);
+        }
         return view('stok_barang.index', compact('datas'));
     }
 

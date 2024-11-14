@@ -14,13 +14,25 @@
                   {{ session('success') }}
               </div>
             @endif
-            <div class="d-flex col-4">
-                <a href="{{route('stok_barang.addItem')}}" class="btn btn-primary m-2">+ Add Item</a>
-                <a href="{{route('stok_barang.addStok')}}" class="btn btn-primary m-2">+ Add Stok</a>
+
+            <div class=" d-flex col-md-12 mt-3 justify-content-between ">
+              <div class="d-flex col-4">
+                  <a href="{{route('stok_barang.addItem')}}" class="btn btn-primary m-2">+ Add Item</a>
+                  <a href="{{route('stok_barang.addStok')}}" class="btn btn-primary m-2">+ Add Stok</a>
+              </div>
+              <div class="col-md-3 mt-1 mx-1">
+                  <form action="" method="GET">
+                      <div class="input-group">
+                          <input type="text" class="form-control" name="keyword" placeholder="Cari...">
+                          <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                      </div>
+                  </form>
+              </div>
             </div>
+
           <!-- /.card-header -->
           <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered" style="margin-top: -10px;">
               <thead>
                 <tr class="text-center">
                   <th>No</th>

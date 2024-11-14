@@ -42,6 +42,12 @@ Route::get('/get-alamat-pelanggan/{id}', function ($id) {
 });
 Route::get('/get-harga-item/{id}', [InvoiceController::class, 'getHargaItem']);
 Route::get('/invoice/payment/{id}', [InvoiceController::class, 'payment'])->name('invoice.payment');
+Route::post('/invoice/{id}/payment', [InvoiceController::class, 'payment_store'])->name('invoice.payment.store');
+Route::get('/invoice/history-payment/{id}', [InvoiceController::class, 'history'])->name('invoice.history');
+Route::get('/invoice/history-payment/{id}/edit', [InvoiceController::class, 'editPayment'])->name('invoice.history.edit');
+Route::put('/invoice/history-payment/{id}', [InvoiceController::class, 'updatePayment'])->name('invoice.history.update');
+Route::delete('/invoice/history-payment/{id}', [InvoiceController::class, 'destroy'])->name('invoice.history.destroy');
+Route::get('/invoice/{id}/export-pdf', [InvoiceController::class, 'exportPdf'])->name('invoice.exportPdf');
 
 
 // MANAGE_USER

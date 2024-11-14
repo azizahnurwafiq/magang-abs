@@ -3,15 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\InvoicePayment;
 use App\Models\Pelanggan;
 use App\Models\Stok;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data['invoices'] = Invoice::paginate(10);
+        $keyword = $request->keyword;
+
+        if ($keyword != null) {
+            $data['invoices'] = Invoice::with('pelanggan')
+                ->where('kode', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('no_invoice', 'LIKE', '%' . $keyword . '%')
+                ->orWhereHas('pelanggan', function ($query) use ($keyword) {
+                    $query->where('nama', 'LIKE', '%' . $keyword . '%');
+                })
+                ->paginate(3);
+        } else {
+            $data['invoices'] = Invoice::paginate(3);
+        }
         return view('invoice.index', $data);
     }
 
@@ -51,7 +65,7 @@ class InvoiceController extends Controller
         $lastTwoDigitsYear = substr($currentDate, -2);
         $combinedDate = $month . $lastTwoDigitsYear;
 
-        $invoicePrefix = $kode === 'non_tax' ? 'INST' : 'TAX';
+        $invoicePrefix = $kode === 'non_tax' ? 'INST' : 'FKN';
 
         $nomorInvoice = "{$invoicePrefix}/{$combinedDate}/{$nextSequence}";
 
@@ -64,9 +78,7 @@ class InvoiceController extends Controller
 
         // $no_invoice = $this->generateInvoiceNumber($request);
 
-        // $total = $request->total;
         $kekuranganBayar = $request->down_payment;
-        // $kekuranganBayar = $total - $down_payment;
 
         if ($kekuranganBayar == 0) {
             $status = "LUNAS";
@@ -96,9 +108,14 @@ class InvoiceController extends Controller
             $attachData = [];
 
             foreach ($item as $index => $stokId) {
+                $hargaItem = intval($harga[$index]);
+                $jumlahItem = intval($jumlah[$index]);
+                $totalItem = $hargaItem * $jumlahItem;
+
                 $attachData[$stokId] = [
-                    'harga' => intval($harga[$index]),
-                    'jumlah' => intval($jumlah[$index]),
+                    'harga' => $hargaItem,
+                    'jumlah' => $jumlahItem,
+                    'total' => $totalItem,
                 ];
             }
             $invoice->stoks()->attach($attachData);
@@ -116,7 +133,119 @@ class InvoiceController extends Controller
 
     public function payment($id)
     {
-        $payment = Invoice::find($id);
-        return view('invoice.payment', compact('payment'));
+        $invoice = Invoice::find($id);
+        return view('invoice.payment', compact('invoice'));
+    }
+
+    public function payment_store(Request $request, $id)
+    {
+        $request->validate([
+            'payment' => 'required',
+            'tanggal' => 'required',
+            'via' => 'required',
+        ], [
+            'payment.required' => 'payment wajib diisi!',
+            'tanggal.required' => 'tanggal wajib diisi!',
+            'via.required' => 'via pembayaran wajib diisi!'
+        ]);
+
+        $invoice = Invoice::find($id);
+
+        $payment = $request->input('payment');
+
+        if ($payment > $invoice->kekurangan_bayar) {
+            return redirect()->back()->with('error', 'Pembayaran melebihi kekurangan bayar.');
+        }
+
+        $invoice->kekurangan_bayar -= $payment;
+
+        if ($invoice->kekurangan_bayar <= 0) {
+            $invoice->status = 'LUNAS';
+            $invoice->kekurangan_bayar = 0;
+        }
+
+        // simpan perubahan di invoice
+        $invoice->save();
+
+        $data = [
+            'invoice_id' => $invoice->id,
+            'payment' => $payment,
+            'tanggal' => $request->tanggal,
+            'via' => $request->via,
+        ];
+
+        InvoicePayment::create($data);
+
+        return redirect()->route('invoice.index')->with('success', 'berhasil');
+    }
+
+    public function history($id)
+    {
+        $invoice = Invoice::with('payments')->findOrFail($id);
+        $payments = $invoice->payments;
+        return view('invoice.historyPayment', compact('invoice', 'payments'));
+    }
+
+    public function editPayment($id)
+    {
+        $payment = InvoicePayment::find($id);
+        return view('invoice.editPayment', compact('payment'));
+    }
+
+    public function updatePayment(Request $request, $id)
+    {
+        $request->validate([
+            'payment' => 'required',
+            'tanggal' => 'required',
+            'via' => 'required',
+        ], [
+            'payment.required' => 'payment wajib diisi!',
+            'tanggal.required' => 'tanggal wajib diisi!',
+            'via.required' => 'via pembayaran wajib diisi!'
+        ]);
+
+        $invoicePayment = InvoicePayment::findOrFail($id);
+        $invoiceId = $invoicePayment->invoice->id;
+
+        $oldPayment = $invoicePayment->payment;
+        $newPayment = $request->input('payment');
+        $difference =  $newPayment - $oldPayment;
+
+        $data = [
+            'payment' => $newPayment,
+            'tanggal' => $request->tanggal,
+            'via' => $request->via,
+        ];
+
+        $invoicePayment->update($data);
+
+        $invoice = Invoice::findOrFail($invoicePayment->invoice_id);
+
+        $invoice->kekurangan_bayar -= $difference;
+        $invoice->save();
+
+        return redirect()->route('invoice.history', ['id' => $invoiceId])->with('success', 'berhasil diupdate');
+    }
+
+    public function destroy($id)
+    {
+        $hapus = InvoicePayment::find($id);
+        $hapus->delete();
+
+        return response()->json(['status' => 'Data payment berhasil dihapus!']);
+    }
+
+    public function exportPdf($id)
+    {
+        $invoice = Invoice::with('invoice_stoks')->findOrFail($id);
+
+        if (str_starts_with($invoice->no_invoice, 'INST')) {
+            $pdf = PDF::loadView('invoice.export_inst', compact('invoice'))->setPaper('A4', 'portrait');
+        } else if (str_starts_with($invoice->no_invoice, 'FKN')) {
+            $pdf = PDF::loadView('invoice.export_fkn', compact('invoice'))->setPaper('A4', 'portrait')->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+        } else {
+            return redirect()->back()->with('error', 'Prefix kode invoice tidak valid.');
+        }
+        return $pdf->stream('invoice_' . $invoice->no_invoice . '.pdf');
     }
 }
