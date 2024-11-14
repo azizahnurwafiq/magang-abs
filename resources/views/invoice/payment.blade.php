@@ -40,6 +40,11 @@
                 </div>
             </div>
         </div>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        </form>
     </div>
+</div>
+</div>
+</div>
 </div>
 @endsection
