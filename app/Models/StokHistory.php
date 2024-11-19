@@ -6,21 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Kyslik\ColumnSortable\Sortable;
 
-class InvoicePayment extends Model
+class StokHistory extends Model
 {
-    use HasFactory, SoftDeletes, Sortable;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'invoice_id',
-        'payment',
-        'tanggal',
-        'via'
+        'stok_id',
+        'jumlah',
+        'tanggal_masuk',
+        'total_stok',
     ];
 
-    public function invoice(): BelongsTo
+    public function stok(): BelongsTo
     {
-        return $this->belongsTo(Invoice::class);
+        return $this->belongsTo(Stok::class, 'stok_id');
     }
 }

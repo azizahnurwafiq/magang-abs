@@ -9,7 +9,7 @@ class KategoriController extends Controller
 {
     public function index()
     {
-        $data['kategoris'] = Kategori::paginate(5);
+        $data['kategoris'] = Kategori::sortable()->paginate(5);
         return view('kategori.index', $data);
     }
 
@@ -56,6 +56,7 @@ class KategoriController extends Controller
     {
         $hapus = Kategori::find($id);
         $hapus->delete();
-        return redirect()->route('kategori.index')->with('success', 'Data kategori berhasil dihapus');
+
+        return response()->json(['status' => 'Data kategori berhasil dihapus!']);
     }
 }

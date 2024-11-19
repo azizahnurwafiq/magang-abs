@@ -7,15 +7,15 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr class="text-center">
                 <th>No</th>
-                <th style="width: 50px">Nama</th>
-                <th style="width: 50px">Email</th>
-                <th>Nomor WA</th>
-                <th>Alamat</th>
-                <th>Note</th>
+                <th>@sortablelink('nama', 'Nama')</th>
+                <th>@sortablelink('email','Email')</th>
+                <th>@sortablelink('no_WA', 'Nomor WA')</th>
+                <th>@sortablelink('alamat', 'Alamat')</th>
+                <th>@sortablelink('note', 'Note')</th>
                 <th>Aksi</th>
                 </tr>
             </thead>
@@ -55,8 +55,11 @@
         </table>           
     </div>
     <!-- Pagination Link -->
-    <div class="d-flex justify-content-end mx-5">
+    {{-- <div class="d-flex justify-content-end mx-5">
         {{$pelanggans->links()}}
+    </div> --}}
+    <div class="d-flex justify-content-end mx-5">
+        {!! $pelanggans->appends(\Request::except('page'))->render() !!}
     </div>
 </div>
 

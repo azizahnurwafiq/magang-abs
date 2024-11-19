@@ -22,10 +22,16 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Kategori</label>
-                                    <input type="text" class="form-control" name="kategori" id="kategori" value="{{$stok->kategori->kategori}}" aria-describedby="emailHelp">
+                                    <select class="form-control form-select" name="kategori" id="kategori">
+                                        <option selected>--Pilih Kategori--</option>
+                                            @foreach ($kategoris as $kt)
+                                                <option value="{{$kt->id}}">{{$kt->kategori}}</option>    
+                                            @endforeach
+                                    </select>
+                                    {{-- <input type="text" class="form-control" name="kategori" id="kategori" value="{{$stok->kategori->kategori}}" aria-describedby="emailHelp">
                                     @error('email')
                                         <div class="form-text text-danger">{{$message}}</div>
-                                    @enderror
+                                    @enderror --}}
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Item</label>
@@ -34,22 +40,8 @@
                                         <div class="form-text text-danger">{{$message}}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Jumlah</label>
-                                    <input type="text" class="form-control" name="jumlah" id="jumalh" value="{{$stok->jumlah}}" aria-describedby="emailHelp">
-                                    @error('note')
-                                        <div class="form-text text-danger">{{$message}}</div>
-                                    @enderror
-                                </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Tanggal Masuk</label>
-                                    <input type="date" class="form-control" name="tanggal_masuk" id="tanggal_masuk" value="{{$stok->tanggal_masuk}}" aria-describedby="emailHelp">
-                                    @error('tanggal_masuk')
-                                        <div class="form-text text-danger">{{$message}}</div>
-                                    @enderror
-                                </div>
                                 <div class="mb-3">
                                     <label class="form-label">Harga Beli</label>
                                     <input type="text" class="form-control" name="harga_beli" id="harga_beli" value="{{$stok->harga_beli}}" aria-describedby="emailHelp">

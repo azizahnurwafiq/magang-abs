@@ -24,7 +24,7 @@ class InvoiceController extends Controller
                 })
                 ->paginate(3);
         } else {
-            $data['invoices'] = Invoice::paginate(3);
+            $data['invoices'] = Invoice::sortable()->paginate(10);
         }
         return view('invoice.index', $data);
     }
@@ -123,6 +123,18 @@ class InvoiceController extends Controller
             return response()->json(['error' => 'Data item, harga, dan jumlah harus memiliki panjang yang sama.'], 400);
         }
         return redirect()->route('invoice.index')->with('success', 'Data invoice berhasil ditambahkan');
+    }
+
+    public function show($id)
+    {
+        $invoice = Invoice::find($id);
+        return view('invoice.detail', compact('invoice'));
+    }
+
+    public function getAlamatPelanggan($id)
+    {
+        $pelanggan = Pelanggan::find($id);
+        return response()->json(['alamat' =>  $pelanggan->alamat]);
     }
 
     public function getHargaItem($id)

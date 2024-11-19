@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStoksTable extends Migration
+class CreatePreOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateStoksTable extends Migration
      */
     public function up()
     {
-        Schema::create('stoks', function (Blueprint $table) {
+        Schema::create('pre_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('SKU');
-            $table->foreignId('kategori_id')->constrained()->cascadeOnDelete();
-            $table->string('item');
-            $table->unsignedBigInteger('harga_beli')->nullable();
-            $table->unsignedBigInteger('harga_jual')->nullable();
+            $table->string('nama_pelanggan');
+            $table->foreignId('invoice_id')->constrained()->cascadeOnDelete();
+            $table->string('judul_article');
+            $table->enum('status', ['Diambil', 'WIP', 'Butuh dikerjakan', 'Hold', 'Done and Ready']);
+            $table->string('image');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,6 +32,6 @@ class CreateStoksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stoks');
+        Schema::dropIfExists('pre_orders');
     }
 }

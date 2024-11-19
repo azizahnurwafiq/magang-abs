@@ -18,7 +18,7 @@ class PelangganSearch extends Component
                 ->orWhere('alamat', 'like', '%' . $this->kataKunci . '%')
                 ->paginate(3);
         } else {
-            $pelanggans = Pelanggan::paginate(3);
+            $pelanggans = Pelanggan::sortable()->paginate(3);
         }
         return view('livewire.pelanggan-search', compact('pelanggans'));
     }

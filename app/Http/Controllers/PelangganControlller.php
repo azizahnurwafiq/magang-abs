@@ -36,7 +36,7 @@ class PelangganControlller extends Controller
 
         Pelanggan::create($validatedData);
 
-        return redirect()->route('pelanggan')->with('success', 'Data pelanggan berhasil ditambahkan');
+        return redirect()->route('pelanggan.index')->with('success', 'Data pelanggan berhasil ditambahkan');
     }
 
     public function edit($id)
