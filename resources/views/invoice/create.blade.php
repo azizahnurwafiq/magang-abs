@@ -1,6 +1,5 @@
 @extends('dashboard.template')
 @section('title', 'Tambah data invoice')
-
 @section('content')
 <div class="container-fluid py-4">
     <div class="row">
@@ -81,6 +80,7 @@
                                         <button class="btn btn-success btn-add" style="height: 50%; margin-top:32px; margin-left: 5px;">+</button>
                                     </div>
                                 </div>
+                                
                                 <div class="mb-3">
                                     <label for="total" class="form-label">Total</label>
                                     <input type="number" class="form-control" name="total" id="total" readonly>
@@ -119,7 +119,6 @@
                 allowClear: true
             })
         });
-
 
         document.getElementById('kode').addEventListener('change', function() {
             const tipeKode = this.value;
@@ -238,6 +237,5 @@
                 updateTotal();
             });
         });
-
     </script>
 @endpush

@@ -7,7 +7,7 @@
         <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Stok Barang</h3>
+                <h3 class="card-title text-bold text-primary">DATA STOK BARANG</h3>
             </div>
             @if (session('success'))
               <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
@@ -32,16 +32,16 @@
 
           <!-- /.card-header -->
           <div class="card-body">
-            <table class="table table-bordered" style="margin-top: -10px;">
+            <table class="table table-bordered table-striped" style="margin-top: -10px;">
               <thead>
                 <tr class="text-center">
                   <th>No</th>
-                  <th>SKU</th>
-                  <th>kategori</th>
-                  <th>Item</th>
-                  <th>Jumlah</th>
-                  <th>Harga Jual</th>
-                  <th>Harga Beli</th>
+                  <th>@sortablelink('SKU', 'SKU')</th>
+                  <th>@sortablelink('kategori.kategori', 'Kategori')</th>
+                  <th>@sortablelink('item', 'Item')</th>
+                  <th>@sortablelink('stokHistories.jumlah', 'Jumlah Stok')</th>
+                  <th>@sortablelink('harga_jual', 'Harga Jual')</th>
+                  <th>@sortablelink('harga_beli', 'Harga Beli')</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -53,7 +53,7 @@
                     <td>{{$data->SKU}}</td>
                     <td>{{$data?->kategori->kategori ?? 'Kategori tidak tersedia'}}</td>
                     <td>{{$data->item}}</td>
-                    <td>{{$data->jumlah}}</td>
+                    <td>{{$data->stokHistories->last()?->total_stok ?? 'Total stok tidak tersedia'}}</td>
                     <td>@rupiah($data->harga_jual)</td>
                     <td>@rupiah($data->harga_beli)</td>
                     <td>
@@ -80,13 +80,10 @@
               </tbody>
             </table>
           </div>
-
-
-          
-
           <!-- Pagination Link -->
           <div class="d-flex justify-content-end mx-5">
-            {{ $datas->links() }}
+            {{-- {{ $datas->links() }} --}}
+            {!! $datas->appends(\Request::except('page'))->render() !!}
           </div>
         </div>
       </div>

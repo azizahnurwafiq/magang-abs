@@ -1,5 +1,5 @@
 @extends('dashboard.template')
-@section('title', 'Data pelanggan')
+@section('title', 'Pelanggan')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title text-bold">PELANGGAN</h3>
+                    <h3 class="card-title text-bold text-primary">DATA PELANGGAN</h3>
                 </div>
 
                 @if (session('success'))
@@ -24,7 +24,6 @@
                 
                 @livewire('pelanggan-search')
 
-                
             </div>
         </div>
     </div>

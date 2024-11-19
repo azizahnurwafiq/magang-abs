@@ -33,7 +33,7 @@
   {{-- jangan diubah-ubah --}}
   @livewireStyles
   @stack('css')
-
+  
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -112,15 +112,13 @@
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
   <script src="{{asset('../assets/dist/js/pages/dashboard.js')}}"></script>
 
-<<<<<<< HEAD
   <script src="/livewire/livewire.js"></script>
-=======
+
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   
   <script src="/livewire/livewire.js"></script>
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
->>>>>>> ba682ddee1a209563fc52fc7745d1736fe938e39
 
   {{-- jangan dirubah --}}
   @livewireScripts

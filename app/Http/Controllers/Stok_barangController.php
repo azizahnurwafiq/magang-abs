@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kategori;
 use App\Models\Stok;
+use App\Models\StokHistory;
 use Illuminate\Http\Request;
 
 class Stok_barangController extends Controller
@@ -15,15 +16,15 @@ class Stok_barangController extends Controller
         $keyword = $request->keyword;
 
         if ($keyword != null) {
-            $datas = Stok::with('kategori')
+            $datas = Stok::with(['kategori', 'stokHistories'])
                 ->where('SKU', 'LIKE', '%' . $keyword . '%')
                 ->orWhere('item', 'LIKE', '%' . $keyword . '%')
                 ->orWhereHas('kategori', function ($query) use ($keyword) {
                     $query->where('kategori', 'LIKE', '%' . $keyword . '%');
                 })
-                ->paginate(3);
+                ->sortable()->paginate(3);
         } else {
-            $datas = Stok::paginate(3);
+            $datas = Stok::sortable()->paginate(4);
         }
         return view('stok_barang.index', compact('datas'));
     }
@@ -36,9 +37,8 @@ class Stok_barangController extends Controller
 
     public function addStok()
     {
-        $kategoris = Kategori::all();
-        $datas = Stok::all();
-        return view('stok_barang.add_stok', compact('datas', 'kategoris'));
+        $stoks = Stok::all();
+        return view('stok_barang.add_stok', compact('stoks'));
     }
 
     public function store(Request $request)
@@ -62,38 +62,70 @@ class Stok_barangController extends Controller
             'SKU' => $request->SKU,
             'kategori_id' => $request->kategori,
             'item' => $request->item,
-            'jumlah' => $request->jumlah,
-            'tanggal_masuk' => $request->tanggal_masuk,
             'harga_beli' => $request->harga_beli,
             'harga_jual' => $request->harga_jual,
         ];
 
         Stok::create($data);
 
+        $stok = Stok::where('SKU', $request->SKU)->first();
+
+        $dataHistory = [
+            'stok_id' => $stok->id,
+            'jumlah' => $request->jumlah,
+            'tanggal_masuk' => $request->tanggal_masuk,
+            'total_stok' => $request->jumlah,
+        ];
+
+        StokHistory::create($dataHistory);
+
         return redirect()->route('stok_barang.barang')->with('success', 'Data item baru berhasil ditambahkan');
+    }
+
+    public function addStokLama(Request $request)
+    {
+        $skuStok = intval($request->SKU);
+
+        $stokHistory = StokHistory::where('stok_id', $skuStok)->latest('total_stok')->first();
+
+        $totalStokLama = $stokHistory ? $stokHistory->total_stok : 0;
+        $jumlahBaru = intval($request->jumlah);
+
+        $total_stok_baru = $totalStokLama + $jumlahBaru;
+
+        StokHistory::create([
+            'stok_id' => $skuStok,
+            'jumlah' => $jumlahBaru,
+            'tanggal_masuk' => $request->tanggal_masuk_baru,
+            'total_stok' => $total_stok_baru,
+        ]);
+
+        return redirect()->route('stok_barang.barang')->with('success', 'Data stok berhasil ditambahkan');
     }
 
     public function edit($id)
     {
+        $kategoris = Kategori::all();
         $stok = Stok::find($id);
-        return view('stok_barang.edit', compact('stok'));
+        return view('stok_barang.edit', compact('stok', 'kategoris'));
     }
 
     public function show($id)
     {
-        $stok = Stok::find($id);
+        $stok = Stok::with('stokHistories')->find($id);
         return view('stok_barang.details', compact('stok'));
     }
 
     public function update(Request $request, $id)
     {
+        $kategori = intval($request->kategori);
+
         $stok = Stok::find($id);
 
         $data = [
-            'kategori' => $request->kategori,
+            'SKU' => $request->SKU,
+            'kategori_id' => $kategori,
             'item' => $request->item,
-            'warna' => $request->warna,
-            'jumlah' => $request->jumlah,
             'harga_beli' => $request->harga_beli,
             'harga_jual' => $request->harga_jual,
         ];

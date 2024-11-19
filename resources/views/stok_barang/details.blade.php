@@ -35,7 +35,7 @@
                             <div class="col-sm-4 col-4">
                                 <label for="item" class="form-label">Jumlah Stok Keseluruhan</label>
                                 <p>
-                                    {{$stok->jumlah}} Pcs
+                                    {{$stok->stokHistories->last()->total_stok}} Pcs
                                 </p>
                             </div>
                             <div class="col-sm-4 col-4">
@@ -53,18 +53,22 @@
                         </div>
                     </div>
                     <div class="mb-12">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Tanggal Masuk Stok</th>
                                     <th>Jumlah Stok Masuk</th>
+                                    <th>Tanggal Masuk Stok</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>{{$stok->tanggal_masuk}}</td>
-                                    <td>{{$stok->jumlah}} <span>Pcs</span></td>
-                                </tr>
+                                @forelse ($stok->stokHistories as $stokHistori)
+                                    <tr>
+                                        <td>{{$stokHistori->jumlah}} <span>Pcs</span></td>
+                                        <td>{{$stokHistori->tanggal_masuk}}</td>
+                                    </tr> 
+                                @empty
+                                <td colspan="2" class="text-center">Data detail Belum Ada !</td>
+                                @endforelse
 
                             </tbody>
                         </table>

@@ -1,5 +1,5 @@
 @extends('dashboard.template')
-@section('title', 'Stok Barang')
+@section('title', 'Kategori')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -7,7 +7,7 @@
         <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Kategori</h3>
+                <h3 class="card-title text-bold text-primary">DATA KATEGORI</h3>
             </div>
             @if (session('success'))
               <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
@@ -15,54 +15,52 @@
               </div>
             @endif
 
-            <div class="col-2">
+            <div class=" d-flex col-md-12 mt-3 justify-content-between ">
+              <div class="d-flex col-4">
                 <a href="{{route('kategori.create')}}" class="btn btn-primary m-2">+ Tambah Data</a>
+              </div>
+              <div class="col-md-3 mt-1 mx-1">
+                  <form action="" method="GET">
+                      <div class="input-group">
+                          <input type="text" class="form-control" name="keyword" placeholder="Cari...">
+                          <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                      </div>
+                  </form>
+              </div>
             </div>
+
           <!-- /.card-header -->
           <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-striped" style="margin-top: -10px;">
               <thead>
                 <tr class="text-center">
                   <th  style="width: 50px">No</th>
-                  <th>kategori</th>
+                  <th>@sortablelink('kategori', 'Nama')</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 @forelse ($kategoris as $index => $kategori)
                   <tr class="text-center">
+                    <input type="hidden" class="delete_id" value="{{$kategori->id}}">
                     <td>{{$index + $kategoris->firstItem()}}</td>
                     <td>{{$kategori->kategori}}</td>
                     <td>
-                        <a href="{{route('kategori.edit', $kategori->id)}}" class="btn btn-primary m-2"><i class="fa fa-edit"></i> Edit</a>
-                        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
-                        
-                    <!-- Modal Konfirmasi Hapus -->
-                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    Apakah anda yakin ingin menghapus data ini ?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                      <div class="dropdown">
+                        <button class="btn btn-primary" data-toggle="dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
+                        </button>
+                          <div class="dropdown-menu">
+                            <a href="{{route('kategori.edit', $kategori->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
+                            
+                            <form action="{{route('kategori.destroy', $kategori->id)}}" method="POST">
+                              @csrf
+                              @method('DELETE')
+                              <button class="btn btn-danger dropdown-item  confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
+                            </form>
+                          </div>
+                      </div>
 
-                                    <!-- Form Hapus -->
-                                    <form action="{{route('kategori.destroy', $kategori->id)}}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Ya, Hapus</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     </td>
                 @empty
@@ -74,11 +72,89 @@
           </div>
           <!-- Pagination Link -->
           <div class="d-flex justify-content-end mx-5">
-            {{ $kategoris->links() }}
+            {!! $kategoris->appends(\Request::except('page'))->render() !!}
           </div>
         </div>
       </div>
     </div>
 </div>
 @endsection
+
+@push('css')
+    <style>
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 100px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 99;
+        border-radius: 4px;
+      }
+
+      .dropdown-item {
+        color: black;
+        padding: 10px 20px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .dropdown-item:hover {
+        background-color: #ddd;
+      }
+    </style>
+@endpush
+
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('.confirm-delete').click(function (e) {
+            e.preventDefault();
+
+            var deletedid = $(this).closest("tr").find('.delete_id').val();
+
+            swal({
+                    title: "Apakah anda yakin?",
+                    text: "Setelah dihapus, Anda tidak dapat memulihkan data ini lagi!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var data = {
+                            "_token": $('input[name=_token]').val(),
+                            'id': deletedid,
+                        };
+                        $.ajax({
+                            type: "DELETE",
+                            url: 'kategori/' + deletedid,
+                            data: data,
+                            success: function (response) {
+                                swal(response.status, {
+                                    icon: "success",
+                                })
+                                .then((result) => {
+                                    location.reload();
+                                });
+                            }
+                        });
+                    }
+                });
+        })
+    })
+</script>
+@endpush
+
 

@@ -1,5 +1,5 @@
 @extends('dashboard.template')
-@section('title', 'Invoice')
+@section('title', 'Pre Order')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title text-bold text-primary">DATA INVOICE</h3>
+                    <h3 class="card-title text-bold text-primary">DATA PRE ORDER</h3>
                 </div>
                 @if (session('success'))
                     <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
@@ -16,7 +16,7 @@
                 @endif
                 <div class=" d-flex col-md-12 mt-3 justify-content-between ">
                     <div class="col-md-8">
-                        <a href="{{route('invoice.create')}}" class="btn btn-primary m-2">+ Buat Invoice</a>
+                        <a href="{{route('preOrder.create')}}" class="btn btn-primary m-2">+ Buat PO</a>
                     </div>
                     <div class="col-md-3 mt-1 mx-1">
                         <form action="" method="GET">
@@ -33,58 +33,51 @@
                         <thead>
                             <tr class="text-center">
                                 <th>No</th>
-                                <th>@sortablelink('kode', 'Kode')</th>
-                                <th>@sortablelink('no_invoice', 'No Invoice')</th>
-                                <th>@sortablelink('pelanggan.nama', 'Nama')</th>
-                                <th>@sortablelink('total_invoice', 'Total Invoice')</th>
-                                <th>@sortablelink('kekurangan_bayar', 'Kekurangan Bayar')</th>
-                                <th>@sortablelink('status', 'Status')</th>
+                                <th>Nama</th>
+                                <th>No Invoice</th>
+                                <th>Judul Article</th>
+                                <th>Jenis Pekerjaan</th>
+                                <th>Status</th>
+                                <th>Deadline</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($invoices as $index => $invoice)
+                            {{-- @forelse ($invoices as $index => $invoice) --}}
                             <tr class="text-center">
-                                <td>{{$index + $invoices->firstItem()}}</td>
-                                <td>{{$invoice->kode}}</td>
-                                <td>{{$invoice->no_invoice}}</td>
-                                <td>{{$invoice?->pelanggan->nama ?? 'pelanggan tidak tersedia'}}</td>
-                                <td>@rupiah($invoice->total_invoice)</td>
-                                <td>@rupiah($invoice->kekurangan_bayar)</td>
-                                <td>
-                                    @if($invoice->status === "BELUM LUNAS")
-                                        <span class="badge bg-danger">Belum lunas</span>
-                                    @endif
-                                    @if ($invoice->status === "LUNAS")
-                                        <span class="badge bg-success">Lunas</span>
-                                    @endif
-                                </td>
+                                <td>1</td>
+                                <td>ilham</td>
+                                <td>INST/1125/001</td>
+                                <td>Hello World</td>
+                                <td>Sublim</td>
+                                <td><span class="badge bg-success">Done and ready</span></td>
+                                <td>2 hari lagi</td>
                                 <td>
                                     <div class="dropdown">
                                         <button class="btn btn-primary" data-toggle="dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
                                         </button>
                                             <div class="dropdown-menu">
-                                                <a href="{{route('invoice.show', $invoice->id)}}" class="btn btn-secondary dropdown-item "><i class="fa fa-eye"></i> Detail</a>
-                                                <a href="{{route('invoice.payment', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-money-bill-wave"></i> Payment</a>
-                                                <a href="{{route('invoice.history', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-history"></i> History</a>
-                                                <a href="{{route('invoice.exportPdf', $invoice->id)}}" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
+                                                <a href="#" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
+                                                <a href="#" class="btn btn-secondary dropdown-item "><i class="fa fa-eye"></i> Details</a>
+                                                <a href="#" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
+                                                <a href="#" class="btn btn-danger dropdown-item "><i class="fa fa-trash"></i> Hapus</a>
                                                 <a href="#" class="btn btn-success dropdown-item "><i class="fa fa-file"></i> Archive</a>
                                             </div>
                                     </div>
 
                                 </td>
-                            @empty
+                            {{-- @empty
                                 <td colspan="9" class="text-center">Data Invoice Belum Ada !</td>
-                            @endforelse
+                            @endforelse --}}
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <!-- Pagination Link -->
-                <div class="d-flex justify-content-end mx-5">
-                    {!! $invoices->appends(\Request::except('page'))->render() !!}
-                </div>
+                {{-- <div class="d-flex justify-content-end mx-5">
+                    {{ $invoices->links() }}
+                </div> --}}
             </div>
         </div>
     </div>
