@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,65 +9,77 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
-            font-family: Arial, sans-serif; 
+            font-family: Arial, sans-serif;
+
+            background-image: url('/assets/dist/insatsu/FKN.png');
+            background-size: cover;
+            /* Menyesuaikan layar */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            /* Tetap saat scrolling */
+            background-position: center;
         }
 
-        header{
+        header {
             margin-top: -45px;
             margin-left: -45px;
             margin-right: -45px;
         }
 
-        .table-borderless td, .table-borderless th {
+        .table-borderless td,
+        .table-borderless th {
             border: none;
         }
-        .table-bordered td, .table-bordered th {
+
+        .table-bordered td,
+        .table-bordered th {
             border: 2px solid black;
         }
+
         .highlight {
             background-color: yellow;
         }
 
-        .judul{
+        .judul {
             margin-top: -50px;
         }
 
-        .kode-date{
+        .kode-date {
             margin-top: 100px;
         }
 
-        .garis{
+        .garis {
             margin-top: -90px;
             width: 100%;
             height: 1px;
             background-color: #c4c3c3;
         }
 
-        .garis2{
+        .garis2 {
             width: 100%;
             height: 1px;
             background-color: #c4c3c3;
         }
 
-        section{
+        section {
             width: 94%;
             margin-left: 20px;
         }
 
-        .invoice{
+        .invoice {
             margin-top: -100px;
         }
 
-        .invoice p{
+        .invoice p {
             margin-top: -7px;
         }
 
-        .invoice h3 span{
+        .invoice h3 span {
             font-size: 25px;
             font-family: Arial, sans-serif;
         }
 
-        .row{
+        .row {
             display: flexbox;
             width: 100%;
             overflow: hidden;
@@ -76,37 +89,64 @@
             background-color: #113989;
             color: white;
         }
-        .table-custom td, .table-custom th {
+
+        .table-custom td,
+        .table-custom th {
             padding: 10px;
         }
 
-        .contact-info{
+        .contact-info {
             margin-top: 55px;
         }
 
-        .contact-item{
+        .contact-item {
             margin-bottom: 10px;
         }
 
-        footer{
+        footer {
             margin-top: -100px;
             margin-left: -45px;
             margin-right: -45px;
             page-break-inside: avoid;
         }
+
+        .bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin-top: -45px;
+            margin-left: -45px;
+            width: 210mm;
+            height: 297mm;
+            z-index: -1;
+        }
+
+        section {
+            margin-top: 80;
+        }
     </style>
 </head>
 
 <body>
-    <header>
+    <div class="bg">
         @php
-            $path = public_path('assets/dist/insatsu/atas_tax.png');
-            $type = pathinfo($path, PATHINFO_EXTENSION);
-            $data = file_get_contents($path);
-            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        $path = public_path('assets/dist/insatsu/FKN.png');
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         @endphp
-        <img src="{{ $base64 }}" width="100%" height="150"/>
-    </header>
+        <img src="{{ $base64 }}" width="100%" height="100%" />
+    </div>
+    <!-- <header>
+        @php
+        $path = public_path('assets/dist/insatsu/atas_tax.png');
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        @endphp
+        <img src="{{ $base64 }}" width="100%" height="150" />
+    </header> -->
+
 
     <section>
         <div class="judul">
@@ -114,12 +154,12 @@
                 <div style="float: left; width: 50%;">
                     <div class="logo">
                         @php
-                            $path = public_path('assets/dist/insatsu/logo_abs_fkn.png');
-                            $type = pathinfo($path, PATHINFO_EXTENSION);
-                            $data = file_get_contents($path);
-                            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                        $path = public_path('assets/dist/insatsu/logo_abs_fkn.png');
+                        $type = pathinfo($path, PATHINFO_EXTENSION);
+                        $data = file_get_contents($path);
+                        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                         @endphp
-                        <img src="{{ $base64 }}" height="90"/>
+                        <img src="{{ $base64 }}" height="90" />
                     </div>
                 </div>
                 <div style="float: right; width: 50%; margin-top: 30px;">
@@ -131,8 +171,8 @@
 
         <div class="kode-date">
             <div class="garis"></div>
-                <p style="margin-top: 15px;">{{$invoice->no_invoice}}</p>
-                <p style="margin-top: -40px;" class="text-end">DATE: {{$invoice->tanggal}}</p>
+            <p style="margin-top: 15px;">{{$invoice->no_invoice}}</p>
+            <p style="margin-top: -40px;" class="text-end">DATE: {{$invoice->tanggal}}</p>
             <div class="garis2"></div><br>
         </div>
 
@@ -143,7 +183,7 @@
                 <p style="margin-top: -10px;">{{ $invoice->pelanggan->alamat }}</p>
             </div>
             <div class="bank-details text-end" style="margin-top: -100px;">
-                <p  style="font-weight: bold; ">BANK DETAILS</p>
+                <p style="font-weight: bold; ">BANK DETAILS</p>
                 <p style="margin-top: -5px;">BCA - 510.0422.222</p>
                 <p style="margin-top: -10px;">FAZA AMALY SULTHON</p>
             </div>
@@ -167,7 +207,7 @@
                         <td>@rupiah($item->harga)</td>
                         <td>@rupiah($item->total)</td>
                     </tr>
-                @endforeach
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -176,22 +216,22 @@
             <p style="font-weight: bold; ">CONTACT INFO :</p>
             <div class="contact-item">
                 @php
-                    $path = public_path('assets/dist/insatsu/phone.png');
-                    $type = pathinfo($path, PATHINFO_EXTENSION);
-                    $data = file_get_contents($path);
-                    $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $path = public_path('assets/dist/insatsu/phone.png');
+                $type = pathinfo($path, PATHINFO_EXTENSION);
+                $data = file_get_contents($path);
+                $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 @endphp
-                <img src="{{ $base64 }}" width="24" height="24"/>
+                <img src="{{ $base64 }}" width="24" height="24" />
                 <span style="margin-left: 5px;">08222 657 2700</span>
             </div>
             <div class="contact-item">
                 @php
-                    $path = public_path('assets/dist/insatsu/maps.png');
-                    $type = pathinfo($path, PATHINFO_EXTENSION);
-                    $data = file_get_contents($path);
-                    $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $path = public_path('assets/dist/insatsu/maps.png');
+                $type = pathinfo($path, PATHINFO_EXTENSION);
+                $data = file_get_contents($path);
+                $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 @endphp
-                <img src="{{ $base64 }}" width="24" height="24"/>
+                <img src="{{ $base64 }}" width="24" height="24" />
                 <span style="margin-left: 5px; ">Jl. Dharmawangsa<br> no 54, lt. 1 60286,<br> Surabaya, Indonesia</span>
             </div>
         </div>
@@ -217,17 +257,18 @@
         </div>
     </section>
 
-    <footer>
+    <!-- <footer>
         <div class="contoh">
 
         </div>
         @php
-            $path = public_path('assets/dist/insatsu/bawah_tax.png');
-            $type = pathinfo($path, PATHINFO_EXTENSION);
-            $data = file_get_contents($path);
-            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        $path = public_path('assets/dist/insatsu/bawah_tax.png');
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         @endphp
-        <img src="{{ $base64 }}" width="100%" height="150"/>
-    </footer>
+        <img src="{{ $base64 }}" width="100%" height="150" />
+    </footer> -->
 </body>
+
 </html>
