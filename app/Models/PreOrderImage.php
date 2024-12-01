@@ -8,31 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Kyslik\ColumnSortable\Sortable;
 
-class PreOrderDetail extends Model
+class PreOrderImage extends Model
 {
     use HasFactory, SoftDeletes, Sortable;
 
     protected $fillable = [
         'pre_order_id',
-        'jenis_pekerjaan',
-        'deadline',
-        'item',
-        'quantity',
-        'total',
         'image',
-        'kebutuhan_bahan',
-        'status',
-        'note',
-        'note_produksi',
     ];
 
     public function preOrder(): BelongsTo
     {
-        return $this->belongsTo(PreOrder::class);
-    }
-
-    public function pekerjaan(): BelongsTo
-    {
-        return $this->belongsTo(Pekerjaan::class);
+        return $this->belongsTo(PreOrder::class, 'pre_order_id');
     }
 }

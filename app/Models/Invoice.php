@@ -47,6 +47,11 @@ class Invoice extends Model
         return $this->hasMany(InvoicePayment::class);
     }
 
+    public function preOrders(): HasMany
+    {
+        return $this->hasMany(PreOrder::class, 'invoice_id', 'id');
+    }
+
     public function preOrderDetails(): HasMany
     {
         return $this->hasMany(PreOrderDetail::class);

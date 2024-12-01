@@ -82,7 +82,6 @@
           </div>
           <!-- Pagination Link -->
           <div class="d-flex justify-content-end mx-5">
-            {{-- {{ $datas->links() }} --}}
             {!! $datas->appends(\Request::except('page'))->render() !!}
           </div>
         </div>

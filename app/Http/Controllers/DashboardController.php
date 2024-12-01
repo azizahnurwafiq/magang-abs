@@ -10,8 +10,4 @@ class DashboardController extends Controller
     {
         return view('dashboard.dashboard_kanan');
     }
-
-    // public function dashboard_kanan() {
-    //     return view('dashboard.dashboard_kanan');
-    // }
 }

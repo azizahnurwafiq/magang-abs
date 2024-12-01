@@ -15,11 +15,13 @@ class CreatePreOrdersTable extends Migration
     {
         Schema::create('pre_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_pelanggan');
             $table->foreignId('invoice_id')->constrained()->cascadeOnDelete();
-            $table->string('judul_article');
-            $table->enum('status', ['Diambil', 'WIP', 'Butuh dikerjakan', 'Hold', 'Done and Ready']);
-            $table->string('image');
+            $table->string('nama_pelanggan')->nullable();
+            $table->string('judul_artikel')->nullable();
+            $table->string('bahan')->nullable();
+            $table->string('warna')->nullable();
+            $table->string('model')->nullable();
+            $table->date('tanggal')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -47,6 +47,13 @@
           </li>
 
           <li class="nav-item">
+            <a href="{{route('pekerjaan.index')}}" class="nav-link {{ Route::is('pekerjaan.*') ? 'active' : ''}}">
+                <i class="fas fa-tools"></i>
+              <p class="mx-2">Pekerjaan</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="{{route('stok_barang.barang')}}" class="nav-link {{Route::is('stok_barang.*') ? 'active' : ''}}">
                 <i class="fas fa-archive"></i>
               <p class="mx-2">Stok Barang</p>

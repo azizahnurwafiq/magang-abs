@@ -55,9 +55,6 @@
         </table>           
     </div>
     <!-- Pagination Link -->
-    {{-- <div class="d-flex justify-content-end mx-5">
-        {{$pelanggans->links()}}
-    </div> --}}
     <div class="d-flex justify-content-end mx-5">
         {!! $pelanggans->appends(\Request::except('page'))->render() !!}
     </div>

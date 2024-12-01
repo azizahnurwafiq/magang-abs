@@ -4,12 +4,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\PekerjaanController;
 use App\Http\Controllers\PelangganControlller;
 use App\Http\Controllers\PreOrderController;
 use App\Http\Controllers\Stok_barangController;
 use App\Http\Controllers\UserController;
-use App\Models\Pelanggan;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 // Dashboard
@@ -48,14 +47,14 @@ Route::put('/invoice/history-payment/{id}', [InvoiceController::class, 'updatePa
 Route::delete('/invoice/history-payment/{id}', [InvoiceController::class, 'destroy'])->name('invoice.history.destroy');
 Route::get('/invoice/{id}/export-pdf', [InvoiceController::class, 'exportPdf'])->name('invoice.exportPdf');
 
-
 // PRE ORDER
 Route::get('/pre-order', [PreOrderController::class, 'index'])->name('preOrder.index');
 Route::get('/pre-order/create', [PreOrderController::class, 'create'])->name('preOrder.create');
 Route::get('/get-nama-pelanggan/{id}', [PreOrderController::class, 'getNamaPelanggan']);
 Route::get('/get-invoice-items/{id}', [PreOrderController::class, 'getInvoiceItems']);
-
-
+Route::post('/pre-order/create', [PreOrderController::class, 'store'])->name('preOrder.store');
+Route::post('/pre-order/{id}/update-status', [PreOrderController::class, 'updateStatus']);
+Route::delete('/pre-order/{id}', [PreOrderController::class, 'destroy'])->name('preOrder.destroy');
 
 // MANAGE_USER
 Route::get('/manage_user', [UserController::class, 'index'])->name('manage_user.user');
@@ -72,6 +71,13 @@ Route::get('stok_barang/{id}/edit', [Stok_barangController::class, 'edit'])->nam
 Route::put('stok_barang/{id}', [Stok_barangController::class, 'update'])->name('stok_barang.update');
 Route::delete('/stok_barang/{id}', [Stok_barangController::class, 'destroy'])->name('stok_barang.destroy');
 
+//PEKERJAAN
+Route::get('/pekerjaan', [PekerjaanController::class, 'index'])->name('pekerjaan.index');
+Route::get('/pekerjaan/create', [PekerjaanController::class, 'create'])->name('pekerjaan.create');
+Route::post('/pekerjaan/create', [PekerjaanController::class, 'store'])->name('pekerjaan.store');
+Route::get('/pekerjaan/{id}/edit', [PekerjaanController::class, 'edit'])->name('pekerjaan.edit');
+Route::put('/pekerjaan/{id}', [PekerjaanController::class, 'update'])->name('pekerjaan.update');
+Route::delete('/pekerjaan/{id}', [PekerjaanController::class, 'destroy'])->name('pekerjaan.destroy');
 
 //LOGIN
 Route::get('/login', [loginController::class, 'index'])->name('indekslogin.index');
