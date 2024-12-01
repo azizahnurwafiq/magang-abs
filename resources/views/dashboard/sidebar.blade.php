@@ -34,7 +34,7 @@
          <li class="nav-header">DATA MASTER</li>
 
          <li class="nav-item">
-           <a href="{{route('pelanggan')}}" class="nav-link">
+           <a href="{{route('pelanggan.index')}}" class="nav-link">
              <i class="fa-solid fa-users"></i>
              <p class="mx-2">Pelanggan</p>
            </a>
