@@ -19,7 +19,6 @@ class CreatePreOrderSizesTable extends Migration
             $table->string('size')->nullable();
             $table->unsignedBigInteger('jumlah')->nullable();
             $table->text('deskripsi')->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -35,9 +35,9 @@
                                 <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a href="{{route('pelanggan.edit', $pelanggan->id)}}" class="btn btn-primary dropdown-item m-2"><i class="fa fa-edit"></i> Edit</a>
+                                    <a href="{{route('admin.pelanggan.edit', $pelanggan->id)}}" class="btn btn-primary dropdown-item m-2"><i class="fa fa-edit"></i> Edit</a>
         
-                                    <form action="{{route('pelanggan.destroy', $pelanggan->id)}}" method="POST">
+                                    <form action="{{route('admin.pelanggan.destroy', $pelanggan->id)}}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-danger dropdown-item confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>

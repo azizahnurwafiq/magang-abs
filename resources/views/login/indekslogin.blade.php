@@ -23,38 +23,48 @@
   <div class="card">
       <div class="card-body login-card-body">
         <h1 align="center">LOGIN</h1>
-        <p class="login-box-msg">Wafiq Nur Azizah</p>
+        <p class="login-box-msg">Insatsu Digital Printing</p>
 
-      <form action="../../index3.html" method="post">
+      <form action="{{route('login.proses')}}" method="post">
+        @csrf
+        @error('username')
+            <div class="form-text text-danger">{{$message}}</div>
+        @enderror
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Username">
+          <input type="text" name="username" class="form-control" placeholder="Username">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
+
+        @error('password')
+            <div class="form-text text-danger">{{$message}}</div>
+        @enderror
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
+
+        
         <div class="row">
-          <div class="col-8">
+          {{-- <div class="col-8">
             <div class="icheck-warning">
               <input type="checkbox" id="remember">
               <label for="remember">
                 Remember Me
               </label>
             </div>
-          </div>
+          </div> --}}
           <!-- /.col -->
-          <div class="col-4">
+          <div class="col-12">
             <!-- <button type="submit" class="btn btn-primary btn-block">Log In</button> -->
-            <a href="navbar.html" class="btn btn-warning btn-block">Login</a>
+            <button type="submit" class="btn btn-primary">Login</button>
           </div>
           <!-- /.col -->
         </div>
@@ -77,5 +87,19 @@
 <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="assets/dist/js/adminlte.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+@if ($message = Session::get('success'))
+    <script>
+      swal('{{$message}}');
+    </script>
+@endif
+
+@if ($message = Session::get('failed'))
+    <script>
+      swal('{{$message}}');
+    </script>
+@endif
 </body>
 </html>

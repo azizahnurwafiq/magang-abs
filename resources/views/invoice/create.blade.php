@@ -7,13 +7,13 @@
             <h3 class="ml-2">Tambah data Invoice</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
-                    <form action="{{route('invoice.store')}}" method="POST">
+                    <form action="{{route('admin.invoice.store')}}" method="POST">
                         @csrf
                         <div class="d-flex col-md-12">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="kode" class="form-label">Kode</label>
-                                    <select class="form-control  form-select" name="kode" id="kode" required>
+                                    <select class="form-control form-select" name="kode" id="kode" required>
                                         <option selected>--Pilih kode--</option>
                                             <option value="tax">TAX</option> 
                                             <option value="non_tax">NON TAX</option> 
@@ -26,7 +26,7 @@
                                 <div class="mb-3">
                                     <label for="pelanggan_id" class="form-label">Nama</label>
                                     <select class="form-control form-select" name="pelanggan_id" id="pelanggan_id" required>
-                                        <option selected>--Pilih pelanggan--</option>
+                                        <option selected>--Pilih nama pelanggan--</option>
                                         @foreach ($pelanggans as $pelanggan)
                                             <option value={{$pelanggan->id}}>{{$pelanggan->nama}}</option>    
                                         @endforeach
@@ -38,17 +38,14 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="tanggal" class="form-label">Tanggal</label>
-                                    <input type="date" class="form-control" name="tanggal" id="tanggal" required>
-                                    @error('note')
-                                        <div class="form-text text-danger">{{$message}}</div>
-                                    @enderror
+                                    <input type="date" class="form-control" name="tanggal" id="tanggal">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="judul" class="form-label">Judul</label>
-                                    <input type="text" class="form-control" name="judul" id="judul" required>
-                                    @error('note')
+                                    <input type="text" class="form-control" name="judul" id="judul" value="{{ @old('judul')}}" >
+                                    @error('judul')
                                         <div class="form-text text-danger">{{$message}}</div>
                                     @enderror
                                 </div>
@@ -74,10 +71,13 @@
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label for="jumlah" class="form-label">Jumlah</label>
-                                                <input type="number" id="jumlah" min="0" class="form-control" name="jumlah[]" required>
+                                                <input type="number" id="jumlah" class="form-control" name="jumlah[]" >
+                                                @error('jumlah')
+                                                    <div class="form-text text-danger">{{$message}}</div>
+                                                @enderror
                                             </div>
                                         </div>
-                                        <button class="btn btn-success btn-add" style="height: 50%; margin-top:32px; margin-left: 5px;">+</button>
+                                        <button type="button" class="btn btn-success btn-add" style="height: 50%; margin-top:32px; margin-left: 5px;">+</button>
                                     </div>
                                 </div>
                                 
@@ -87,8 +87,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="down_payment" class="form-label">Down Payment</label>
-                                    <input type="number" class="form-control" name="down_payment" id="down_payment">
-                                    @error('note')
+                                    <input type="number" class="form-control" name="down_payment" id="down_payment" value="{{ @old('down_payment')}}" >
+                                    @error('down_payment')
                                         <div class="form-text text-danger">{{$message}}</div>
                                     @enderror
                                 </div>
@@ -124,7 +124,7 @@
             const tipeKode = this.value;
 
             if(tipeKode){
-                fetch('/generate-invoice-number', {
+                fetch('/admin/generate-invoice-number', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -149,7 +149,7 @@
 
                 if(pelangganId){
                     $.ajax({
-                        url: '/get-alamat-pelanggan/' + pelangganId,
+                        url: '/admin/get-alamat-pelanggan/' + pelangganId,
                         type: 'GET',
                         success: function(response){
                             $('#alamat').val(response.alamat);
@@ -194,10 +194,10 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="mb-3">
-                                            <input type="number" id="jumlah" min="0" class="form-control" name="jumlah[]" required>
+                                            <input type="number" id="jumlah" class="form-control" name="jumlah[]">
                                         </div>
                                     </div>
-                                    <button class="btn btn-danger btn-remove" style="height: 50%; margin-left: 5px;">-</button>
+                                    <button type="button" class="btn btn-danger btn-remove" style="height: 50%; margin-left: 5px;">-</button>
                                 </div>`;
                                 
                                 $('#dynamicForm').append(newField);
@@ -220,7 +220,7 @@
                 let harga = $(this).closest('.form-group').find('#harga');
 
                 $.ajax({
-                    url: '/get-harga-item/' + stokId,
+                    url: '/admin/get-harga-item/' + stokId,
                     type: 'GET',
                     data: {id: stokId},
                     success: function(response){

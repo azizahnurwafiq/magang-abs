@@ -8,7 +8,7 @@
             <h3 class="ml-2">Edit data stok barang</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
-                    <form action="{{route('stok_barang.update', $stok->id)}}" method="POST">
+                    <form action="{{route('admin.stok_barang.update', $stok->id)}}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="d-flex col-md-12">

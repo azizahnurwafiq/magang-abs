@@ -8,7 +8,7 @@
             <h3 class="ml-2">Tambah data pelanggan</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
-                    <form action="{{route('pelanggan.store')}}" method="POST">
+                    <form action="{{route('admin.pelanggan.store')}}" method="POST">
                         @csrf
                         <div class="d-flex col-md-12">
                             <div class="col-md-6">

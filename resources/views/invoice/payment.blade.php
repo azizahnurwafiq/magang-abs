@@ -8,7 +8,7 @@
             <h3 class="ml-2">Payment</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
-                    <form action="{{route('invoice.payment.store', ['id' => $invoice->id])}}" method="POST">
+                    <form action="{{route('admin.invoice.payment.store', ['id' => $invoice->id])}}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="payment" class="form-label">Payment</label>

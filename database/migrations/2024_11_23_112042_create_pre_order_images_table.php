@@ -17,7 +17,6 @@ class CreatePreOrderImagesTable extends Migration
             $table->id();
             $table->foreignId('pre_order_id')->constrained()->cascadeOnDelete();
             $table->string('image')->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
     }

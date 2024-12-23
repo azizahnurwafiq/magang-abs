@@ -17,7 +17,7 @@
 
             <div class=" d-flex col-md-12 mt-3 justify-content-between ">
                 <div class="d-flex col-4">
-                    <a href="{{route('pekerjaan.create')}}" class="btn btn-primary m-2">+ Tambah Data</a>
+                    <a href="{{route('admin.pekerjaan.create')}}" class="btn btn-primary m-2">+ Tambah Data</a>
                 </div>
                 <div class="col-md-3 mt-1 mx-1">
                     <form action="" method="GET">
@@ -51,9 +51,9 @@
                             <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
                             </button>
                             <div class="dropdown-menu">
-                                <a href="{{route('pekerjaan.edit', $pekerjaan->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
+                                <a href="{{route('admin.pekerjaan.edit', $pekerjaan->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
                                 
-                                <form action="{{route('pekerjaan.destroy', $pekerjaan->id)}}" method="POST">
+                                <form action="{{route('admin.pekerjaan.destroy', $pekerjaan->id)}}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger dropdown-item  confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>

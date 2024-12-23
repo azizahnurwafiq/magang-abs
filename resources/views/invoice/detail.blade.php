@@ -86,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <a href="{{route('invoice.index')}}" class="btn btn-primary m-2">Kembali</a>
+            <a href="{{route('admin.invoice.index')}}" class="btn btn-primary m-2">Kembali</a>
         </div>
     </div>
 </div>

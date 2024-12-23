@@ -8,7 +8,7 @@
             <h3 class="ml-2">Edit data pekerjaan</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
-                    <form action="{{route('pekerjaan.update', $pekerjaan->id)}}" method="POST">
+                    <form action="{{route('admin.pekerjaan.update', $pekerjaan->id)}}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">

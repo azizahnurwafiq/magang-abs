@@ -10,7 +10,7 @@ use Kyslik\ColumnSortable\Sortable;
 
 class PreOrderSize extends Model
 {
-    use HasFactory, SoftDeletes, Sortable;
+    use HasFactory, Sortable;
 
     protected $fillable = [
         'pre_order_id',

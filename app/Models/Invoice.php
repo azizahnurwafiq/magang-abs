@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Kyslik\ColumnSortable\Sortable;
 
 class Invoice extends Model
 {
-    use HasFactory, SoftDeletes, Sortable;
+    use HasFactory, Sortable;
     protected $table = 'invoices';
     protected $fillable = [
         'kode',
@@ -55,5 +54,10 @@ class Invoice extends Model
     public function preOrderDetails(): HasMany
     {
         return $this->hasMany(PreOrderDetail::class);
+    }
+
+    public function preOrderArsips(): HasMany
+    {
+        return $this->hasMany(PreOrderArsip::class);
     }
 }

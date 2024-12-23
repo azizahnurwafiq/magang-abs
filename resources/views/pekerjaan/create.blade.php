@@ -8,7 +8,7 @@
             <h3 class="ml-2">Tambah jenis pekerjaan</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
-                    <form action="{{route('pekerjaan.store')}}" method="POST">
+                    <form action="{{route('admin.pekerjaan.store')}}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="jenis_pekerjaan" class="form-label">Jenis Pekerjaan</label>

@@ -10,7 +10,7 @@ use Kyslik\ColumnSortable\Sortable;
 
 class PreOrderImage extends Model
 {
-    use HasFactory, SoftDeletes, Sortable;
+    use HasFactory, Sortable;
 
     protected $fillable = [
         'pre_order_id',
@@ -20,5 +20,10 @@ class PreOrderImage extends Model
     public function preOrder(): BelongsTo
     {
         return $this->belongsTo(PreOrder::class, 'pre_order_id');
+    }
+
+    public function detail(): BelongsTo
+    {
+        return $this->belongsTo(PreOrderDetail::class, 'pre_order_id');
     }
 }

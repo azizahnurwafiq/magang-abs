@@ -29,14 +29,17 @@ class PekerjaanController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'jenis_pekerjaan' => 'required'
+            'jenis_pekerjaan' => 'required|string|max:100|regex:/^[a-zA-Z\s]+$/'
         ], [
-            'jenis_pekerjaan.required' => 'Jenis pekerjaan wajib diisi!',
+            'jenis_pekerjaan.required' => 'jenis pekerjaan wajib diisi!',
+            'jenis_pekerjaan.string' => 'jenis pekerjaan harus berupa teks !!',
+            'jenis_pekerjaan.max' => 'jenis pekerjaan tidak boleh lebih dari 100 karakter !!',
+            'jenis_pekerjaan.regex' => 'jenis pekerjaan hanya boleh mengandung huruf dan spasi !!',
         ]);
 
         Pekerjaan::create($validatedData);
 
-        return redirect()->route('pekerjaan.index')->with('success', 'Data pekerjaan berhasil ditambahkan');
+        return redirect()->route('admin.pekerjaan.index')->with('success', 'Data pekerjaan berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -57,7 +60,7 @@ class PekerjaanController extends Controller
 
         Pekerjaan::where('id', $request->id)->update($data);
 
-        return redirect()->route('pekerjaan.index')->with('success', 'Data pekerjaan berhasil diupdate');
+        return redirect()->route('admin.pekerjaan.index')->with('success', 'Data pekerjaan berhasil diupdate');
     }
 
     public function destroy($id)

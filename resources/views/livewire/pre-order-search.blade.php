@@ -1,10 +1,23 @@
 <div>
-    <div class="d-flex col-md-3 mx-2" style="justify-self:right; margin-top:-50px;">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Cari..." wire:model.live="keyword">
-            <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+    @if(auth()->user()->role === 'admin')
+        <div class="d-flex col-md-3 mx-2" style="justify-self:right; margin-top:-50px;">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Cari..." wire:model.live="keyword">
+                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+            </div>
         </div>
-    </div>
+    @endif
+
+    @if(auth()->user()->role === 'produksi')
+        <div class="d-flex col-md-3 mx-3">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Cari..." wire:model.live="keyword">
+                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    @endif
+
+
 
     <div class="card-body">
         <table class="table table-bordered table-striped">
@@ -62,31 +75,36 @@
                         </td>
                         <td>
                             @php
-                                $daysLeft = \Carbon\Carbon::parse($detail->deadline)->diffInDays(\Carbon\Carbon::today());
-                                $isTodayOrPast = \Carbon\Carbon::parse($detail->deadline)->isPast();
+                                // Ambil tanggal deadline sebagai objek Carbon
+                                $deadlineDate = \Carbon\Carbon::parse($detail->deadline);
+                                // Hitung jumlah hari tersisa dari hari ini (dengan nilai negatif jika sudah lewat)
+                                $daysLeft = $deadlineDate->diffInDays(\Carbon\Carbon::today());
+                                // Cek apakah deadline sudah lewat
+                                $isPast = $deadlineDate->isPast() && !$deadlineDate->isToday(); // Lewat tetapi bukan hari ini
                             @endphp
 
-                            @if ($isTodayOrPast < 0)
+                            @if ($isPast)
                                 <span style="background-color: black; color: red; padding: 5px; border-radius: 5px;">
                                     Melewati Deadline
                                 </span>
-                            @elseif($daysLeft == 0)
+                            @elseif ($daysLeft === 0)
                                 <span style="background-color: red; color: white; padding: 5px; border-radius: 5px;">
                                     Hari ini
                                 </span>
-                            @elseif($daysLeft > 0 && $daysLeft <= 2)
+                            @elseif ($daysLeft >= 1 && $daysLeft <= 2)
                                 <span style="background-color: red; color: white; padding: 5px; border-radius: 5px;">
                                     {{ $daysLeft }} Hari lagi
                                 </span>
-                            @elseif($daysLeft >= 3 && $daysLeft <= 5)
+                            @elseif ($daysLeft >= 3 && $daysLeft <= 5)
                                 <span style="background-color: yellow; color: black; padding: 5px; border-radius: 5px;">
                                     {{ $daysLeft }} Hari lagi
                                 </span>
                             @else
                                 <span style="background-color: rgb(25, 202, 37); color: white; padding: 5px; border-radius: 5px;">
-                                    {{$daysLeft}} Hari lagi
+                                    {{ $daysLeft }} Hari lagi
                                 </span>
                             @endif
+
                         </td>
                         <td>
                             <div class="dropdown">
@@ -94,17 +112,27 @@
                                     <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
                                 </button>
                                     <div class="dropdown-menu">
-                                        <a href="#" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
-                                        <a href="#" class="btn btn-secondary dropdown-item "><i class="fa fa-eye"></i> Details</a>
-                                        <a href="#" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
+                                        {{-- <a href="#" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a> --}}
+                                        @if (auth()->user()->role === 'admin')
+                                            <a href="{{route('admin.preOrder.show', $detail->id)}}" class="btn btn-secondary dropdown-item "><i class="fa fa-eye"></i> Details</a>
 
-                                        <form action="{{route('preOrder.destroy', $detail->id)}}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-danger dropdown-item confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
-                                        </form>
+                                            <a href="#" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
 
-                                        <a href="#" class="btn btn-success dropdown-item "><i class="fa fa-file"></i> Archive</a>
+                                            <form action="{{route('admin.preOrder.destroy', $detail->id)}}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-danger dropdown-item confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
+                                            </form>
+
+                                            <form action="{{route('admin.preOrder.archive', $detail->id)}}" method="POST">
+                                                @csrf
+                                                <button class="btn btn-success dropdown-item"><i class="fa fa-file"></i> Archive</button>
+                                            </form>
+                                        @endif
+
+                                        @if (auth()->user()->role === 'produksi')
+                                            <a href="{{route('produksi.preOrder.show', $detail->id)}}" class="btn btn-secondary dropdown-item "><i class="fa fa-eye"></i> Details</a>
+                                        @endif
                                     </div>
                             </div>
                         </td>
@@ -117,11 +145,11 @@
             </tbody>
         </table>
     </div>
-</div>
     <!-- Pagination Link -->
     <div class="d-flex justify-content-end mx-5">
         {{ $details->links() }}
     </div>
+</div>
 
 
 
@@ -203,10 +231,10 @@
                         newClass = 'bg-danger';
                         break;
                     case 'REVISI':
-                        newClass = 'bg-primary';
+                        newClass = 'bg-info';
                         break;
                     case 'DIAMBIL':
-                        newClass = 'bg-info';
+                        newClass = 'bg-primary';
                         break;
                     case 'WIP':
                         newClass = 'bg-secondary';
@@ -230,7 +258,7 @@
 
                 // kirim data ke server dengan AJAX
                 $.ajax({
-                    url: `/pre-order/${preOrderId}/update-status`,
+                    url: `/admin/pre-order/${preOrderId}/update-status`,
                     method: 'POST',
                     data: {
                         status: newStatus,
@@ -273,7 +301,7 @@
                             };
                             $.ajax({
                                 type: "DELETE",
-                                url: '/pre-order/' + deletedid,
+                                url: '/admin/pre-order/' + deletedid,
                                 data: data,
                                 success: function (response) {
                                     swal(response.status, {

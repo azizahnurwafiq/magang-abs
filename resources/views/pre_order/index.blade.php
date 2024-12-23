@@ -15,13 +15,16 @@
                     </div>
                 @endif
                 <div class=" d-flex col-md-12 mt-3 justify-content-between ">
-                    <div class="col-md-8">
-                        <a href="{{route('preOrder.create')}}" class="btn btn-primary m-2">+ Buat PO</a>
-                    </div>
+                    @if (auth()->user()->role === 'admin')
+                        <div class="col-md-8">
+                            <a href="{{route('admin.preOrder.create')}}" class="btn btn-primary m-2">+ Buat PO</a>
+                        </div>
+                    @endif
                 </div>
                 @livewire('pre-order-search')
             </div>
         </div>
+    </div>
 </div>
 @endsection
 

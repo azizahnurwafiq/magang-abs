@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\InvoiceArsip;
 use App\Models\InvoicePayment;
 use App\Models\Pelanggan;
 use App\Models\Stok;
@@ -11,21 +12,9 @@ use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $keyword = $request->keyword;
-
-        if ($keyword != null) {
-            $data['invoices'] = Invoice::with('pelanggan')
-                ->where('kode', 'LIKE', '%' . $keyword . '%')
-                ->orWhere('no_invoice', 'LIKE', '%' . $keyword . '%')
-                ->orWhereHas('pelanggan', function ($query) use ($keyword) {
-                    $query->where('nama', 'LIKE', '%' . $keyword . '%');
-                })
-                ->paginate(3);
-        } else {
-            $data['invoices'] = Invoice::sortable()->paginate(10);
-        }
+        $data['invoices'] = Invoice::sortable()->paginate(10);
         return view('invoice.index', $data);
     }
 
@@ -77,6 +66,20 @@ class InvoiceController extends Controller
     {
 
         // $no_invoice = $this->generateInvoiceNumber($request);
+        $request->validate([
+            'judul' => 'required|max:255',
+            'jumlah' => 'required|min:1|max:20',
+            'down_payment' => 'required|numeric|min:1',
+        ], [
+            'judul.required' => 'judul wajib diisi !!',
+            'judul.max' => 'judul tidak boleh lebih dari 255 karakter !!',
+            'jumlah.required' => 'Jumlah wajib diisi !!',
+            'jumlah.min' => 'Jumlah harus minimal 1 !!',
+            'jumlah.max' => 'Jumlah tidak boleh lebih dari 20 karakter !!',
+            'down_payment.required' => 'down payment wajib diisi !!',
+            'down_payment.numeric' => 'Down payment harus berupa angka !!',
+            'down_payment.min' => 'down payment harus minimal 1 !!',
+        ]);
 
         $kekuranganBayar = $request->down_payment;
 
@@ -122,7 +125,7 @@ class InvoiceController extends Controller
         } else {
             return response()->json(['error' => 'Data item, harga, dan jumlah harus memiliki panjang yang sama.'], 400);
         }
-        return redirect()->route('invoice.index')->with('success', 'Data invoice berhasil ditambahkan');
+        return redirect()->route('admin.invoice.index')->with('success', 'Data invoice berhasil ditambahkan');
     }
 
     public function show($id)
@@ -188,7 +191,7 @@ class InvoiceController extends Controller
 
         InvoicePayment::create($data);
 
-        return redirect()->route('invoice.index')->with('success', 'berhasil');
+        return redirect()->route('admin.invoice.index')->with('success', 'berhasil');
     }
 
     public function history($id)
@@ -236,7 +239,7 @@ class InvoiceController extends Controller
         $invoice->kekurangan_bayar -= $difference;
         $invoice->save();
 
-        return redirect()->route('invoice.history', ['id' => $invoiceId])->with('success', 'berhasil diupdate');
+        return redirect()->route('admin.invoice.history', ['id' => $invoiceId])->with('success', 'berhasil diupdate');
     }
 
     public function destroy($id)
@@ -259,5 +262,16 @@ class InvoiceController extends Controller
             return redirect()->back()->with('error', 'Prefix kode invoice tidak valid.');
         }
         return $pdf->stream('invoice_' . $invoice->no_invoice . '.pdf');
+    }
+
+    public function archive($id)
+    {
+        $invoice = Invoice::findOrfail($id);
+
+        InvoiceArsip::create($invoice->toArray());
+
+        $invoice->delete();
+
+        return redirect()->route('admin.invoice.index')->with('success', 'invoice berhasil diarsipkan');
     }
 }

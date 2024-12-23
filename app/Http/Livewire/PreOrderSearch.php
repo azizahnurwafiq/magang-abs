@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+
 use App\Models\PreOrder;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -10,6 +11,11 @@ use Livewire\Component;
 class PreOrderSearch extends Component
 {
     public $keyword;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage();
+    }
 
     public function render()
     {
@@ -34,8 +40,17 @@ class PreOrderSearch extends Component
             });
 
             // Sorting berdasarkan deadline
-            $details = $details->sortBy(function ($detail) {
-                return Carbon::parse($detail->deadline)->diffInDays(Carbon::today());
+            $details = $details->sortByDesc(function ($detail) {
+                $deadlineDate = Carbon::parse($detail->deadline); // Parsing deadline
+                $daysLeft = $deadlineDate->diffInDays(Carbon::today(), false);
+                // Prioritas berdasarkan status
+                if ($daysLeft < 0) {
+                    return $daysLeft; // Melewati deadline (nilai negatif lebih dulu)
+                } elseif ($daysLeft === 0) {
+                    return 0; // Hari ini
+                } else {
+                    return $daysLeft; // Urutkan berdasarkan jarak hari
+                }
             });
         } else {
             // Jika tidak ada pencarian
@@ -49,14 +64,31 @@ class PreOrderSearch extends Component
             });
 
             // Sorting berdasarkan deadline
-            $details = $details->sortBy(function ($detail) {
-                return Carbon::parse($detail->deadline)->diffInDays(Carbon::today());
+            $details = $details->sortByDesc(function ($detail) {
+                $deadlineDate = Carbon::parse($detail->deadline); // Parsing deadline
+                $daysLeft = $deadlineDate->diffInDays(Carbon::today(), false);
+                if ($daysLeft < 0) {
+                    return $daysLeft; // Melewati deadline (nilai negatif lebih dulu)
+                } elseif ($daysLeft === 0) {
+                    return 0; // Hari ini
+                } else {
+                    return $daysLeft; // Urutkan berdasarkan jarak hari
+                }
+
+                $details = $details->sortBy(function ($detail) {
+                    $deadlineDate = Carbon::parse($detail->deadline, false); // Parsing dengan default null jika invalid
+                    if (!$deadlineDate) {
+                        return PHP_INT_MAX; // Prioritas terendah untuk tanggal kosong
+                    }
+                    $daysLeft = $deadlineDate->diffInDays(Carbon::today(), false);
+                    return $daysLeft < 0 ? $daysLeft : $daysLeft;
+                });
             });
         }
 
         // Tambahkan pagination manual
         $page = request()->get('page', 1); // Halaman saat ini
-        $perPage = 5; // Jumlah item per halaman
+        $perPage = 10; // Jumlah item per halaman
         $pagedDetails = $details->slice(($page - 1) * $perPage, $perPage)->values(); // Ambil data untuk halaman tertentu
 
         $detailsPaginated = new LengthAwarePaginator(
