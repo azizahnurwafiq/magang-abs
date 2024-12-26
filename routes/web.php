@@ -57,7 +57,7 @@ Route::post('/pre-order/{id}/update-status', [PreOrderController::class, 'update
 Route::delete('/pre-order/{id}', [PreOrderController::class, 'destroy'])->name('preOrder.destroy');
 
 // MANAGE_USER
-Route::get('/manage_user', [UserController::class, 'index'])->name('manage_user.user');
+Route::get('/manage_user', [UserController::class, 'index'])->name('manage_user.index');
 
 // STOK_BARANG
 Route::get('/stok_barang', [Stok_barangController::class, 'index'])->name('stok_barang.barang');
