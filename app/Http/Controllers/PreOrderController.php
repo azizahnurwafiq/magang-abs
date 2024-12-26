@@ -4,14 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Pekerjaan;
-use App\Models\Pelanggan;
 use App\Models\PreOrder;
+use App\Models\PreOrderArsip;
 use App\Models\PreOrderDetail;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class PreOrderController extends Controller
 {
@@ -61,14 +58,25 @@ class PreOrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tanggal' => 'required',
-            'bahan' => 'required',
-            'model' => 'required',
+            'bahan' => 'required|string|max:20|regex:/^[a-zA-Z\s]+$/',
+            'model' => 'required|string|max:20|regex:/^[a-zA-Z\s]+$/',
+            // 'warna' => 'required|string|max:20|regex:/^[a-zA-Z\s]+$/',
+            'item' => 'required',
             // 'image.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
-            'tanggal.required' => 'tanggal wajib diisi !!',
-            'bahan.required' => 'bahan wajib diisi !!',
-            'model.required' => 'model wajib diisi !!',
+            'bahan.required' => 'Bahan wajib diisi !!',
+            'bahan.string' => 'Bahan harus berupa teks !!',
+            'bahan.max' => 'Nama bahan tidak boleh lebih dari 20 karakter !!',
+            'bahan.regex' => 'Bahan hanya boleh mengandung huruf dan spasi !!',
+            'model.required' => 'Model wajib diisi !!',
+            'model.string' => 'Model harus berupa teks !!',
+            'model.max' => 'Nama model tidak boleh lebih dari 20 karakter !!',
+            'model.regex' => 'Model hanya boleh mengandung huruf dan spasi !!',
+            // 'warna.required' => 'Warna wajib diisi !!',
+            // 'warna.string' => 'Warna harus berupa teks !!',
+            // 'warna.max' => 'Warna tidak boleh lebih dari 20 karakter !!',
+            // 'warna.regex' => 'Warna hanya boleh mengandung huruf dan spasi !!',
+            'item.required' => 'item wajib diisi !!'
         ]);
 
         $data = [
@@ -81,7 +89,7 @@ class PreOrderController extends Controller
             'model' => $request->model,
         ];
 
-        // simpan data ke tabel pre order
+        // // simpan data ke tabel pre order
         $preOrder = PreOrder::create($data);
 
         // ambil data dari request
@@ -96,16 +104,16 @@ class PreOrderController extends Controller
 
         if (count($item) === count($quantity)) {
             $detailsData = [];
+            $imageData = [];
 
-            if (count($pekerjaan) === 1) {
-                // kondisi pekerjaan hanya satu
+            // kondisi satu pekerjaan untuk semua item
+            if (count($pekerjaan) === 1 && count($item) > 1) {
                 $jobId = $pekerjaan[0];
                 $job = Pekerjaan::where('id', $jobId)->first();
 
                 if (!$job) {
                     return response()->json(['error' => "Pekerjaan dengan ID {$jobId} tidak ditemukan."], 404);
                 }
-
                 foreach ($item as $index => $itemPreOrder) {
                     $quantityItem = intval($quantity[$index]);
                     $deadlinePekerjaan = $deadline[0] ?? now();
@@ -113,26 +121,24 @@ class PreOrderController extends Controller
                     $detailsData[] = [
                         'pre_order_id' => $preOrder->id,
                         'pekerjaan_id' => $job->id,
-                        'item' => $itemPreOrder,
-                        'quantity' => $quantityItem,
+                        'item' => json_encode($item),
+                        'quantity' => json_encode($quantity),
                         'deadline' => $deadlinePekerjaan,
                         'status' => 'BUTUH DIKERJAKAN',
                         'note' => $note,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
-
-                    $imageData = [];
-                    if ($request->hasFile('image')) {
-                        foreach ($request->file('image') as $file) {
-                            $path = $file->store('pre_order_images', 'public');
-                            $imageData[] = [
-                                'pre_order_id' => $preOrder->id,
-                                'image' => $path ?? null,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ];
-                        }
+                }
+                if ($request->hasFile('image')) {
+                    foreach ($request->file('image') as $file) {
+                        $path = $file->store('pre_order_images', 'public');
+                        $imageData[] = [
+                            'pre_order_id' => $preOrder->id,
+                            'image' => $path,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
                     }
                 }
             } else if (count($pekerjaan) === count($item)) {
@@ -151,34 +157,107 @@ class PreOrderController extends Controller
                     $detailsData[] = [
                         'pre_order_id' => $preOrder->id,
                         'pekerjaan_id' => $job->id,
-                        'item' => $itemPreOrder,
-                        'quantity' => $quantityItem,
+                        'item' => json_encode($item),
+                        'quantity' => json_encode($quantity),
                         'deadline' => $deadlinePekerjaan,
                         'status' => 'BUTUH DIKERJAKAN',
                         'note' => $note,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
+                }
+                if ($request->hasFile('image')) {
+                    foreach ($request->file('image') as $file) {
+                        $path = $file->store('pre_order_images', 'public');
+                        $imageData[] = [
+                            'pre_order_id' => $preOrder->id,
+                            'image' => $path,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                }
+            } else if (count($item) === 1 && count($pekerjaan) > 1) {
+                // kondisi satu item untuk banyak pekerjaan
+                $itemPreOrder = $item[0];
+                $quantityItem = intval($quantity[0] ?? 0);
 
-                    $imageData = [];
-                    if ($request->hasFile('image')) {
-                        foreach ($request->file('image') as $file) {
-                            $path = $file->store('pre_order_images', 'public');
-                            $imageData[] = [
-                                'pre_order_id' => $preOrder->id,
-                                'image' => $path ?? null,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ];
-                        }
+                foreach ($pekerjaan as $index => $jobId) {
+                    $job = Pekerjaan::where('id', $jobId)->first();
+
+                    if (!$job) {
+                        return response()->json(['error' => "Pekerjaan dengan ID {$jobId} tidak ditemukan."], 404);
+                    }
+
+                    $deadlinePekerjaan = $deadline[$index] ?? now();
+
+                    $detailsData[] = [
+                        'pre_order_id' => $preOrder->id,
+                        'pekerjaan_id' => $job->id,
+                        'item' => json_encode($item),
+                        'quantity' => json_encode($quantity),
+                        'deadline' => $deadlinePekerjaan,
+                        'status' => 'BUTUH DIKERJAKAN',
+                        'note' => $note,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+                if ($request->hasFile('image')) {
+                    foreach ($request->file('image') as $file) {
+                        $path = $file->store('pre_order_images', 'public');
+                        $imageData[] = [
+                            'pre_order_id' => $preOrder->id,
+                            'image' => $path,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                }
+            } else if (count($item) > 1 && count($pekerjaan) > 1) {
+                // kondisi item lebih dari satu tetapi tidak sama dengan pekerjaan dan pekerjaan tidak sama dengan item
+                foreach ($pekerjaan as $jobIndex => $jobId) {
+                    $job = Pekerjaan::where('id', $jobId)->first();
+
+                    if (!$job) {
+                        return response()->json(['error' => "Pekerjaan dengan ID {$jobId} tidak ditemukan."], 404);
+                    }
+
+                    // Ambil deadline berdasarkan indeks pekerjaan (jika ada)
+                    $deadlinePekerjaan = $deadline[$jobIndex] ?? now();
+
+                    // Simpan semua item sebagai satu grup untuk pekerjaan ini
+                    $detailsData[] = [
+                        'pre_order_id' => $preOrder->id,
+                        'pekerjaan_id' => $job->id,
+                        'item' => json_encode($item), // Semua item dalam satu pekerjaan
+                        'quantity' => json_encode($quantity), // Kuantitas semua item
+                        'deadline' => $deadlinePekerjaan,
+                        'status' => 'BUTUH DIKERJAKAN',
+                        'note' => $note,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+                if ($request->hasFile('image')) {
+                    foreach ($request->file('image') as $file) {
+                        $path = $file->store('pre_order_images', 'public');
+                        $imageData[] = [
+                            'pre_order_id' => $preOrder->id,
+                            'image' => $path,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
                     }
                 }
             }
+
             // simpan ke tabel pre order detail
             DB::table('pre_order_details')->insert($detailsData);
-
-            // simpan gambar ke tabel pre order images
-            DB::table('pre_order_images')->insert($imageData);
+            // Simpan gambar ke tabel pre_order_images hanya jika ada data
+            if (!empty($imageData)) {
+                DB::table('pre_order_images')->insert($imageData);
+            }
         } else {
             return response()->json(['error' => 'Data item, quantity, jenis pekerjaan, dan deadline harus memiliki panjang yang sesuai.'], 400);
         }
@@ -200,7 +279,7 @@ class PreOrderController extends Controller
         } else {
             return response()->json(['error' => 'Jumlah data size, jumlah, dan deskripsi tidak sama.'], 400);
         }
-        return redirect()->route('preOrder.index')->with('success', 'Berhasil membuat data PO');
+        return redirect()->route('admin.preOrder.index')->with('success', 'Berhasil membuat data PO');
     }
 
     public function updateStatus(Request $request, $id)
@@ -208,12 +287,16 @@ class PreOrderController extends Controller
         $validated = $request->validate([
             'status' => 'required|string',
         ]);
-
         $preOrderDetail = PreOrderDetail::findOrFail($id);
         $preOrderDetail->status = $validated['status'];
         $preOrderDetail->save();
-
         return response()->json(['message' => 'Status berhasil diperbarui']);
+    }
+
+    public function show($id)
+    {
+        $details = PreOrderDetail::with('preOrder.invoice', 'pekerjaan', 'preOrder.sizes')->find($id);
+        return view('pre_order.details', compact('details'));
     }
 
     public function destroy($id)
@@ -227,5 +310,27 @@ class PreOrderController extends Controller
         $preOrderDetail->delete();
 
         return response()->json(['status' => 'Data PO berhasil dihapus!']);
+    }
+
+    public function archive($id)
+    {
+        $preOrderDetail = PreOrderDetail::findOrFail($id);
+        // dd($preOrderDetail);
+        PreOrderArsip::create($preOrderDetail->toArray());
+
+        $preOrderDetail->delete();
+
+        return redirect()->route('admin.preOrder.index')->with('success', 'PO berhasil diarsipkan');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $preOrderDetail = PreOrderDetail::find($id);
+
+        $preOrderDetail->update([
+            'note_produksi' => $request->note_produksi,
+        ]);
+
+        return redirect()->route('produksi.preOrder.index')->with('success', 'Berhasil menambahkan note produksi');
     }
 }

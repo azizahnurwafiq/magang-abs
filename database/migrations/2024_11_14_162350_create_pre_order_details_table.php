@@ -19,12 +19,11 @@ class CreatePreOrderDetailsTable extends Migration
             $table->foreignId('pekerjaan_id')->constrained()->cascadeOnDelete();
             $table->date('deadline')->nullable();
             $table->string('item')->nullable();
-            $table->unsignedBigInteger('quantity')->nullable();
+            $table->string('quantity')->nullable();
             $table->string('kebutuhan_bahan')->nullable();
             $table->text('note')->nullable();
             $table->text('note_produksi')->nullable();
             $table->enum('status', ['DIAMBIL', 'WIP', 'BUTUH DIKERJAKAN', 'HOLD', 'DONE AND READY', 'REVISI', 'BATAL'])->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
     }

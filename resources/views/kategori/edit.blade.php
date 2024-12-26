@@ -8,7 +8,7 @@
             <h3 class="ml-2">Edit data kategori</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
-                    <form action="{{route('kategori.update', $kategori->id)}}" method="POST">
+                    <form action="{{route('admin.kategori.update', $kategori->id)}}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">

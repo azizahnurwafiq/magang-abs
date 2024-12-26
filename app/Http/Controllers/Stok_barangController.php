@@ -44,18 +44,32 @@ class Stok_barangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'SKU' => 'required|unique:stoks,SKU',
-            'item' => 'required',
-            'jumlah' => 'required',
-            'tanggal_masuk' => 'required',
-            'harga_jual' => 'required',
+            'SKU' => 'required|string|max:20|regex:/^[A-Z0-9\-]+$/|unique:stoks,SKU',
+            'item' => 'required|string|max:255',
+            'jumlah' => 'required|integer|min:1',
+            'tanggal_masuk' => 'required|date',
+            'harga_jual' => 'required|numeric|min:0',
+            'harga_beli' => 'required|numeric|min:0',
         ], [
-            'SKU.required' => 'sku wajib diisi !!',
-            'SKU.unique' => 'kode sudah digunakan, silahkan masukkan kode yang berbeda',
-            'item.required' => 'item wajib diisi !!',
-            'jumlah.required' => 'jumlah wajib diisi !!',
-            'tanggal_masuk.required' => 'tanggal masuk wajib diisi !!',
-            'harga_jual.required' => 'harga jual wajib diisi !!',
+            'SKU.required' => 'SKU wajib diisi !!',
+            'SKU.string' => 'SKU harus berupa teks !!',
+            'SKU.max' => 'SKU tidak boleh lebih dari 20 karakter !!',
+            'SKU.regex' => 'SKU hanya boleh mengandung huruf kapital, angka, dan tanda hubung (-) !!',
+            'SKU.unique' => 'SKU sudah digunakan, silakan masukkan kode yang berbeda !!',
+            'item.required' => 'Item wajib diisi !!',
+            'item.string' => 'Item harus berupa teks !!',
+            'item.max' => 'Item tidak boleh lebih dari 255 karakter !!',
+            'jumlah.required' => 'Jumlah wajib diisi !!',
+            'jumlah.integer' => 'Jumlah harus berupa angka bulat !!',
+            'jumlah.min' => 'Jumlah harus minimal 1 !!',
+            'tanggal_masuk.required' => 'Tanggal masuk wajib diisi !!',
+            'tanggal_masuk.date' => 'Format tanggal tidak valid !!',
+            'harga_jual.required' => 'Harga jual wajib diisi !!',
+            'harga_jual.numeric' => 'Harga jual harus berupa angka !!',
+            'harga_jual.min' => 'Harga jual tidak boleh negatif !!',
+            'harga_beli.required' => 'Harga beli wajib diisi !!',
+            'harga_beli.numeric' => 'Harga beli harus berupa angka !!',
+            'harga_beli.min' => 'Harga beli tidak boleh negatif !!',
         ]);
 
         $data = [
@@ -79,11 +93,20 @@ class Stok_barangController extends Controller
 
         StokHistory::create($dataHistory);
 
-        return redirect()->route('stok_barang.barang')->with('success', 'Data item baru berhasil ditambahkan');
+        return redirect()->route('admin.stok_barang.barang')->with('success', 'Data item baru berhasil ditambahkan');
     }
 
     public function addStokLama(Request $request)
     {
+        $request->validate([
+            'jumlah' => 'required|integer|min:1|max:20',
+        ], [
+            'jumlah.required' => 'Jumlah wajib diisi !!',
+            'jumlah.integer' => 'Jumlah harus berupa angka bulat !!',
+            'jumlah.min' => 'Jumlah harus minimal 1 !!',
+            'jumlah.max' => 'Jumlah tidak boleh lebih dari 20 karakter !!',
+        ]);
+
         $skuStok = intval($request->SKU);
 
         $stokHistory = StokHistory::where('stok_id', $skuStok)->latest('total_stok')->first();
@@ -100,7 +123,7 @@ class Stok_barangController extends Controller
             'total_stok' => $total_stok_baru,
         ]);
 
-        return redirect()->route('stok_barang.barang')->with('success', 'Data stok berhasil ditambahkan');
+        return redirect()->route('admin.stok_barang.barang')->with('success', 'Data stok berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -132,7 +155,7 @@ class Stok_barangController extends Controller
 
         $stok->update($data);
 
-        return redirect()->route('stok_barang.barang')->with('success', 'Data stok berhasil diupdate');
+        return redirect()->route('admin.stok_barang.barang')->with('success', 'Data stok berhasil diupdate');
     }
 
     public function destroy($id)

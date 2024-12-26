@@ -25,7 +25,6 @@ class CreateInvoicesTable extends Migration
             $table->unsignedBigInteger('kekurangan_bayar')->nullable();
             $table->unsignedBigInteger('total_invoice')->nullable();
             $table->enum('status', ['LUNAS', 'BELUM LUNAS']);
-            $table->softDeletes();
             $table->timestamps();
         });
     }

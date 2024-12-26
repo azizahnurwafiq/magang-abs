@@ -8,7 +8,7 @@
             <h3 class="ml-2">Edit payment</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
-                    <form action="{{route('invoice.history.update', ['id' => $payment->id]) }}" method="POST">
+                    <form action="{{route('admin.invoice.history.update', ['id' => $payment->id]) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">
@@ -32,8 +32,6 @@
                                     <option>Transfer</option>    
                                     <option>Cash</option>    
                             </select>
-                            {{-- <label for="via" class="form-label">Via</label>
-                            <input type="text" class="form-control" name="via" id="via" value="{{$payment->via}}"aria-describedby="emailHelp"> --}}
                             @error('via')
                                 <div class="form-text text-danger">{{$message}}</div>
                             @enderror

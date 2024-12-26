@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title')</title>
+  <style>
+    .element::after{
+        content: none !important;
+      }
+  </style>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -22,6 +27,8 @@
   <!-- JQVMap -->
   <link rel="stylesheet" href="{{asset('../assets/plugins/jqvmap/jqvmap.min.css')}}">
   <!-- Theme style -->
+  <link rel="stylesheet" href="{{asset('../assets/dist/css/adminlte.min.css')}}">
+    <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('../assets/dist/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{asset('../assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">

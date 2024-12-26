@@ -21,14 +21,17 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'kategori' => 'required'
+            'kategori' => 'required|string|max:100|regex:/^[a-zA-Z\s]+$/'
         ], [
             'kategori.required' => 'Kategori wajib diisi!',
+            'kategori.string' => 'Kategori harus berupa teks !!',
+            'kategori.max' => 'Nama kategori tidak boleh lebih dari 100 karakter !!',
+            'kategori.regex' => 'Nama kategori hanya boleh mengandung huruf dan spasi !!',
         ]);
 
         Kategori::create($validatedData);
 
-        return redirect()->route('kategori.index')->with('success', 'Data kategori berhasil ditambahkan');
+        return redirect()->route('admin.kategori.index')->with('success', 'Data kategori berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -49,7 +52,7 @@ class KategoriController extends Controller
 
         Kategori::where('id', $request->id)->update($data);
 
-        return redirect()->route('kategori.index')->with('success', 'Data kategori berhasil diupdate');
+        return redirect()->route('admin.kategori.index')->with('success', 'Data kategori berhasil diupdate');
     }
 
     public function destroy($id)

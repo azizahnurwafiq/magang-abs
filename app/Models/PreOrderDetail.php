@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kyslik\ColumnSortable\Sortable;
 
 class PreOrderDetail extends Model
 {
-    use HasFactory, SoftDeletes, Sortable;
+    use HasFactory, Sortable;
 
     protected $fillable = [
         'pre_order_id',
-        'jenis_pekerjaan',
+        'pekerjaan_id',
         'deadline',
         'item',
         'quantity',
@@ -34,5 +34,15 @@ class PreOrderDetail extends Model
     public function pekerjaan(): BelongsTo
     {
         return $this->belongsTo(Pekerjaan::class);
+    }
+
+    public function invoice(): BelongsTo
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(PreOrderImage::class, 'pre_order_id');
     }
 }

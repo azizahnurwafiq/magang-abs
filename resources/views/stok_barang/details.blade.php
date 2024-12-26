@@ -69,14 +69,13 @@
                                 @empty
                                 <td colspan="2" class="text-center">Data detail Belum Ada !</td>
                                 @endforelse
-
                             </tbody>
                         </table>
                     </div>
 
                 </div>
             </div>
-            <a href="{{route('stok_barang.barang')}}" class="btn btn-primary m-2">Kembali</a>
+            <a href="{{route('admin.stok_barang.barang')}}" class="btn btn-primary m-2">Kembali</a>
         </div>
         <div class="col-md-12">
 

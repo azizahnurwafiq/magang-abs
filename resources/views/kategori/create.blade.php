@@ -8,7 +8,7 @@
             <h3 class="ml-2">Tambah data kategori</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
-                    <form action="{{route('kategori.store')}}" method="POST">
+                    <form action="{{route('admin.kategori.store')}}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="kategori" class="form-label">Kategori</label>

@@ -17,8 +17,8 @@
 
             <div class=" d-flex col-md-12 mt-3 justify-content-between ">
               <div class="d-flex col-4">
-                  <a href="{{route('stok_barang.addItem')}}" class="btn btn-primary m-2">+ Add Item</a>
-                  <a href="{{route('stok_barang.addStok')}}" class="btn btn-primary m-2">+ Add Stok</a>
+                  <a href="{{route('admin.stok_barang.addItem')}}" class="btn btn-primary m-2">+ Add Item</a>
+                  <a href="{{route('admin.stok_barang.addStok')}}" class="btn btn-primary m-2">+ Add Stok</a>
               </div>
               <div class="col-md-3 mt-1 mx-1">
                   <form action="" method="GET">
@@ -62,10 +62,10 @@
                           <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
                         </button>
                           <div class="dropdown-menu">
-                              <a href="{{route('stok_barang.show', $data->id)}}" class="btn btn-secondary dropdown-item"><i class="fa fa-eye"></i> Details</a>
-                              <a href="{{route('stok_barang.edit', $data->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
+                              <a href="{{route('admin.stok_barang.show', $data->id)}}" class="btn btn-secondary dropdown-item"><i class="fa fa-eye"></i> Details</a>
+                              <a href="{{route('admin.stok_barang.edit', $data->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
 
-                              <form action="{{route('stok_barang.destroy', $data->id)}}" method="POST">
+                              <form action="{{route('admin.stok_barang.destroy', $data->id)}}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger dropdown-item confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>

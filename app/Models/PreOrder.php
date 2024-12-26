@@ -12,7 +12,7 @@ use Kyslik\ColumnSortable\Sortable;
 
 class PreOrder extends Model
 {
-    use HasFactory, SoftDeletes, Sortable;
+    use HasFactory, Sortable;
 
     protected $fillable = [
         'invoice_id',
@@ -32,6 +32,11 @@ class PreOrder extends Model
     public function details(): HasMany
     {
         return $this->hasMany(PreOrderDetail::class);
+    }
+
+    public function detailArsips(): HasMany
+    {
+        return $this->hasMany(PreOrderArsip::class);
     }
 
     public function pekerjaans(): BelongsToMany

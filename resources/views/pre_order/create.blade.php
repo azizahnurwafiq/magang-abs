@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <h3 class="ml-2">Input PO</h3>
             <div class="card ml-2 mt-4">
-                <form action="{{route('preOrder.store')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{route('admin.preOrder.store')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div class="d-flex col-md-12">
@@ -31,17 +31,17 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="tanggal" class="form-label">Tanggal</label>
-                                    <input type="date" class="form-control" name="tanggal" id="tanggal" required>
+                                    <input type="date" class="form-control" name="tanggal" id="tanggal">
                                     {{-- @error('tanggal')
                                         <div class="form-text text-danger">{{$message}}</div>
                                     @enderror --}}
                                 </div>
                                 <div class="mb-3">
                                     <label for="bahan" class="form-label">Bahan</label>
-                                    <input type="text" id="bahan" class="form-control" name="bahan" required>
-                                    {{-- @error('bahan')
+                                    <input type="text" id="bahan" class="form-control" name="bahan">
+                                    @error('bahan')
                                         <div class="form-text text-danger">{{$message}}</div>
-                                    @enderror --}}
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="item" class="form-label">Item <span class="text-red">(pilih salah satu)</span></label>
@@ -82,27 +82,28 @@
                                         </div>
                                     </div>
 
+
                                     <div id="dynamicForm1">
                                         <div class="form-group d-flex" style="margin-left: -10px;">
                                             <div class="col-md-6">
                                                 <div class="mb-2">
                                                     <label for="item" class="form-label">Item</label>
-                                                    <input type="text" id="item" class="form-control" name="item[]" required>
-                                                    {{-- @error('item')
+                                                    <input type="text" id="item" class="form-control" name="item[]">
+                                                    @error('item')
                                                         <div class="form-text text-danger">{{$message}}</div>
-                                                    @enderror --}}
+                                                    @enderror
                                                 </div> 
                                             </div>  
                                             <div class="col-md-5">
                                                 <div class="mb-2">
                                                     <label for="quantity" class="form-label">Quantity</label>
-                                                    <input type="text" id="quantity" class="form-control" name="quantity[]" required>
-                                                    {{-- @error('quantity')
+                                                    <input type="number" id="quantity" class="form-control" name="quantity[]">
+                                                    @error('quantity')
                                                         <div class="form-text text-danger">{{$message}}</div>
-                                                    @enderror --}}
+                                                    @enderror
                                                 </div>
                                             </div>
-                                            <button class="btn btn-success btn-add" id="btn-add" style="height: 50%; margin-top:32px; margin-left: 5px;">+</button>
+                                            <button type="button" class="btn btn-success btn-add" id="btn-add" style="height: 50%; margin-top:32px; margin-left: 5px;">+</button>
                                         </div>
                                     </div>  
                                     
@@ -112,17 +113,17 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="model" class="form-label">Model</label>
-                                    <input type="text" id="model" class="form-control" name="model" required>
-                                    {{-- @error('model')
+                                    <input type="text" id="model" class="form-control" name="model">
+                                    @error('model')
                                         <div class="form-text text-danger">{{$message}}</div>
-                                    @enderror --}}
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="warna" class="form-label">Warna</label>
                                     <input type="text" id="warna" class="form-control" name="warna">
-                                    {{-- @error('warna')
+                                    @error('warna')
                                         <div class="form-text text-danger">{{$message}}</div>
-                                    @enderror --}}
+                                    @enderror
                                 </div>
 
                                 <div id="dynamicForm2">
@@ -144,7 +145,7 @@
                                                 <input type="date" id="deadline"class="form-control" name="deadline[]">
                                             </div>
                                         </div>
-                                        <button class="btn btn-success btn-add" style="height: 50%; margin-top:32px; margin-left: 5px;">+</button>
+                                        <button type="button" class="btn btn-success btn-add" style="height: 50%; margin-top:32px; margin-left: 5px;">+</button>
                                     </div>
                                 </div>
 
@@ -155,13 +156,10 @@
                                                 <label class="form-label">gambar</label>
                                                 <input type="file" class="form-control" name="image[]" onchange="previewImage()" multiple>
                                                 <img class="img-preview img-fluid mt-2 col-sm-8">
-                                                @error('image')
-                                                    <div class="form-text text-danger">{{$message}}</div>
-                                                @enderror 
                                             </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <button class="btn btn-success btn-add" style=" margin-top:32px;">+</button>
+                                            <button type="button" class="btn btn-success btn-add" style=" margin-top:32px;">+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -257,12 +255,11 @@
                                             </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <button class="btn btn-danger btn-remove" style=" margin-top:32px;">-</button>
+                                            <button type="button" class="btn btn-danger btn-remove" style=" margin-top:32px;">-</button>
                                         </div>
                                     </div>`;
                         $('#dynamicForm3').append(newField);
     });
-    
     $('#dynamicForm3').on('click', '.btn-remove', function(){
             $(this).closest('.d-flex').remove();
     });
@@ -289,7 +286,7 @@
 
                 if(InvoiceId){
                     $.ajax({
-                        url: '/get-nama-pelanggan/' + InvoiceId,
+                        url: '/admin/get-nama-pelanggan/' + InvoiceId,
                         type: 'GET',
                         dataType: 'json',
                         success: function(response){
@@ -337,7 +334,7 @@
 
             if(isChecked && invoiceId){
                 $.ajax({
-                    url: '/get-invoice-items/' + invoiceId,
+                    url: '/admin/get-invoice-items/' + invoiceId,
                     type: 'GET',
                     dataType: 'json',
                     success: function(response){
@@ -426,6 +423,5 @@
             $(this).closest('tr').remove();
         })
     })
-
 </script>
 @endpush

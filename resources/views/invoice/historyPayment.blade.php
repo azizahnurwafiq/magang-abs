@@ -38,9 +38,9 @@
                                             <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
                                         </button>
                                             <div class="dropdown-menu">
-                                                <a href="{{route('invoice.history.edit', $payment->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
+                                                <a href="{{route('admin.invoice.history.edit', $payment->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
 
-                                                <form action="{{route('invoice.history.destroy', $payment->id)}}" method="POST">
+                                                <form action="{{route('admin.invoice.history.destroy', $payment->id)}}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="btn btn-danger dropdown-item confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>

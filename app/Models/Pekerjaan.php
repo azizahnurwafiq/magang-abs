@@ -28,4 +28,9 @@ class Pekerjaan extends Model
     {
         return $this->hasMany(PreOrderDetail::class);
     }
+
+    public function detailArsips(): HasMany
+    {
+        return $this->hasMany(PreOrderArsip::class);
+    }
 }

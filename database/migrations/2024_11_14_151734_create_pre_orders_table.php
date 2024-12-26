@@ -22,7 +22,6 @@ class CreatePreOrdersTable extends Migration
             $table->string('warna')->nullable();
             $table->string('model')->nullable();
             $table->date('tanggal')->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
     }
