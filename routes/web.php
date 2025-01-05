@@ -219,3 +219,26 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'role:manager'], '
     Route::put('/manage_user/{id}', [UserController::class, 'update'])->name('manage_user.update');
     Route::delete('/manage_user/{id}', [UserController::class, 'destroy'])->name('manage_user.destroy');
 });
+
+
+Route::group(['prefix' => 'produksi', 'middleware' => ['auth', 'role:produksi'], 'as' => 'produksi.'], function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // PRE ORDER
+    Route::get('/pre-order', [PreOrderController::class, 'index'])->name('preOrder.index');
+    Route::get('/pre-order/create', [PreOrderController::class, 'create'])->name('preOrder.create');
+    Route::get('/get-nama-pelanggan/{id}', [PreOrderController::class, 'getNamaPelanggan']);
+    Route::get('/get-invoice-items/{id}', [PreOrderController::class, 'getInvoiceItems']);
+    Route::post('/pre-order/create', [PreOrderController::class, 'store'])->name('preOrder.store');
+    Route::post('/pre-order/{id}/update-status', [PreOrderController::class, 'updateStatus']);
+    Route::get('/pre-order/{id}', [PreOrderController::class, 'show'])->name('preOrder.show');
+    Route::put('/pre-order/{id}', [PreOrderController::class, 'update'])->name('preOrder.update');
+    Route::delete('/pre-order/{id}', [PreOrderController::class, 'destroy'])->name('preOrder.destroy');
+    Route::post('/pre-order/{id}/archive', [PreOrderController::class, 'archive'])->name('preOrder.archive');
+
+    // Arsip pre order
+    Route::get('/archive-pre-order', [ArsipPreOrderController::class, 'index'])->name('preOrderArchive.index');
+    Route::post('/archive-pre-order/{id}/restore', [ArsipPreOrderController::class, 'restore'])->name('preOrderArchive.restore');
+    Route::delete('archive-pre-order/{id}', [ArsipPreOrderController::class, 'destroy'])->name('preOrderArchive.destroy');
+});
