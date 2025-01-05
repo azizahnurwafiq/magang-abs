@@ -33,6 +33,8 @@ class loginController extends Controller
                 return redirect()->route('admin.dashboard');
             } elseif ($user->role == 'produksi') {
                 return redirect()->route('produksi.dashboard');
+            } elseif ($user->role == 'manager') {
+                return redirect()->route('manager.dashboard');
             }
         } else {
             return redirect()->route('login')->with('failed', 'Username atau Password Salah!');

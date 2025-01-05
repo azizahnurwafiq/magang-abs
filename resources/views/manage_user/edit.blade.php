@@ -8,7 +8,7 @@
             <h3 class="ml-2">Edit data user</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
-                    <form action="{{route('admin.manage_user.update', $user->id)}}" method="POST">
+                    <form action="{{route('manager.manage_user.update', $user->id)}}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">
@@ -23,8 +23,9 @@
                             <label for="role" class="form-label">Role</label>
                             <select class="form-control form-select" name="role" id="role">
                                 <option selected>--Pilih Role--</option>
-                                    <option value="admin">Admin</option> 
-                                    <option value="produksi">Produksi</option> 
+                                <option value="admin">Admin</option>
+                                <option value="produksi">Produksi</option>
+                                <option value="manager">Manager</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>

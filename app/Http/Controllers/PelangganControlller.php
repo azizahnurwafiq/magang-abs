@@ -49,7 +49,11 @@ class PelangganControlller extends Controller
 
         Pelanggan::create($validatedData);
 
-        return redirect()->route('admin.pelanggan.index')->with('success', 'Data pelanggan berhasil ditambahkan');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.pelanggan.index')->with('success', 'Data pelanggan berhasil ditambahkan');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.pelanggan.index')->with('success', 'Data pelanggan berhasil ditambahkan');
+        }
     }
 
     public function edit($id)
@@ -78,7 +82,12 @@ class PelangganControlller extends Controller
 
         Pelanggan::where('id', $request->id)->update($data);
 
-        return redirect()->route('admin.pelanggan.index')->with('success', 'Data pelanggan berhasil diupdate');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.pelanggan.index')->with('success', 'Data pelanggan berhasil diupdate');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.pelanggan.index')->with('success', 'Data pelanggan berhasil diupdate');
+        }
+
     }
 
     public function destroy($id)

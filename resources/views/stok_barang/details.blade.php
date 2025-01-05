@@ -62,10 +62,10 @@
                             </thead>
                             <tbody>
                                 @forelse ($stok->stokHistories as $stokHistori)
-                                    <tr>
-                                        <td>{{$stokHistori->jumlah}} <span>Pcs</span></td>
-                                        <td>{{$stokHistori->tanggal_masuk}}</td>
-                                    </tr> 
+                                <tr>
+                                    <td>{{$stokHistori->jumlah}} <span>Pcs</span></td>
+                                    <td>{{$stokHistori->tanggal_masuk}}</td>
+                                </tr>
                                 @empty
                                 <td colspan="2" class="text-center">Data detail Belum Ada !</td>
                                 @endforelse
@@ -75,7 +75,11 @@
 
                 </div>
             </div>
+            @if (request()->is('admin*'))
             <a href="{{route('admin.stok_barang.barang')}}" class="btn btn-primary m-2">Kembali</a>
+            @elseif (request()->is('manager*'))
+            <a href="{{route('manager.stok_barang.barang')}}" class="btn btn-primary m-2">Kembali</a>
+            @endif
         </div>
         <div class="col-md-12">
 

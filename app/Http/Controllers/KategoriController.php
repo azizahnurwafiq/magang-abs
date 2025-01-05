@@ -31,7 +31,11 @@ class KategoriController extends Controller
 
         Kategori::create($validatedData);
 
-        return redirect()->route('admin.kategori.index')->with('success', 'Data kategori berhasil ditambahkan');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.kategori.index')->with('success', 'Data kategori berhasil ditambahkan');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.kategori.index')->with('success', 'Data kategori berhasil ditambahkan');
+        }
     }
 
     public function edit($id)
@@ -52,7 +56,11 @@ class KategoriController extends Controller
 
         Kategori::where('id', $request->id)->update($data);
 
-        return redirect()->route('admin.kategori.index')->with('success', 'Data kategori berhasil diupdate');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.kategori.index')->with('success', 'Data kategori berhasil diupdate');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.kategori.index')->with('success', 'Data kategori berhasil diupdate');
+        }
     }
 
     public function destroy($id)

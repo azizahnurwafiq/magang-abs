@@ -25,6 +25,10 @@ class ArsipPreOrderController extends Controller
 
         $arsip->delete();
 
-        return redirect()->route('admin.preOrderArchive.index')->with('success', 'PO berhasil dipulihkan');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.preOrderArchive.index')->with('success', 'PO berhasil dipulihkan');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.preOrderArchive.index')->with('success', 'PO berhasil dipulihkan');
+        }
     }
 }

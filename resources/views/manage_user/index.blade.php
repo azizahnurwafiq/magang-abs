@@ -5,22 +5,22 @@
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-md-12">
-          <div class="card">
-              <div class="card-header">
-                  <h3 class="card-title">MANAGE USER</h3>
-              </div>
-              @if (session('success'))
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">MANAGE USER</h3>
+                </div>
+                @if (session('success'))
                 <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
                     {{ session('success') }}
                 </div>
-              @endif
-              <div class=" d-flex col-md-12 mt-3 justify-content-between ">
-                <div class="d-flex col-2">
-                    <a href="{{route('admin.manage_user.create')}}" class="btn btn-primary m-2">+ Tambah user</a>
+                @endif
+                <div class=" d-flex col-md-12 mt-3 justify-content-between ">
+                    <div class="d-flex col-2">
+                        <a href="{{route('manager.manage_user.create')}}" class="btn btn-primary m-2">+ Tambah user</a>
+                    </div>
                 </div>
-              </div>
-              @livewire('user-search')
-          </div>
+                @livewire('user-search')
+            </div>
         </div>
     </div>
 </div>
@@ -28,14 +28,14 @@
 
 @push('scripts')
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
 
-        $('.confirm-delete').click(function (e) {
+        $('.confirm-delete').click(function(e) {
             e.preventDefault();
 
             var deletedid = $(this).closest("tr").find('.delete_id').val();
@@ -57,13 +57,13 @@
                             type: "DELETE",
                             url: 'manage_user/' + deletedid,
                             data: data,
-                            success: function (response) {
+                            success: function(response) {
                                 swal(response.status, {
-                                    icon: "success",
-                                })
-                                .then((result) => {
-                                    location.reload();
-                                });
+                                        icon: "success",
+                                    })
+                                    .then((result) => {
+                                        location.reload();
+                                    });
                             }
                         });
                     }

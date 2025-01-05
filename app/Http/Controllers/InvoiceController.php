@@ -125,7 +125,12 @@ class InvoiceController extends Controller
         } else {
             return response()->json(['error' => 'Data item, harga, dan jumlah harus memiliki panjang yang sama.'], 400);
         }
-        return redirect()->route('admin.invoice.index')->with('success', 'Data invoice berhasil ditambahkan');
+
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.invoice.index')->with('success', 'Data invoice berhasil ditambahkan');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.invoice.index')->with('success', 'Data invoice berhasil ditambahkan');
+        }
     }
 
     public function show($id)
@@ -191,7 +196,12 @@ class InvoiceController extends Controller
 
         InvoicePayment::create($data);
 
-        return redirect()->route('admin.invoice.index')->with('success', 'berhasil');
+
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.invoice.index')->with('success', 'berhasil');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.invoice.index')->with('success', 'berhasil');
+        }
     }
 
     public function history($id)
@@ -239,7 +249,11 @@ class InvoiceController extends Controller
         $invoice->kekurangan_bayar -= $difference;
         $invoice->save();
 
-        return redirect()->route('admin.invoice.history', ['id' => $invoiceId])->with('success', 'berhasil diupdate');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.invoice.history', ['id' => $invoiceId])->with('success', 'berhasil diupdate');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.invoice.history', ['id' => $invoiceId])->with('success', 'berhasil diupdate');
+        }
     }
 
     public function destroy($id)
@@ -272,6 +286,10 @@ class InvoiceController extends Controller
 
         $invoice->delete();
 
-        return redirect()->route('admin.invoice.index')->with('success', 'invoice berhasil diarsipkan');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.invoice.index')->with('success', 'invoice berhasil diarsipkan');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.invoice.index')->with('success', 'invoice berhasil diarsipkan');
+        }
     }
 }

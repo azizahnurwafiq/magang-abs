@@ -35,7 +35,11 @@ class ArsipInvoiceController extends Controller
 
             $arsip->delete();
 
-            return redirect()->route('admin.archive.invoice')->with('success', 'invoice berhasil dipulihkan');
+            if (auth()->user()->role === 'manager') {
+                return redirect()->route('manager.archive.invoice')->with('success', 'invoice berhasil dipulihkan');
+            } else if (auth()->user()->role === 'admin') {
+                return redirect()->route('admin.archive.invoice')->with('success', 'invoice berhasil dipulihkan');
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Terjadi kesalahan: ' . $e->getMessage()

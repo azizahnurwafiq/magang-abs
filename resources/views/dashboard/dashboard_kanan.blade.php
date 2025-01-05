@@ -2,6 +2,7 @@
 @section('dashboard_kanan')
 
 <!-- Content Header (Page header) -->
+@if (request()->is('manager*'))
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -21,9 +22,9 @@
             <!-- small box -->
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3><span>Rp. </span>10.000.000</h3>
+                    <h3><span>Rp.</span>{{ number_format($totalInvoiceTahun ?? 0, 0, ',', '.') }}</h3>
                     <p>
-                        <span>Income Perusahaan A </span>
+                        <span>Income Keseluruhan Perusahaan Di Tahun : {{ \Carbon\Carbon::now()->format('Y') }} </span>
                     </p>
                 </div>
                 <div class="icon">
@@ -36,9 +37,9 @@
             <!-- small box -->
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3>100<span> Pesanan</span></h3>
+                    <h3>{{ $jumlahInvoiceTahun ?? 0 }}<span> Pesanan</span></h3>
                     <p>
-                        <span>Jumlah Pesanan Belum Lunas</span>
+                        <span>Jumlah Pesanan Belum Lunas Di Tahun : {{ \Carbon\Carbon::now()->format('Y') }}</span>
                     </p>
                 </div>
                 <div class="icon">
@@ -52,7 +53,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3><span>Rp.</span>100.000.000</h3>
+                    <h3><span>Rp.</span>{{ number_format($totaltahunTax ?? 0, 0, ',', '.') }}</h3>
                     <p>
                         <span>Income Perusahaan A</span><br>
                         <span>Pada Tahun : </span>
@@ -67,7 +68,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
                 <div class="inner">
-                    <h3><span>Rp.</span>15.000.000</h3>
+                    <h3><span>Rp.</span>{{ number_format($totalbulanTax ?? 0, 0, ',', '.') }}</h3>
                     <p>
                         <span>Income Perusahaan A</span><br>
                         <span>Pada Bulan : </span>
@@ -80,7 +81,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>Rp.15.000.000</h3>
+                    <h3><span>Rp.</span>{{ number_format($totaltahunNon_tax ?? 0, 0, ',', '.') }}</h3>
                     <p>
                         <span>Income Perusahaan B</span><br>
                         <span>Pada Tahun : </span>
@@ -93,7 +94,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
                 <div class="inner">
-                    <h3>Rp.15.000.000</h3>
+                    <h3><span>Rp.</span>{{ number_format($totalbulanNon_tax ?? 0, 0, ',', '.') }}</h3>
                     <p>
                         <span>Income Perusahaan B</span><br>
                         <span>Pada Bulan : </span>
@@ -112,19 +113,14 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">Rekap Keseluruhan Perusahaan A</h5>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="remove" fdprocessedid="9inhn">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
+                    <h5 class="card-title">Rekap Keseluruhan Pesanan Tax</h5>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
                             <p class="text-center">
-                                <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                                <strong>Penjualan Tax Tahun : {{ \Carbon\Carbon::now()->format('Y') }}</strong>
                             </p>
 
                             <div class="chart">
@@ -144,31 +140,6 @@
                     </div>
                     <!-- /.row -->
                 </div>
-                <!-- ./card-body -->
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-sm-6 col-6">
-                            <div class="description-block border-right">
-                                <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>
-                                <h5 class="description-header">$35,210.43</h5>
-                                <span class="description-text">TOTAL REVENUE</span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-6 col-6">
-                            <div class="description-block border-right">
-                                <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 0%</span>
-                                <h5 class="description-header">$10,390.90</h5>
-                                <span class="description-text">TOTAL COST</span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.card-footer -->
             </div>
             <!-- /.card -->
         </div>
@@ -178,19 +149,14 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">Rekap Keseluruhan Perusahaan B</h5>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="remove" fdprocessedid="9inhn">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
+                    <h5 class="card-title">Rekap Keseluruhan Pesanan Non-Tax</h5>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
                             <p class="text-center">
-                                <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                                <strong>Penjualan Non-Tax Tahun : {{ \Carbon\Carbon::now()->format('Y') }} </strong>
                             </p>
 
                             <div class="chart">
@@ -210,31 +176,6 @@
                     </div>
                     <!-- /.row -->
                 </div>
-                <!-- ./card-body -->
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-sm-6 col-6">
-                            <div class="description-block border-right">
-                                <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>
-                                <h5 class="description-header">$35,210.43</h5>
-                                <span class="description-text">TOTAL REVENUE</span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-6 col-6">
-                            <div class="description-block border-right">
-                                <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 0%</span>
-                                <h5 class="description-header">$10,390.90</h5>
-                                <span class="description-text">TOTAL COST</span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.card-footer -->
             </div>
             <!-- /.card -->
         </div>
@@ -258,19 +199,20 @@
                                     <th>SKU</th>
                                     <th>Kategori</th>
                                     <th>Item</th>
-                                    <th>Warna</th>
-                                    <th>jumlah</th>
+                                    <th>Jumlah</th>
+
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse ($dashboard as $index => $data)
                                 <tr>
-                                    <td>1.</td>
-                                    <td>wnksmwxnwino</td>
-                                    <td>Futijmxo</td>
-                                    <td>jsowxmo</td>
-                                    <td>nxiokmc</td>
-                                    <td>20</td>
+                                    <td>{{$index + $dashboard->firstItem()}}</td>
+                                    <td>{{$data->SKU}}</td>
+                                    <td>{{$data?->kategori->kategori ?? 'Kategori tidak tersedia'}}</td>
+                                    <td>{{$data->item}}</td>
+                                    <td>{{$data->stokHistories->last()?->total_stok ?? 'Total stok tidak tersedia'}}</td>
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -281,6 +223,7 @@
 </div>
 
 <!-- Content Header (Page header) -->
+@elseif (request()->is('admin*'))
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -300,7 +243,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>100<span> Pesanan</span></h3>
+                    <h3>{{ $sumOrders ?? 0 }}<span> Pesanan</span></h3>
                     <p>
                         <span>Jumlah Keseluruhan Pesanan Pada Bulan : </span>
                         <span>{{ \Carbon\Carbon::now()->format('F') }}</span>
@@ -317,7 +260,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3>150<span> Pesanan</span></h3>
+                    <h3>{{ $ordersNotCompleted ?? 0 }}<span> Pesanan</span></h3>
                     <p>Jumlah Pesanan On-Progress</p>
                 </div>
                 <div class="icon">
@@ -348,19 +291,21 @@
                                     <th>SKU</th>
                                     <th>Kategori</th>
                                     <th>Item</th>
-                                    <th>Warna</th>
                                     <th>jumlah</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbo<tbody>
+                                @forelse ($dashboard as $index => $data)
                                 <tr>
-                                    <td>1.</td>
-                                    <td>wnksmwxnwino</td>
-                                    <td>Futijmxo</td>
-                                    <td>jsowxmo</td>
-                                    <td>nxiokmc</td>
+                                    <td>{{$index + $dashboard->firstItem()}}</td>
+                                    <td>{{$data->SKU}}</td>
+                                    <td>{{$data?->kategori->kategori ?? 'Kategori tidak tersedia'}}</td>
+                                    <td>{{$data->item}}</td>
+                                    <td>{{$data->stokHistories->last()?->total_stok ?? 'Total stok tidak tersedia'}}</td>
                                 </tr>
-                            </tbody>
+                                @endforeach
+                                </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -370,6 +315,7 @@
 </div>
 
 <!-- Content Header (Page header) -->
+@elseif (request()->is('produksi*'))
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -402,6 +348,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <!-- @forelse ($dashboard as $index => $data) -->
                             <tr>
                                 <td>1.</td>
                                 <td>wnksmwxnwino</td>
@@ -409,14 +356,21 @@
                                 <td>jsowxmo</td>
                                 <td>nxiokmc</td>
                             </tr>
+                            <!-- @endforeach -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    @endif
 </div>
 
+
+{{--
+        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'produksi' || auth()->user()->role === 'manager')
+          
+        @endif --}}
 
 <style>
     .chart-container {
@@ -432,6 +386,10 @@
 <!-- Script untuk membuat grafik -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Data dari server
+        const monthlySalesTax = @json($monthlySalesTax);
+        const monthlySalesNonTax = @json($monthlySalesNonTax);
+
         // Fungsi untuk membuat grafik pertama
         const ctx1 = document.getElementById('salesChart1').getContext('2d');
         new Chart(ctx1, {
@@ -439,8 +397,8 @@
             data: {
                 labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
                 datasets: [{
-                    label: 'Sales 1',
-                    data: [65, 59, 80, 81, 56, 55, 40],
+                    label: 'Sales Tax',
+                    data: monthlySalesTax,
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                 }]
@@ -463,8 +421,8 @@
             data: {
                 labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
                 datasets: [{
-                    label: 'Sales 2',
-                    data: [45, 39, 60, 71, 46, 35, 30],
+                    label: 'Sales Non-Tax',
+                    data: monthlySalesNonTax,
                     fill: false,
                     borderColor: 'rgb(255, 99, 132)',
                 }]
@@ -481,4 +439,5 @@
         });
     });
 </script>
+
 @endsection

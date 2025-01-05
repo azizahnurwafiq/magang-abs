@@ -279,7 +279,12 @@ class PreOrderController extends Controller
         } else {
             return response()->json(['error' => 'Jumlah data size, jumlah, dan deskripsi tidak sama.'], 400);
         }
-        return redirect()->route('admin.preOrder.index')->with('success', 'Berhasil membuat data PO');
+
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.preOrder.index')->with('success', 'Berhasil membuat data PO');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.preOrder.index')->with('success', 'Berhasil membuat data PO');
+        }
     }
 
     public function updateStatus(Request $request, $id)
@@ -320,7 +325,11 @@ class PreOrderController extends Controller
 
         $preOrderDetail->delete();
 
-        return redirect()->route('admin.preOrder.index')->with('success', 'PO berhasil diarsipkan');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.preOrder.index')->with('success', 'PO berhasil diarsipkan');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.preOrder.index')->with('success', 'PO berhasil diarsipkan');
+        }
     }
 
     public function update(Request $request, $id)

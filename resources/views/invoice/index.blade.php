@@ -10,13 +10,17 @@
                     <h3 class="card-title text-bold text-primary">DATA INVOICE</h3>
                 </div>
                 @if (session('success'))
-                    <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
-                        {{ session('success') }}
-                    </div>
+                <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
+                    {{ session('success') }}
+                </div>
                 @endif
                 <div class=" d-flex col-md-12 mt-3 justify-content-between ">
                     <div class="col-md-8">
+                        @if (request()->is('admin*'))
                         <a href="{{route('admin.invoice.create')}}" class="btn btn-primary m-2">+ Buat Invoice</a>
+                        @elseif (request()->is('manager*'))
+                        <a href="{{route('manager.invoice.create')}}" class="btn btn-primary m-2">+ Buat Invoice</a>
+                        @endif
                     </div>
                 </div>
                 @livewire('invoice-search')

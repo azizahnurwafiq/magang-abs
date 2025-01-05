@@ -166,6 +166,9 @@
                     </div>
                 </div>
             </div>
+            @if (auth()->user()->role === 'manager')
+                <a href="{{route('manager.preOrder.index')}}" class="btn btn-primary m-2">Kembali</a>
+            @endif
             @if (auth()->user()->role === 'admin')
                 <a href="{{route('admin.preOrder.index')}}" class="btn btn-primary m-2">Kembali</a>
             @endif

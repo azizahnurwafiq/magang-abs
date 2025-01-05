@@ -39,7 +39,7 @@ class UserController extends Controller
 
         User::create($data);
 
-        return redirect()->route('admin.manage_user.user')->with('success', 'Data user berhasil ditambahkan');
+        return redirect()->route('manager.manage_user.user')->with('success', 'Data user berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -64,7 +64,7 @@ class UserController extends Controller
                 'role' => $request->role,
             ]);
         }
-        return redirect()->route('admin.manage_user.user')->with('success', 'Data user berhasil diupdate');
+        return redirect()->route('manager.manage_user.user')->with('success', 'Data user berhasil diupdate');
     }
 
     public function destroy($id)

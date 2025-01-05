@@ -33,49 +33,52 @@
                     <td>@rupiah($arsip->kekurangan_bayar)</td>
                     <td>
                         @if($arsip->status === "BELUM LUNAS")
-                            <span class="badge bg-danger">Belum lunas</span>
+                        <span class="badge bg-danger">Belum lunas</span>
                         @endif
                         @if($arsip->status === "LUNAS")
-                            <span class="badge bg-success">lunas</span>
+                        <span class="badge bg-success">lunas</span>
                         @endif
                     </td>
                     <td class="d-flex">
+                        @if (request()->is('admin*'))
                         <form action="{{route('admin.archive.restore', $arsip->id)}}" method="POST">
-                            @csrf
-                            <button class="btn btn-success mx-1"><i class="fa fa-undo"> </i>  Pulihkan</button>
-                        </form>
-                        <form action="" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
-                        </form>
+                            @elseif (request()->is('manager*'))
+                            <form action="{{route('manager.archive.restore', $arsip->id)}}" method="POST">
+                                @endif
+                                @csrf
+                                <button class="btn btn-success mx-1"><i class="fa fa-undo"> </i> Pulihkan</button>
+                            </form>
+                            <form action="" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
+                            </form>
 
-                        {{-- <div class="dropdown">
+                            {{-- <div class="dropdown">
                             <button class="btn btn-primary" data-toggle="dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
                             </button>
-                                <div class="dropdown-menu">
-                                
-                                    <a href="{{route('invoice.payment', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-money-bill-wave"></i> Payment</a>
-                                    <a href="{{route('invoice.history', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-history"></i> History</a>
-                                    <a href="{{route('invoice.exportPdf', $invoice->id)}}" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
+                                <div class="dropdown-menu">    
+                            <a href="{{route('invoice.payment', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-money-bill-wave"></i> Payment</a>
+                            <a href="{{route('invoice.history', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-history"></i> History</a>
+                            <a href="{{route('invoice.exportPdf', $invoice->id)}}" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
 
-                                    <form action="{{route('invoice.archive', $invoice->id)}}" method="POST">
-                                        @csrf
-                                        <button class="btn btn-success dropdown-item"><i class="fa fa-file"></i> Archive</button>
-                                    </form>
-                                </div>
-                        </div> --}}
-                    </td>
-                @empty
-                    <td colspan="9" class="text-center">Arsip Belum Ada !</td>
-                @endforelse
-                </tr>
-            </tbody>
-        </table>
+                            <form action="{{route('invoice.archive', $invoice->id)}}" method="POST">
+                                @csrf
+                                <button class="btn btn-success dropdown-item"><i class="fa fa-file"></i> Archive</button>
+                            </form>
     </div>
-    <!-- Pagination Link -->
-    <div class="d-flex justify-content-end mx-5">
-        {!! $arsips->appends(\Request::except('page'))->render() !!}
-    </div>
+</div> --}}
+</td>
+@empty
+<td colspan="9" class="text-center">Arsip Belum Ada !</td>
+@endforelse
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Link -->
+<div class="d-flex justify-content-end mx-5">
+    {!! $arsips->appends(\Request::except('page'))->render() !!}
+</div>
 </div>

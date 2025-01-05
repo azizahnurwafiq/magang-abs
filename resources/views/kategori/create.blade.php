@@ -8,13 +8,18 @@
             <h3 class="ml-2">Tambah data kategori</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
+                    @if (request()->is('admin*'))
                     <form action="{{route('admin.kategori.store')}}" method="POST">
+                    @elseif (request()->is('manager*'))
+                    <form action="{{route('manager.kategori.store')}}" method="POST">
+                    @endif
+                    
                         @csrf
                         <div class="mb-3">
                             <label for="kategori" class="form-label">Kategori</label>
                             <input type="text" class="form-control" name="kategori" id="kategori" value="{{ @old('kategori')}}" aria-describedby="emailHelp">
                             @error('kategori')
-                                <div class="form-text text-danger">{{$message}}</div>
+                            <div class="form-text text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <button type="submit" class="btn btn-primary">Simpan</button>

@@ -39,7 +39,11 @@ class PekerjaanController extends Controller
 
         Pekerjaan::create($validatedData);
 
-        return redirect()->route('admin.pekerjaan.index')->with('success', 'Data pekerjaan berhasil ditambahkan');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.pekerjaan.index')->with('success', 'Data pekerjaan berhasil ditambahkan');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.pekerjaan.index')->with('success', 'Data pekerjaan berhasil ditambahkan');
+        }
     }
 
     public function edit($id)
@@ -60,7 +64,11 @@ class PekerjaanController extends Controller
 
         Pekerjaan::where('id', $request->id)->update($data);
 
-        return redirect()->route('admin.pekerjaan.index')->with('success', 'Data pekerjaan berhasil diupdate');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.pekerjaan.index')->with('success', 'Data pekerjaan berhasil diupdate');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.pekerjaan.index')->with('success', 'Data pekerjaan berhasil diupdate');
+        }
     }
 
     public function destroy($id)

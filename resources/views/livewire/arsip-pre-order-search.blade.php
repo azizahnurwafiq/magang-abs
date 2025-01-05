@@ -22,82 +22,86 @@
             </thead>
             <tbody>
                 @forelse ($detailArsips as $index => $detail)
-                    <tr class="text-center">
-                        <input type="hidden" class="delete_id" value="{{$detail->id}}">
-                        <td>1</td>
-                        <td>{{$detail->preOrder->nama_pelanggan ?? '-'}}</td>
-                        <td>{{$detail->preOrder->invoice->no_invoice ?? '-'}}</td>
-                        <td>{{$detail->preOrder->judul_artikel ?? '-'}}</td>
-                        <td>
-                            {{$detail->pekerjaan->jenis_pekerjaan ?? '-'}}
-                        </td>
-                        <td>
-                            @if($detail->status === "BUTUH DIKERJAKAN")
-                                <span class="badge bg-warning">BUTUH DIKERJAKAN</span>
-                            @endif
-                            @if($detail->status === "HOLD")
-                                <span class="badge bg-danger">HOLD</span>
-                            @endif
-                            @if($detail->status === "WIP")
-                                <span class="badge bg-secondary">WIP</span>
-                            @endif
-                            @if($detail->status === "DIAMBIL")
-                                <span class="badge bg-primary">DIAMBIL</span>
-                            @endif
-                            @if($detail->status === "DONE AND READY")
-                                <span class="badge bg-success">DONE AND READY</span>
-                            @endif
-                            @if($detail->status === "REVISI")
-                                <span class="badge bg-info">REVISI</span>
-                            @endif
-                            @if($detail->status === "BATAL")
-                                <span class="badge bg-dark">BATAL</span>
-                            @endif
-                        </td>
-                        <td>
-                            @php
-                                // Ambil tanggal deadline sebagai objek Carbon
-                                $deadlineDate = \Carbon\Carbon::parse($detail->deadline);
-                                // Hitung jumlah hari tersisa dari hari ini (dengan nilai negatif jika sudah lewat)
-                                $daysLeft = $deadlineDate->diffInDays(\Carbon\Carbon::today());
-                                // Cek apakah deadline sudah lewat
-                                $isPast = $deadlineDate->isPast() && !$deadlineDate->isToday(); // Lewat tetapi bukan hari ini
-                            @endphp
+                <tr class="text-center">
+                    <input type="hidden" class="delete_id" value="{{$detail->id}}">
+                    <td>1</td>
+                    <td>{{$detail->preOrder->nama_pelanggan ?? '-'}}</td>
+                    <td>{{$detail->preOrder->invoice->no_invoice ?? '-'}}</td>
+                    <td>{{$detail->preOrder->judul_artikel ?? '-'}}</td>
+                    <td>
+                        {{$detail->pekerjaan->jenis_pekerjaan ?? '-'}}
+                    </td>
+                    <td>
+                        @if($detail->status === "BUTUH DIKERJAKAN")
+                        <span class="badge bg-warning">BUTUH DIKERJAKAN</span>
+                        @endif
+                        @if($detail->status === "HOLD")
+                        <span class="badge bg-danger">HOLD</span>
+                        @endif
+                        @if($detail->status === "WIP")
+                        <span class="badge bg-secondary">WIP</span>
+                        @endif
+                        @if($detail->status === "DIAMBIL")
+                        <span class="badge bg-primary">DIAMBIL</span>
+                        @endif
+                        @if($detail->status === "DONE AND READY")
+                        <span class="badge bg-success">DONE AND READY</span>
+                        @endif
+                        @if($detail->status === "REVISI")
+                        <span class="badge bg-info">REVISI</span>
+                        @endif
+                        @if($detail->status === "BATAL")
+                        <span class="badge bg-dark">BATAL</span>
+                        @endif
+                    </td>
+                    <td>
+                        @php
+                        // Ambil tanggal deadline sebagai objek Carbon
+                        $deadlineDate = \Carbon\Carbon::parse($detail->deadline);
+                        // Hitung jumlah hari tersisa dari hari ini (dengan nilai negatif jika sudah lewat)
+                        $daysLeft = $deadlineDate->diffInDays(\Carbon\Carbon::today());
+                        // Cek apakah deadline sudah lewat
+                        $isPast = $deadlineDate->isPast() && !$deadlineDate->isToday(); // Lewat tetapi bukan hari ini
+                        @endphp
 
-                            @if ($isPast)
-                                <span style="background-color: black; color: red; padding: 5px; border-radius: 5px;">
-                                    Melewati Deadline
-                                </span>
-                            @elseif ($daysLeft === 0)
-                                <span style="background-color: red; color: white; padding: 5px; border-radius: 5px;">
-                                    Hari ini
-                                </span>
-                            @elseif ($daysLeft >= 1 && $daysLeft <= 2)
-                                <span style="background-color: red; color: white; padding: 5px; border-radius: 5px;">
-                                    {{ $daysLeft }} Hari lagi
-                                </span>
+                        @if ($isPast)
+                        <span style="background-color: black; color: red; padding: 5px; border-radius: 5px;">
+                            Melewati Deadline
+                        </span>
+                        @elseif ($daysLeft === 0)
+                        <span style="background-color: red; color: white; padding: 5px; border-radius: 5px;">
+                            Hari ini
+                        </span>
+                        @elseif ($daysLeft >= 1 && $daysLeft <= 2)
+                            <span style="background-color: red; color: white; padding: 5px; border-radius: 5px;">
+                            {{ $daysLeft }} Hari lagi
+                            </span>
                             @elseif ($daysLeft >= 3 && $daysLeft <= 5)
                                 <span style="background-color: yellow; color: black; padding: 5px; border-radius: 5px;">
-                                    {{ $daysLeft }} Hari lagi
+                                {{ $daysLeft }} Hari lagi
                                 </span>
-                            @else
+                                @else
                                 <span style="background-color: rgb(25, 202, 37); color: white; padding: 5px; border-radius: 5px;">
                                     {{ $daysLeft }} Hari lagi
                                 </span>
-                            @endif
+                                @endif
 
-                        </td>
-                        <td>
-                            <form action="{{route('admin.preOrderArchive.restore', $detail->id)}}" method="POST">
+                    </td>
+                    <td>
+                        @if (request()->is('admin*'))
+                        <form action="{{route('admin.preOrderArchive.restore', $detail->id)}}" method="POST">
+                            @elseif (request()->is('manager*'))
+                            <form action="{{route('manager.preOrderArchive.restore', $detail->id)}}" method="POST">
+                                @endif
                                 @csrf
-                                <button class="btn btn-success mx-1"><i class="fa fa-undo"> </i>  Pulihkan</button>
+                                <button class="btn btn-success mx-1"><i class="fa fa-undo"> </i> Pulihkan</button>
                             </form>
-                        </td>
-                    </tr>
+                    </td>
+                </tr>
                 @empty
-                    <tr>
-                        <td colspan="9" class="text-center">Arsip PO Belum Ada !</td>
-                    </tr>
+                <tr>
+                    <td colspan="9" class="text-center">Arsip PO Belum Ada !</td>
+                </tr>
                 @endforelse
             </tbody>
         </table>
@@ -107,4 +111,3 @@
         {{ $detailArsips->links() }}
     </div>
 </div>
-

@@ -10,13 +10,17 @@
                     <h3 class="card-title text-bold text-primary">DATA PELANGGAN</h3>
                 </div>
                 @if (session('success'))
-                    <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
-                        {{ session('success') }}
-                    </div>
+                <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
+                    {{ session('success') }}
+                </div>
                 @endif
                 <div class="row align-items-center my-1">
                     <div class="col-md-8">
+                        @if (request()->is('admin*'))
                         <a href="{{route('admin.pelanggan.create')}}" class="btn btn-primary mx-3 my-4">+ Tambah Data</a>
+                        @elseif (request()->is('manager*'))
+                        <a href="{{route('manager.pelanggan.create')}}" class="btn btn-primary mx-3 my-4">+ Tambah Data</a>
+                        @endif
                     </div>
                 </div>
                 @livewire('pelanggan-search')
@@ -27,9 +31,9 @@
 @endsection
 
 @push('css')
-    <style>
-        .note{
-            max-width: 200px;
-        }
-    </style>
+<style>
+    .note {
+        max-width: 200px;
+    }
+</style>
 @endpush

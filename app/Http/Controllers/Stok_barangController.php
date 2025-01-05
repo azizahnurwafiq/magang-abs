@@ -93,7 +93,12 @@ class Stok_barangController extends Controller
 
         StokHistory::create($dataHistory);
 
-        return redirect()->route('admin.stok_barang.barang')->with('success', 'Data item baru berhasil ditambahkan');
+
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.stok_barang.barang')->with('success', 'Data item baru berhasil ditambahkan');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.stok_barang.barang')->with('success', 'Data item baru berhasil ditambahkan');
+        }
     }
 
     public function addStokLama(Request $request)
@@ -123,7 +128,12 @@ class Stok_barangController extends Controller
             'total_stok' => $total_stok_baru,
         ]);
 
-        return redirect()->route('admin.stok_barang.barang')->with('success', 'Data stok berhasil ditambahkan');
+
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.stok_barang.barang')->with('success', 'Data stok berhasil ditambahkan');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.stok_barang.barang')->with('success', 'Data stok berhasil ditambahkan');
+        }
     }
 
     public function edit($id)
@@ -155,7 +165,11 @@ class Stok_barangController extends Controller
 
         $stok->update($data);
 
-        return redirect()->route('admin.stok_barang.barang')->with('success', 'Data stok berhasil diupdate');
+        if (auth()->user()->role === 'manager') {
+            return redirect()->route('manager.stok_barang.barang')->with('success', 'Data stok berhasil diupdate');
+        } else if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.stok_barang.barang')->with('success', 'Data stok berhasil diupdate');
+        }
     }
 
     public function destroy($id)
