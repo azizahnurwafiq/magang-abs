@@ -53,6 +53,10 @@ class DashboardController extends Controller
             ->where('kekurangan_bayar', '>', 0)
             ->count();
 
+        $jumlahLunas = Invoice::whereYear('created_at', Carbon::now()->year)
+            ->where('kekurangan_bayar', '=', 0)
+            ->count();
+
 
         $monthlySalesTax = [];
         $monthlySalesNonTax = [];
@@ -87,6 +91,7 @@ class DashboardController extends Controller
                 'totalbulanNon_tax',
                 'totaltahunNon_tax',
                 'jumlahInvoiceTahun',
+                'jumlahLunas',
                 'monthlySalesTax',
                 'monthlySalesNonTax'
             )

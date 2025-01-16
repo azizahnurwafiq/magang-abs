@@ -7,7 +7,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Dashboard Manager</h1>
+                <h1 class="m-0 ">DASHBOARD MANAGER</h1>
             </div><!-- /.col -->
 
         </div><!-- /.row -->
@@ -18,9 +18,9 @@
     <!-- Dashboard Milik Manager -->
     <!-- Small boxes (Stat box) -->
     <div class="row">
-        <div class="col-lg-6 col-6">
+        <div class="col-lg-4 col-4">
             <!-- small box -->
-            <div class="small-box bg-success">
+            <div class="small-box bg-primary">
                 <div class="inner">
                     <h3><span>Rp.</span>{{ number_format($totalInvoiceTahun ?? 0, 0, ',', '.') }}</h3>
                     <p>
@@ -33,9 +33,9 @@
             </div>
             <!-- ./col -->
         </div>
-        <div class="col-lg-6 col-6">
+        <div class="col-lg-4 col-4">
             <!-- small box -->
-            <div class="small-box bg-success">
+            <div class="small-box bg-danger">
                 <div class="inner">
                     <h3>{{ $jumlahInvoiceTahun ?? 0 }}<span> Pesanan</span></h3>
                     <p>
@@ -43,12 +43,27 @@
                     </p>
                 </div>
                 <div class="icon">
-                    <i class="ion ion-bag"></i>
+                    <i class="ion ion-clock"></i>
                 </div>
             </div>
             <!-- ./col -->
-
         </div>
+        <div class="col-lg-4 col-4">
+            <!-- small box -->
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>{{ $jumlahLunas ?? 0 }}<span> Pesanan</span></h3>
+                    <p>
+                        <span>Jumlah Pesanan Lunas Di Tahun : {{ \Carbon\Carbon::now()->format('Y') }}</span>
+                    </p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-checkmark"></i>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+
         <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-info">
@@ -66,7 +81,7 @@
         </div>
         <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-warning">
+            <div class="small-box bg-info">
                 <div class="inner">
                     <h3><span>Rp.</span>{{ number_format($totalbulanTax ?? 0, 0, ',', '.') }}</h3>
                     <p>
@@ -79,7 +94,7 @@
         </div>
         <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-info">
+            <div class="small-box bg-warning">
                 <div class="inner">
                     <h3><span>Rp.</span>{{ number_format($totaltahunNon_tax ?? 0, 0, ',', '.') }}</h3>
                     <p>
@@ -205,13 +220,13 @@
                             </thead>
                             <tbody>
                                 @forelse ($dashboard as $index => $data)
-                                <tr>
-                                    <td>{{$index + $dashboard->firstItem()}}</td>
-                                    <td>{{$data->SKU}}</td>
-                                    <td>{{$data?->kategori->kategori ?? 'Kategori tidak tersedia'}}</td>
-                                    <td>{{$data->item}}</td>
-                                    <td>{{$data->stokHistories->last()?->total_stok ?? 'Total stok tidak tersedia'}}</td>
-                                </tr>
+                                    <tr>
+                                        <td>{{$index + $dashboard->firstItem()}}</td>
+                                        <td>{{$data->SKU}}</td>
+                                        <td>{{$data?->kategori->kategori ?? 'Kategori tidak tersedia'}}</td>
+                                        <td>{{$data->item}}</td>
+                                        <td>{{$data->stokHistories->last()?->total_stok ?? 'Total stok tidak tersedia'}}</td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -368,7 +383,6 @@
 
 {{--
         @if(auth()->user()->role === 'admin' || auth()->user()->role === 'produksi' || auth()->user()->role === 'manager')
-          
         @endif --}}
 
 <style>
@@ -423,7 +437,7 @@
                     label: 'Sales Non-Tax',
                     data: monthlySalesNonTax,
                     fill: false,
-                    borderColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 193, 7)',
                 }]
             },
             options: {
