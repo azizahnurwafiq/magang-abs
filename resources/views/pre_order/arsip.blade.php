@@ -9,11 +9,6 @@
                 <div class="card-header">
                     <h3 class="card-title text-bold text-primary">DATA PRE ORDER</h3>
                 </div>
-                @if (session('success'))
-                    <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
-                        {{ session('success') }}
-                    </div>
-                @endif
                 @livewire('arsip-pre-order-search')
             </div>
         </div>
@@ -65,6 +60,15 @@
 
 @push('scripts')
     <script>
+        @if (session('success'))
+            swal({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
         // memperbarui status
         // $(document).ready(function() {
         //     // Fungsi untuk menampilkan dropdown status saat label diklik
@@ -173,12 +177,15 @@
                                 url: '/pre-order/' + deletedid,
                                 data: data,
                                 success: function (response) {
-                                    swal(response.status, {
-                                        icon: "success",
-                                    })
-                                    .then((result) => {
-                                        location.reload();
-                                    });
+                                    swal({
+                                        icon: 'success',
+                                        title: 'Berhasil!',
+                                        text: response.status,
+                                        showConfirmButton: true,
+                                        timer: 2000
+                                    }).then((result) => {
+                                            location.reload();
+                                        });
                                 }
                             });
                         }

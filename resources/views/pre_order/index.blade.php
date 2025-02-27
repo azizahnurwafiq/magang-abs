@@ -9,11 +9,6 @@
                 <div class="card-header">
                     <h3 class="card-title text-bold text-primary">DATA PRE ORDER</h3>
                 </div>
-                @if (session('success'))
-                <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
-                    {{ session('success') }}
-                </div>
-                @endif
                 <div class=" d-flex col-md-12 mt-3 justify-content-between ">
                     @if (request()->is('admin*'))
                     <div class="col-md-8">
@@ -24,8 +19,6 @@
                         <a href="{{route('manager.preOrder.create')}}" class="btn btn-primary m-2">+ Buat PO</a>
                     </div>
                     @endif
-
-
                 </div>
                 @livewire('pre-order-search')
             </div>
@@ -33,3 +26,17 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script>
+        @if (session('success'))
+            swal({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                showConfirmButton: true,
+                timer: 2000
+            });
+        @endif
+    </script>
+@endpush

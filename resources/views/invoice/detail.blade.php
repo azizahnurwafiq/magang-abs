@@ -82,14 +82,33 @@
                                     {{$invoice->status}}
                                 </p>
                             </div>
+                            <div class="col-sm-4 col-4">
+                                <label for="item" class="form-label">Item dan Jumlah :</label>
+                                <table class="table table-bordered table-striped table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Jumlah</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($invoice->invoice_stoks as $stok)
+                                            <tr>
+                                                <td>{{ $stok->stok->item ?? '-' }}</td> 
+                                                <td>{{ $stok->jumlah ?? '-' }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             @if (request()->is('admin*'))
-            <a href="{{route('admin.invoice.index')}}" class="btn btn-primary m-2">Kembali</a>
+                <a href="{{route('admin.invoice.index')}}" class="btn btn-success m-2">Kembali</a>
             @elseif (request()->is('manager*'))
-            <a href="{{route('manager.invoice.index')}}" class="btn btn-primary m-2">Kembali</a>
+                <a href="{{route('manager.invoice.index')}}" class="btn btn-success m-2">Kembali</a>
             @endif
 
         </div>

@@ -9,12 +9,6 @@
                 <div class="card-header">
                     <h3 class="card-title text-bold text-primary">DATA PEKERJAAN</h3>
                 </div>
-                @if (session('success'))
-                <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
-                    {{ session('success') }}
-                </div>
-                @endif
-
                 <div class=" d-flex col-md-12 mt-3 justify-content-between ">
                     <div class="d-flex col-4">
                         @if (request()->is('admin*'))
@@ -126,6 +120,16 @@
 
 @push('scripts')
 <script>
+    @if (session('success'))
+        swal({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    @endif
+
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {
@@ -164,6 +168,8 @@
                                     });
                             }
                         });
+                    } else {
+                        swal("Data pekerjaan tidak jadi dihapus");
                     }
                 });
         })

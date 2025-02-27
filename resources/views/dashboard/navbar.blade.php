@@ -45,18 +45,6 @@
           <i class="fas fa-th-large"></i>
         </a>
       </li>
-{{-- 
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-1 pb-2 d-flex" style="margin-right: 7px; position: relative;">
-        <div class="info">
-          <a href="#" class="d-block text-secondary">M. Ilham Kurniawan</a>
-        </div>
-        <div>
-          <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="{{asset('../assets/dist/img/aku.jpg')}}" class="img-circle" alt="User Image">
-          </a>
-        </div>
-      </div> --}}
 
       <!-- Nav Item - User Information -->
       <li class="nav-item dropdown no-arrow">
@@ -68,17 +56,9 @@
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
             aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#">
-                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                Profile
-            </a>
-            <a class="dropdown-item" href="#">
-                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                Settings
-            </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{{route('logout')}}">
-                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                <i class="fas fa-sign-out-alt fa-sm fa-fw text-gray-400"></i>
                 Logout
             </a>
         </div>

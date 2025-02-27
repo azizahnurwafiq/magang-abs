@@ -8,11 +8,6 @@
                 <div class="card-header">
                     <h3 class="card-title">History Payment</h3>
                 </div>
-                @if (session('success'))
-                <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
-                    {{ session('success') }}
-                </div>
-                @endif
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -69,6 +64,11 @@
                     {{ $invoices->links() }}
             </div> --}}
         </div>
+        @if (request()->is('admin*'))
+            <a href="{{route('admin.invoice.index')}}" class="btn btn-success">Kembali</a>
+        @elseif (request()->is('manager*'))
+            <a href="{{route('manager.invoice.index')}}" class="btn btn-success">Kembali</a>
+        @endif
     </div>
 </div>
 </div>
@@ -76,6 +76,16 @@
 
 @push('scripts')
 <script>
+    @if (session('success'))
+        swal({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    @endif
+
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {

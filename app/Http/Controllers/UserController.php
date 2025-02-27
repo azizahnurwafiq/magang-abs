@@ -64,14 +64,25 @@ class UserController extends Controller
                 'role' => $request->role,
             ]);
         }
-        return redirect()->route('manager.manage_user.user')->with('success', 'Data user berhasil diupdate');
+        return redirect()->route('manager.manage_user.user')->with('success', 'Berhasil mengupdate data user');
     }
 
     public function destroy($id)
     {
+        $authUser = auth()->user();
+
         $hapus = User::find($id);
+
+        if (!$hapus) {
+            return response()->json(['message' => 'User tidak ditemukan!'], 404);
+        }
+
+        if($authUser->id == $hapus->id){
+            return response()->json(['message' => 'Anda tidak bisa menghapus akun Anda sendiri!'], 400);
+        }
+
         $hapus->delete();
 
-        return response()->json(['status' => 'Data user berhasil dihapus!']);
+        return response()->json(['status' => 'Data user berhasil dihapus!'], 200);
     }
 }

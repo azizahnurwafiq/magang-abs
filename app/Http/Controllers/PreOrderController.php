@@ -295,7 +295,7 @@ class PreOrderController extends Controller
         $preOrderDetail = PreOrderDetail::findOrFail($id);
         $preOrderDetail->status = $validated['status'];
         $preOrderDetail->save();
-        return response()->json(['message' => 'Status berhasil diperbarui']);
+        return response()->json(['message' => 'Berhasil memperbarui status']);
     }
 
     public function show($id)
@@ -314,21 +314,20 @@ class PreOrderController extends Controller
 
         $preOrderDetail->delete();
 
-        return response()->json(['status' => 'Data PO berhasil dihapus!']);
+        return response()->json(['status' => 'Berhasil menghapus data pre order']);
     }
 
     public function archive($id)
     {
         $preOrderDetail = PreOrderDetail::findOrFail($id);
-        // dd($preOrderDetail);
         PreOrderArsip::create($preOrderDetail->toArray());
 
         $preOrderDetail->delete();
 
         if (auth()->user()->role === 'manager') {
-            return redirect()->route('manager.preOrder.index')->with('success', 'PO berhasil diarsipkan');
+            return redirect()->route('manager.preOrder.index')->with('success', 'Data pre order berhasil diarsipkan');
         } else if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.preOrder.index')->with('success', 'PO berhasil diarsipkan');
+            return redirect()->route('admin.preOrder.index')->with('success', 'Data pre order berhasil diarsipkan');
         }
     }
 

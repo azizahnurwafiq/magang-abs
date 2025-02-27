@@ -9,11 +9,6 @@
                 <div class="card-header">
                     <h3 class="card-title text-bold text-primary">DATA PELANGGAN</h3>
                 </div>
-                @if (session('success'))
-                <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
-                    {{ session('success') }}
-                </div>
-                @endif
                 <div class="row align-items-center my-1">
                     <div class="col-md-8">
                         @if (request()->is('admin*'))
@@ -36,4 +31,19 @@
         max-width: 200px;
     }
 </style>
+@endpush
+
+@push('scripts')
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    @if (session('success'))
+        swal({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            showConfirmButton: true,
+            timer: 2000
+        });
+    @endif
+</script>
 @endpush

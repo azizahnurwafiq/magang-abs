@@ -7,6 +7,7 @@ use App\Models\InvoiceArsip;
 use App\Models\InvoicePayment;
 use App\Models\Pelanggan;
 use App\Models\Stok;
+use App\Models\StokHistory;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -64,8 +65,6 @@ class InvoiceController extends Controller
 
     public function store(Request $request)
     {
-
-        // $no_invoice = $this->generateInvoiceNumber($request);
         $request->validate([
             'judul' => 'required|max:255',
             'jumlah' => 'required|min:1|max:20',
@@ -120,7 +119,24 @@ class InvoiceController extends Controller
                     'jumlah' => $jumlahItem,
                     'total' => $totalItem,
                 ];
+
+                $stokHistory = StokHistory::where('stok_id', $stokId)
+                    ->orderByDesc('tanggal_masuk')
+                    ->first();
+
+                if ($stokHistory) {
+                    if ($stokHistory->total_stok >= $jumlahItem) {
+                        $stokHistory->update([
+                            'total_stok' => $stokHistory->total_stok - $jumlahItem
+                        ]);
+                    } else {
+                        return response()->json(['error' => 'Stok tidak mencukupi untuk stok_id: $stokId'], 400);
+                    }
+                } else {
+                    return response()->json(['error' => 'Stok tidak ditemukan!'], 404);
+                }
             }
+
             $invoice->stoks()->attach($attachData);
         } else {
             return response()->json(['error' => 'Data item, harga, dan jumlah harus memiliki panjang yang sama.'], 400);
@@ -135,7 +151,7 @@ class InvoiceController extends Controller
 
     public function show($id)
     {
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::with('stoks', 'invoice_stoks')->find($id);
         return view('invoice.detail', compact('invoice'));
     }
 
@@ -149,6 +165,18 @@ class InvoiceController extends Controller
     {
         $stok = Stok::find($id);
         return response()->json(['harga_jual' =>  $stok->harga_jual]);
+    }
+
+    public function getJumlahStok($id)
+    {
+        $stok = StokHistory::where('stok_id', $id)
+            ->orderBy('tanggal_masuk', 'desc')
+            ->first();
+
+        if (!$stok) {
+            return response()->json(['error' => 'Stok tidak ditemukan'], 404);
+        }
+        return response()->json(['total_stok' => $stok->total_stok]);
     }
 
     public function payment($id)
@@ -173,8 +201,14 @@ class InvoiceController extends Controller
 
         $payment = $request->input('payment');
 
-        if ($payment > $invoice->kekurangan_bayar) {
-            return redirect()->back()->with('error', 'Pembayaran melebihi kekurangan bayar.');
+        if (auth()->user()->role === 'manager') {
+            if ($payment > $invoice->kekurangan_bayar) {
+                return redirect()->route('manager.invoice.index')->with('error', 'Pembayaran melebihi kekurangan bayar!!');
+            }
+        } else if (auth()->user()->role === 'admin') {
+            if ($payment > $invoice->kekurangan_bayar) {
+                return redirect()->route('admin.invoice.index')->with('error', 'Pembayaran melebihi kekurangan bayar!!');
+            }
         }
 
         $invoice->kekurangan_bayar -= $payment;
@@ -184,7 +218,6 @@ class InvoiceController extends Controller
             $invoice->kekurangan_bayar = 0;
         }
 
-        // simpan perubahan di invoice
         $invoice->save();
 
         $data = [
@@ -196,11 +229,10 @@ class InvoiceController extends Controller
 
         InvoicePayment::create($data);
 
-
         if (auth()->user()->role === 'manager') {
-            return redirect()->route('manager.invoice.index')->with('success', 'berhasil');
+            return redirect()->route('manager.invoice.index')->with('success', 'Berhasil mengisi pembayaran');
         } else if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.invoice.index')->with('success', 'berhasil');
+            return redirect()->route('admin.invoice.index')->with('success', 'Berhasil mengisi pembayaran');
         }
     }
 
@@ -231,7 +263,6 @@ class InvoiceController extends Controller
 
         $invoicePayment = InvoicePayment::findOrFail($id);
         $invoiceId = $invoicePayment->invoice->id;
-
         $oldPayment = $invoicePayment->payment;
         $newPayment = $request->input('payment');
         $difference =  $newPayment - $oldPayment;
@@ -241,18 +272,24 @@ class InvoiceController extends Controller
             'tanggal' => $request->tanggal,
             'via' => $request->via,
         ];
-
+        
         $invoicePayment->update($data);
 
         $invoice = Invoice::findOrFail($invoicePayment->invoice_id);
 
         $invoice->kekurangan_bayar -= $difference;
+        if ($invoice->kekurangan_bayar == 0) {
+            $invoice->status = 'LUNAS';
+        } else if ($invoice->kekurangan_bayar > 0) {
+            $invoice->status = 'BELUM LUNAS';
+        }
+        
         $invoice->save();
 
         if (auth()->user()->role === 'manager') {
-            return redirect()->route('manager.invoice.history', ['id' => $invoiceId])->with('success', 'berhasil diupdate');
+            return redirect()->route('manager.invoice.history', ['id' => $invoiceId])->with('success', 'Berhasil mengupdate pembayaran');
         } else if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.invoice.history', ['id' => $invoiceId])->with('success', 'berhasil diupdate');
+            return redirect()->route('admin.invoice.history', ['id' => $invoiceId])->with('success', 'Berhasil mengupdate pembayaran');
         }
     }
 

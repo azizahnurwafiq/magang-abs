@@ -22,9 +22,9 @@ class Stok_barangController extends Controller
                 ->orWhereHas('kategori', function ($query) use ($keyword) {
                     $query->where('kategori', 'LIKE', '%' . $keyword . '%');
                 })
-                ->sortable()->paginate(3);
+                ->sortable()->paginate(5);
         } else {
-            $datas = Stok::sortable()->paginate(4);
+            $datas = Stok::sortable()->paginate(5);
         }
         return view('stok_barang.index', compact('datas'));
     }
@@ -104,12 +104,11 @@ class Stok_barangController extends Controller
     public function addStokLama(Request $request)
     {
         $request->validate([
-            'jumlah' => 'required|integer|min:1|max:20',
+            'jumlah' => 'required|integer|min:1',
         ], [
             'jumlah.required' => 'Jumlah wajib diisi !!',
             'jumlah.integer' => 'Jumlah harus berupa angka bulat !!',
             'jumlah.min' => 'Jumlah harus minimal 1 !!',
-            'jumlah.max' => 'Jumlah tidak boleh lebih dari 20 karakter !!',
         ]);
 
         $skuStok = intval($request->SKU);

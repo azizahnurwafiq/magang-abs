@@ -9,11 +9,6 @@
                 <div class="card-header">
                     <h3 class="card-title">MANAGE USER</h3>
                 </div>
-                @if (session('success'))
-                <div class="alert alert-success" role="alert" style="margin: 20px 15px;">
-                    {{ session('success') }}
-                </div>
-                @endif
                 <div class=" d-flex col-md-12 mt-3 justify-content-between ">
                     <div class="d-flex col-2">
                         <a href="{{route('manager.manage_user.create')}}" class="btn btn-primary m-2">+ Tambah user</a>
@@ -28,6 +23,16 @@
 
 @push('scripts')
 <script>
+    @if (session('success'))
+        swal({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            showConfirmButton: true,
+            timer: 1500
+        });
+    @endif
+
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {
@@ -46,26 +51,40 @@
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
-                })
-                .then((willDelete) => {
+            }).then((willDelete) => {
                     if (willDelete) {
                         var data = {
                             "_token": $('input[name=_token]').val(),
                             'id': deletedid,
                         };
+
                         $.ajax({
                             type: "DELETE",
                             url: 'manage_user/' + deletedid,
                             data: data,
                             success: function(response) {
-                                swal(response.status, {
-                                        icon: "success",
-                                    })
-                                    .then((result) => {
+                                swal({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: response.status,
+                                    showConfirmButton: true,
+                                    timer: 2000
+                                }).then((result) => {
                                         location.reload();
                                     });
+                            },
+                            error: function(response) {
+                                swal({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: response.responseJSON.message, 
+                                    showConfirmButton: true,
+                                    timer: 2500
+                                });
                             }
                         });
+                    } else {
+                        swal("Data user tidak jadi dihapus");
                     }
                 });
         })

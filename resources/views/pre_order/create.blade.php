@@ -6,7 +6,12 @@
     <div class="row">
         <div class="col-md-12">
             <h3 class="ml-2">Input PO</h3>
-            <div class="card ml-2 mt-4">
+            @if (request()->is('admin*'))
+                <a href="{{route('admin.preOrder.index')}}" class="btn btn-success m-2">Kembali</a>
+            @elseif (request()->is('manager*'))
+                <a href="{{route('manager.preOrder.index')}}" class="btn btn-success m-2">Kembali</a>
+            @endif
+            <div class="card ml-2 mt-1">
                 @if (request()->is('admin*'))
                 <form action="{{route('admin.preOrder.store')}}" method="POST" enctype="multipart/form-data">
                     @elseif (request()->is('manager*'))
@@ -175,7 +180,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary mx-3 my-3">Submit</button>
+                        <button type="submit" class="btn btn-primary mx-3 my-2">Submit</button>
             </div>
             </form>
         </div>
@@ -183,8 +188,6 @@
 </div>
 </div>
 @endsection
-
-
 
 
 @push('scripts')
@@ -282,7 +285,6 @@
             reader.readAsDataURL(input.files[0]); // Membaca file gambar
         }
     });
-
 
     // mengambil nama pelanggan dan judul otomatis berdasarkan no invoice yang dipilih 
     $(document).ready(function() {

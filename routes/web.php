@@ -13,12 +13,12 @@ use App\Http\Controllers\Stok_barangController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-
 //LOGIN
 Route::get('/', [loginController::class, 'index'])->name('login');
 Route::post('/login-proses', [loginController::class, 'proses'])->name('login.proses');
 Route::get('/logout', [loginController::class, 'logout'])->name('logout');
 
+// ADMIN
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:admin'], 'as' => 'admin.'], function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -107,7 +107,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:admin'], 'as' 
     // Route::delete('/manage_user/{id}', [UserController::class, 'destroy'])->name('manage_user.destroy');
 });
 
-
+// PRODUKSI
 Route::group(['prefix' => 'produksi', 'middleware' => ['auth', 'role:produksi'], 'as' => 'produksi.'], function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -130,12 +130,11 @@ Route::group(['prefix' => 'produksi', 'middleware' => ['auth', 'role:produksi'],
     Route::delete('archive-pre-order/{id}', [ArsipPreOrderController::class, 'destroy'])->name('preOrderArchive.destroy');
 });
 
-
+// MANAGER
 Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'role:manager'], 'as' => 'manager.'], function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/{id}', [DashboardController::class, 'show']);
-
 
     // Pelanggan
     Route::get('/pelanggan', [PelangganControlller::class, 'index'])->name('pelanggan.index');
@@ -181,6 +180,7 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'role:manager'], '
     Route::post('/generate-invoice-number', [InvoiceController::class, 'generateInvoiceNumber']);
     Route::get('/get-alamat-pelanggan/{id}', [InvoiceController::class, 'getAlamatPelanggan']);
     Route::get('/get-harga-item/{id}', [InvoiceController::class, 'getHargaItem']);
+    Route::get('/get-jumlah-stok/{id}', [InvoiceController::class, 'getJumlahStok']);
     Route::get('/invoice/payment/{id}', [InvoiceController::class, 'payment'])->name('invoice.payment');
     Route::post('/invoice/{id}/payment', [InvoiceController::class, 'payment_store'])->name('invoice.payment.store');
     Route::get('/invoice/history-payment/{id}', [InvoiceController::class, 'history'])->name('invoice.history');
@@ -212,7 +212,6 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'role:manager'], '
     Route::delete('archive-pre-order/{id}', [ArsipPreOrderController::class, 'destroy'])->name('preOrderArchive.destroy');
 
     // MANAGE_USER
-
     Route::get('/manage-user', [UserController::class, 'index'])->name('manage_user.user');
     Route::get('/manage_user/create', [UserController::class, 'create'])->name('manage_user.create');
     Route::post('/manage_user/create', [UserController::class, 'store'])->name('manage_user.store');

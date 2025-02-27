@@ -25,6 +25,11 @@
                         </form>
                 </div>
             </div>
+            @if (request()->is('admin*'))
+                <a href="{{route('admin.pekerjaan.index')}}" class="btn btn-success m-2">Kembali</a>
+            @elseif (request()->is('manager*'))
+                <a href="{{route('manager.pekerjaan.index')}}" class="btn btn-success m-2">Kembali</a>
+            @endif
         </div>
     </div>
 </div>

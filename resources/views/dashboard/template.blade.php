@@ -54,6 +54,7 @@
 
     @include('dashboard.navbar')
     @include('dashboard.sidebar')
+  
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">

@@ -1,5 +1,5 @@
 @extends('dashboard.template')
-@section('title', 'Tambah data pelanggan')
+@section('title', 'Tambah data item baru')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -20,7 +20,7 @@
                                         <label for="SKU">SKU</label>
                                         <input type="text" name="SKU" id="SKU" class="form-control" placeholder="SKU">
                                         @error('SKU')
-                                        <div class="form-text text-danger">{{$message}}</div>
+                                            <div class="form-text text-danger">{{$message}}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
@@ -28,7 +28,7 @@
                                         <select class="form-control form-select" name="kategori" id="kategori">
                                             <option selected>--Pilih kategori--</option>
                                             @foreach ($kategoris as $kategori)
-                                            <option value={{$kategori->id}}>{{$kategori->kategori}}</option>
+                                                <option value={{$kategori->id}}>{{$kategori->kategori}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -68,10 +68,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary mx-4 my-4">Submit</button>
+                            <button type="submit" class="btn btn-primary mx-3 my-3">Submit</button>
                         </div>
                     </form>
             </div>
+            @if (request()->is('admin*'))
+                <a href="{{route('admin.stok_barang.barang')}}" class="btn btn-success m-2">Kembali</a>
+            @elseif (request()->is('manager*'))
+                <a href="{{route('manager.stok_barang.barang')}}" class="btn btn-success m-2">Kembali</a>
+            @endif
         </div>
     </div>
 </div>

@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <h3 class="ml-2">Tambah User</h3>
-            <div class="card ml-2 mt-4">
+            <div class="card ml-2 mt-3">
                 <div class="m-4">
                     <form action="{{route('manager.manage_user.store')}}" method="POST">
                         @csrf
@@ -40,6 +40,11 @@
                     </form>
                 </div>
             </div>
+            @if (request()->is('admin*'))
+                <a href="{{route('admin.manage_user.user')}}" class="btn btn-success m-2">Kembali</a>
+            @elseif (request()->is('manager*'))
+                <a href="{{route('manager.manage_user.user')}}" class="btn btn-success m-2">Kembali</a>
+            @endif
         </div>
     </div>
 </div>

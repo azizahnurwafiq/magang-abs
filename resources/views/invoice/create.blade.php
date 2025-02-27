@@ -53,6 +53,7 @@
                                         <div class="form-text text-danger">{{$message}}</div>
                                         @enderror
                                     </div>
+                                    
                                     <div id="dynamicForm">
                                         <div class="form-group d-flex">
                                             <div class="col-md-4">
@@ -76,8 +77,9 @@
                                                 <div class="mb-3">
                                                     <label for="jumlah" class="form-label">Jumlah</label>
                                                     <input type="number" id="jumlah" class="form-control" name="jumlah[]">
+                                                    <p id="errorStok" class="text-danger form-text"></p>
                                                     @error('jumlah')
-                                                    <div class="form-text text-danger">{{$message}}</div>
+                                                        <div class="form-text text-danger">{{$message}}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -102,6 +104,11 @@
                         </form>
                 </div>
             </div>
+            @if (request()->is('admin*'))
+                <a href="{{route('admin.invoice.index')}}" class="btn btn-success m-2">Kembali</a>
+            @elseif (request()->is('manager*'))
+                <a href="{{route('manager.invoice.index')}}" class="btn btn-success m-2">Kembali</a>
+            @endif
         </div>
     </div>
 </div>
@@ -118,7 +125,6 @@
 <script>
     // Menentukan Role User
     const userRole = "{{ request()->is('admin*') ? 'admin' : 'manager' }}";
-    console.log(userRole);
 
     $(document).ready(function() {
         $('#item').select2({
@@ -207,6 +213,7 @@
                     <div class="col-md-3">
                         <div class="mb-3">
                             <input type="number" id="jumlah" class="form-control" name="jumlah[]">
+                            <p id="errorStok" class="text-danger form-text"></p>
                         </div>
                     </div>
                     <button type="button" class="btn btn-danger btn-remove" style="height: 50%; margin-left: 5px;">-</button>
@@ -249,7 +256,39 @@
         $('#dynamicForm').on('input', '#jumlah', function() {
             updateTotal();
         });
+
+        // Mengecek jumlah stok 
+        $('#dynamicForm').on('change', '.item-select', function () {
+            let stokId = $(this).val();
+            let parentDiv = $(this).closest('.form-group');
+    
+            if (stokId) {
+                $.ajax({
+                    url: `/${userRole}/get-jumlah-stok/${stokId}`,
+                    type: 'GET',
+                    success: function (response) {
+                        parentDiv.find('#jumlah').data('stok', response.total_stok);
+                        console.log(response)
+                    },
+                    error: function () {
+                        alert('Gagal mengambil data stok!');
+                    }
+                });
+            }
+        });
+
+        $('#dynamicForm').on('input', '#jumlah', function () {
+            let jumlah = parseInt($(this).val());
+            let stokTersedia = $(this).data('stok');
+            let parentDiv = $(this).closest('.form-group');
+    
+            if (jumlah > stokTersedia) {
+                parentDiv.find('#errorStok').text('Jumlah stok tidak mencukupi !!');
+            } else {
+                parentDiv.find('#errorStok').text('');
+            }
+        });
+
     });
 </script>
-
 @endpush

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class PelangganControlller extends Controller
 {
@@ -50,15 +51,19 @@ class PelangganControlller extends Controller
         Pelanggan::create($validatedData);
 
         if (auth()->user()->role === 'manager') {
-            return redirect()->route('manager.pelanggan.index')->with('success', 'Data pelanggan berhasil ditambahkan');
+            return redirect()->route('manager.pelanggan.index')
+                ->with('success', 'Berhasil menambahkan data pelanggan');
         } else if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.pelanggan.index')->with('success', 'Data pelanggan berhasil ditambahkan');
+            return redirect()->route('admin.pelanggan.index')
+                ->with('success', 'Berhasil menambahkan data pelanggan');
         }
     }
 
     public function edit($id)
     {
-        $pelanggan = Pelanggan::find($id);
+        $decrypt = Crypt::decryptString($id);
+
+        $pelanggan = Pelanggan::find($decrypt);
         return view('pelanggan.edit', compact('pelanggan'));
     }
 
@@ -83,18 +88,19 @@ class PelangganControlller extends Controller
         Pelanggan::where('id', $request->id)->update($data);
 
         if (auth()->user()->role === 'manager') {
-            return redirect()->route('manager.pelanggan.index')->with('success', 'Data pelanggan berhasil diupdate');
+            return redirect()->route('manager.pelanggan.index')->with('success', 'Berhasil mengupdate data pelanggan');
         } else if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.pelanggan.index')->with('success', 'Data pelanggan berhasil diupdate');
+            return redirect()->route('admin.pelanggan.index')->with('success', 'Berhasil mengupdate data pelanggan');
         }
-
     }
 
     public function destroy($id)
     {
-        $hapus = Pelanggan::find($id);
+        $decrypt = Crypt::decryptString($id);
+
+        $hapus = Pelanggan::find($decrypt);
         $hapus->delete();
 
-        return response()->json(['status' => 'Data pelanggan berhasil dihapus!']);
+        return response()->json(['status' => 'Berhasil menghapus data pelanggan']);
     }
 }

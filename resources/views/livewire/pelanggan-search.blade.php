@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Facades\Crypt;
+@endphp
 <div>
     <div class="d-flex col-md-3 mx-2" style="justify-self:right; margin-top:-63px;">
         <div class="input-group">
@@ -22,7 +25,7 @@
             <tbody>
                 @forelse ($pelanggans as $index => $pelanggan)
                 <tr class="text-center">
-                    <input type="hidden" class="delete_id" value="{{$pelanggan->id}}">
+                    {{-- <input type="hidden" class="delete_id" value="{{ Crypt::encryptString($pelanggan->id) }}"> --}}
                     <td>{{$index + $pelanggans->firstItem()}}</td>
                     <td>{{$pelanggan->nama}}</td>
                     <td>{{$pelanggan->email}}</td>
@@ -37,23 +40,23 @@
 
                             @if (request()->is('admin*'))
                             <div class="dropdown-menu">
-                                <a href="{{route('admin.pelanggan.edit', $pelanggan->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
-
-                                <form action="{{route('admin.pelanggan.destroy', $pelanggan->id)}}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger dropdown-item  confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
-                                </form>
+                                <a href="{{route('admin.pelanggan.edit', ['id' => $pelanggan->encrypted_id])}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
+                                {{-- <form action="{{route('admin.pelanggan.destroy', ['id' => $pelanggan->encrypted_id])}}" method="POST"> --}}
+                                    {{-- @csrf
+                                    @method('DELETE') --}}
+                                    <button class="btn btn-danger dropdown-item confirm-delete" data-id="{{ Crypt::encryptString($pelanggan->id) }}" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
+                                {{-- </form> --}}
                             </div>
+
                             @elseif (request()->is('manager*'))
                             <div class="dropdown-menu">
-                                <a href="{{route('manager.pelanggan.edit', $pelanggan->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
-
-                                <form action="{{route('manager.pelanggan.destroy', $pelanggan->id)}}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger dropdown-item  confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
-                                </form>
+                                <a href="{{route('manager.pelanggan.edit', ['id' => $pelanggan->encrypted_id])}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a>
+                                {{-- <form action="{{route('manager.pelanggan.destroy', ['id' => $pelanggan->encrypted_id])}}" method="POST"> --}}
+                                    {{-- @csrf
+                                    @method('DELETE') --}}
+                                    {{-- <a href="{{route('manager.pelanggan.edit', ['id' => $pelanggan->encrypted_id])}}" class="btn btn-primary dropdown-item "><i class="fa fa-edit"></i> Edit</a> --}}
+                                    <button class="btn btn-danger dropdown-item confirm-delete" data-id="{{ Crypt::encryptString($pelanggan->id) }}" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
+                                {{-- </form> --}}
                             </div>
                             @endif
                         </div>
@@ -105,8 +108,9 @@
 
 @push('scripts')
 <script>
-    $(document).ready(function() {
+    const userRole = "{{ request()->is('admin*') ? 'admin' : 'manager' }}";
 
+    $(document).ready(function() {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -116,7 +120,8 @@
         $('.confirm-delete').click(function(e) {
             e.preventDefault();
 
-            var deletedid = $(this).closest("tr").find('.delete_id').val();
+            // var deletedid = $(this).closest("tr").find('.delete_id').val();
+            var deletedid = $(this).data('id');
 
             swal({
                     title: "Apakah anda yakin?",
@@ -127,23 +132,41 @@
                 })
                 .then((willDelete) => {
                     if (willDelete) {
-                        var data = {
-                            "_token": $('input[name=_token]').val(),
-                            'id': deletedid,
-                        };
+                        // var data = {
+                        //     "_token": $('input[name=_token]').val(),
+                        //     'id': deletedid,
+                        // };
+
+                        // url: `/${userRole}/get-alamat-pelanggan/${pelangganId}`,
                         $.ajax({
-                            type: "DELETE",
-                            url: 'pelanggan/' + deletedid,
-                            data: data,
+                            type: "POST",
+                            url: `/${userRole}/pelanggan/${deletedid}`,
+                            data: {
+                                _method: "DELETE",
+                                _token: $('input[name=_token]').val(),
+                            },
                             success: function(response) {
-                                swal(response.status, {
+                                swal({
+                                        title: "Berhasil",
                                         icon: "success",
+                                        text: response.status,
+                                        showConfirmButton: true,
+                                        timer: 2000
                                     })
-                                    .then((result) => {
+                                    .then(() => {
                                         location.reload();
                                     });
+                            },
+                            error: function(xhr) {
+                                swal({
+                                    title: "Gagal!",
+                                    text: xhr.responseJSON.message || "Terjadi kesalahan",
+                                    icon: "error"
+                                });
                             }
                         });
+                    } else {
+                        swal("Data pelanggan tidak jadi dihapus");
                     }
                 });
         })

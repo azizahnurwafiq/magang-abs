@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         // Data user admin
         User::create([
             'username' => 'ilham',
-            'password' => Hash::make('zxcvb321'),
+            'password' => Hash::make('ilham123'),
             'role' => 'admin',
         ]);
 
@@ -31,10 +31,10 @@ class UserSeeder extends Seeder
         // Data user produksi
         User::create([
             'username' => 'produksi',
-            'password' => Hash::make('qwerty123'),
+            'password' => Hash::make('produksi123'),
             'role' => 'produksi',
         ]);
-
+        
         User::create([
             'username' => 'rina',
             'password' => Hash::make('rina321'),
@@ -44,7 +44,7 @@ class UserSeeder extends Seeder
         // Data user produksi
         User::create([
             'username' => 'manager',
-            'password' => Hash::make('zxcvbn123'),
+            'password' => Hash::make('zxcvbn99812'),
             'role' => 'manager',
         ]);
 

@@ -4,7 +4,7 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-md-6">
+        <div>
             <h3 class="ml-2">Payment</h3>
             <div class="card ml-2 mt-4">
                 <div class="m-4">
@@ -43,6 +43,11 @@
                     </form>
                 </div>
             </div>
+            @if (request()->is('admin*'))
+                <a href="{{route('admin.invoice.index')}}" class="btn btn-success m-2">Kembali</a>
+            @elseif (request()->is('manager*'))
+                <a href="{{route('manager.invoice.index')}}" class="btn btn-success m-2">Kembali</a>
+            @endif
         </div>
     </div>
 </div>

@@ -31,7 +31,7 @@
             <div class="form-text text-danger">{{$message}}</div>
         @enderror
         <div class="input-group mb-3">
-          <input type="text" name="username" class="form-control" placeholder="Username">
+          <input type="text" name="username" class="form-control" value="{{ @old('username')}}" placeholder="Username">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -43,7 +43,7 @@
             <div class="form-text text-danger">{{$message}}</div>
         @enderror
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control"  placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -51,30 +51,17 @@
           </div>
         </div>
 
-        
         <div class="row">
-          {{-- <div class="col-8">
-            <div class="icheck-warning">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div> --}}
-          <!-- /.col -->
           <div class="col-12">
-            <!-- <button type="submit" class="btn btn-primary btn-block">Log In</button> -->
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary w-100">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="25" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+                </svg>              
+              Masuk
+            </button>
           </div>
-          <!-- /.col -->
         </div>
       </form>
-      <!-- <p class="mb-1"> -->
-        <!-- <a href="forgot-password.html">I forgot my password</a>
-      </p>
-      <p class="mb-0">
-        <a href="register.html" class="text-center">Register a new membership</a>
-      </p> -->
     </div>
     <!-- /.login-card-body -->
   </div>
@@ -92,13 +79,25 @@
 
 @if ($message = Session::get('success'))
     <script>
-      swal('{{$message}}');
+      swal({
+        title: 'Berhasil',
+        icon: 'success',
+        text: '{{$message}}',
+        showConfirmButton: true,
+        timer: 1500
+      });
     </script>
 @endif
 
 @if ($message = Session::get('failed'))
     <script>
-      swal('{{$message}}');
+      swal({
+        title: 'Gagal',
+        icon: 'error',
+        text: '{{$message}}',
+        showConfirmButton: true,
+        timer: 1500
+      });
     </script>
 @endif
 </body>

@@ -7,20 +7,24 @@ use App\Models\Stok;
 use App\Models\PreOrder;
 use App\Models\PreOrderDetail;
 use App\Models\Invoice;
+use App\Models\StokHistory;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        // $dashboard = Stok::whereHas('stokHistories', function ($query) {
+        //     $query->where('total_stok', '<', 10);
+        // })->paginate(10);
+        
         $dashboard = Stok::whereHas('stokHistories', function ($query) {
-            $query->where('total_stok', '<', 10);  // Filter total_stok < 10
+            $query->whereRaw('total_stok < 10')
+                    ->whereRaw('tanggal_masuk = (SELECT MAX(tanggal_masuk) FROM stok_histories AS sh WHERE sh.stok_id = stok_histories.stok_id)');
         })->paginate(10);
-
-
+        
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
-
 
         $sumOrders = PreOrder::whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)

@@ -44,6 +44,11 @@
                         </form>
                 </div>
             </div>
+            @if (request()->is('admin*'))
+                <a href="{{route('admin.invoice.index')}}" class="btn btn-success m-2">Kembali</a>
+            @elseif (request()->is('manager*'))
+                <a href="{{route('manager.invoice.index')}}" class="btn btn-success m-2">Kembali</a>
+            @endif
         </div>
     </div>
 </div>

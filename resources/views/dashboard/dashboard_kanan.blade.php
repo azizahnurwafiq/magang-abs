@@ -70,7 +70,7 @@
                 <div class="inner">
                     <h3><span>Rp.</span>{{ number_format($totaltahunTax ?? 0, 0, ',', '.') }}</h3>
                     <p>
-                        <span>Income Perusahaan A</span><br>
+                        <span>Income Tax</span><br>
                         <span>Pada Tahun : </span>
                         <span>{{ \Carbon\Carbon::now()->format('Y') }}</span>
                     </p>
@@ -85,7 +85,7 @@
                 <div class="inner">
                     <h3><span>Rp.</span>{{ number_format($totalbulanTax ?? 0, 0, ',', '.') }}</h3>
                     <p>
-                        <span>Income Perusahaan A</span><br>
+                        <span>Income Tax</span><br>
                         <span>Pada Bulan : </span>
                         <span>{{ \Carbon\Carbon::now()->format('F') }}</span>
                     </p>
@@ -98,7 +98,7 @@
                 <div class="inner">
                     <h3><span>Rp.</span>{{ number_format($totaltahunNon_tax ?? 0, 0, ',', '.') }}</h3>
                     <p>
-                        <span>Income Perusahaan B</span><br>
+                        <span>Income Non Tax</span><br>
                         <span>Pada Tahun : </span>
                         <span>{{ \Carbon\Carbon::now()->format('Y') }}</span>
                     </p>
@@ -111,7 +111,7 @@
                 <div class="inner">
                     <h3><span>Rp.</span>{{ number_format($totalbulanNon_tax ?? 0, 0, ',', '.') }}</h3>
                     <p>
-                        <span>Income Perusahaan B</span><br>
+                        <span>Income Non Tax</span><br>
                         <span>Pada Bulan : </span>
                         <span>{{ \Carbon\Carbon::now()->format('F') }}</span>
                     </p>
@@ -207,15 +207,14 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th style="width: 10px">NO</th>
+                                    <th style="width: 10px">No</th>
                                     <th>SKU</th>
                                     <th>Kategori</th>
                                     <th>Item</th>
                                     <th>Jumlah</th>
-
                                 </tr>
                             </thead>
                             <tbody>

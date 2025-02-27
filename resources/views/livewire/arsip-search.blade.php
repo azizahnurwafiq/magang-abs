@@ -42,43 +42,95 @@
                     <td class="d-flex">
                         @if (request()->is('admin*'))
                         <form action="{{route('admin.archive.restore', $arsip->id)}}" method="POST">
-                            @elseif (request()->is('manager*'))
+                        @elseif (request()->is('manager*'))
                             <form action="{{route('manager.archive.restore', $arsip->id)}}" method="POST">
                                 @endif
                                 @csrf
                                 <button class="btn btn-success mx-1"><i class="fa fa-undo"> </i> Pulihkan</button>
                             </form>
-                            <form action="" method="POST">
+                            <form action="{{route('manager.archive.destroy', $arsip->id)}}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger confirm-delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</button>
                             </form>
 
                             {{-- <div class="dropdown">
-                            <button class="btn btn-primary" data-toggle="dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
-                            </button>
-                                <div class="dropdown-menu">    
-                            <a href="{{route('invoice.payment', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-money-bill-wave"></i> Payment</a>
-                            <a href="{{route('invoice.history', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-history"></i> History</a>
-                            <a href="{{route('invoice.exportPdf', $invoice->id)}}" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
+                                <button class="btn btn-primary" data-toggle="dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i> <i class="fas fa-bars"></i>
+                                </button>
+                                    <div class="dropdown-menu">    
+                                        <a href="{{route('invoice.payment', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-money-bill-wave"></i> Payment</a>
+                                        <a href="{{route('invoice.history', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-history"></i> History</a>
+                                        <a href="{{route('invoice.exportPdf', $invoice->id)}}" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
 
-                            <form action="{{route('invoice.archive', $invoice->id)}}" method="POST">
-                                @csrf
-                                <button class="btn btn-success dropdown-item"><i class="fa fa-file"></i> Archive</button>
-                            </form>
+                                        <form action="{{route('invoice.archive', $invoice->id)}}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-success dropdown-item"><i class="fa fa-file"></i> Archive</button>
+                                        </form>
+                                    </div>
+                            </div> --}}
+                    </td>
+                        @empty
+                        <td colspan="9" class="text-center">Arsip Belum Ada !</td>
+                        @endforelse
+                </tr>
+            </tbody>
+        </table>
     </div>
-</div> --}}
-</td>
-@empty
-<td colspan="9" class="text-center">Arsip Belum Ada !</td>
-@endforelse
-</tr>
-</tbody>
-</table>
+    <!-- Pagination Link -->
+    <div class="d-flex justify-content-end mx-5">
+        {!! $arsips->appends(\Request::except('page'))->render() !!}
+    </div>
 </div>
-<!-- Pagination Link -->
-<div class="d-flex justify-content-end mx-5">
-    {!! $arsips->appends(\Request::except('page'))->render() !!}
-</div>
-</div>
+
+@push('scripts')
+<script>
+    $(document).ready(function () {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('.confirm-delete').click(function (e) {
+            e.preventDefault();
+
+            var deletedid = $(this).closest("tr").find('.delete_id').val();
+
+            swal({
+                    title: "Apakah anda yakin?",
+                    text: "Setelah dihapus, Anda tidak dapat memulihkan data ini lagi!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var data = {
+                            "_token": $('input[name=_token]').val(),
+                            'id': deletedid,
+                        };
+                        $.ajax({
+                            type: "DELETE",
+                            url: 'archive-invoice/' + deletedid,
+                            data: data,
+                            success: function (response) {
+                                swal(response.status, {
+                                    title: "Berhasil",
+                                    icon: "success",
+                                    text: "Arsip invoice berhasil dihapus."
+                                })
+                                .then((result) => {
+                                    location.reload();
+                                });
+                            }
+                        });
+                    } else {
+                        swal("Data arsip invoice tidak jadi dihapus");
+                    }
+                });
+        })
+    })
+</script>
+@endpush

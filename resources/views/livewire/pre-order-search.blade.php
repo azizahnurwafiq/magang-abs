@@ -17,8 +17,6 @@
     </div>
     @endif
 
-
-
     <div class="card-body">
         <table class="table table-bordered table-striped">
             <thead>
@@ -47,15 +45,15 @@
                     <td>
                         @if ($detail->status)
                         @php
-                        $statusClass = match ($detail->status) {
-                        'BUTUH DIKERJAKAN' => 'bg-warning',
-                        'HOLD' => 'bg-danger',
-                        'WIP' => 'bg-secondary',
-                        'DIAMBIL' => 'bg-primary',
-                        'DONE AND READY' => 'bg-success',
-                        'REVISI' => 'bg-info',
-                        'BATAL' => 'bg-dark',
-                        };
+                            $statusClass = match ($detail->status) {
+                                'BUTUH DIKERJAKAN' => 'bg-warning',
+                                'HOLD' => 'bg-danger',
+                                'WIP' => 'bg-secondary',
+                                'DIAMBIL' => 'bg-primary',
+                                'DONE AND READY' => 'bg-success',
+                                'REVISI' => 'bg-info',
+                                'BATAL' => 'bg-dark',
+                            };
                         @endphp
 
                         <span class="badge {{$statusClass}} status-label" data-id="{{$detail->id}}" data-status="{{$detail->status}}" onclick="toggleStatusDropdown($(this))">{{$detail->status}}</span>
@@ -75,12 +73,12 @@
                     </td>
                     <td>
                         @php
-                        // Ambil tanggal deadline sebagai objek Carbon
-                        $deadlineDate = \Carbon\Carbon::parse($detail->deadline);
-                        // Hitung jumlah hari tersisa dari hari ini (dengan nilai negatif jika sudah lewat)
-                        $daysLeft = $deadlineDate->diffInDays(\Carbon\Carbon::today());
-                        // Cek apakah deadline sudah lewat
-                        $isPast = $deadlineDate->isPast() && !$deadlineDate->isToday(); // Lewat tetapi bukan hari ini
+                            // Ambil tanggal deadline sebagai objek Carbon
+                            $deadlineDate = \Carbon\Carbon::parse($detail->deadline);
+                            // Hitung jumlah hari tersisa dari hari ini (dengan nilai negatif jika sudah lewat)
+                            $daysLeft = $deadlineDate->diffInDays(\Carbon\Carbon::today());
+                            // Cek apakah deadline sudah lewat
+                            $isPast = $deadlineDate->isPast() && !$deadlineDate->isToday();
                         @endphp
 
                         @if ($isPast)
@@ -104,7 +102,6 @@
                                     {{ $daysLeft }} Hari lagi
                                 </span>
                                 @endif
-
                     </td>
                     <td>
                         <div class="dropdown">
@@ -167,7 +164,6 @@
         {{ $details->links() }}
     </div>
 </div>
-
 
 
 @push('css')
@@ -282,12 +278,22 @@
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    alert('status berhasil diperbarui');
-                    console.log(response);
+                    swal({
+                        title: "Berhasil",
+                        text: "Berhasil memperbarui status",
+                        icon: "success",
+                        showConfirmButton: true,
+                        timer: 2000
+                    });
                 },
                 error: function(xhr) {
-                    alert('Gagal memperbarui status');
-                    console.log(xhr);
+                    swal({
+                        title: "Gagal!",
+                        text: "Gagal memperbarui status",
+                        icon: "error",
+                        showConfirmButton: true,
+                        timer: 2000
+                    })
                 }
             });
         };
@@ -321,14 +327,19 @@
                             url: '/admin/pre-order/' + deletedid,
                             data: data,
                             success: function(response) {
-                                swal(response.status, {
-                                        icon: "success",
-                                    })
-                                    .then((result) => {
-                                        location.reload();
-                                    });
+                                swal({
+                                    title: "Berhasil",
+                                    icon: "success",
+                                    text: response.status,
+                                    showConfirmButton: true,
+                                    timer: 2000
+                                }).then((result) => {
+                                    location.reload();
+                                });
                             }
                         });
+                    } else {
+                        swal("Data pre-order tidak jadi dihapus");
                     }
                 });
         })

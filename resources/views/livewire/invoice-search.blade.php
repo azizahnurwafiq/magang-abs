@@ -31,10 +31,10 @@
                     <td>@rupiah($invoice->kekurangan_bayar)</td>
                     <td>
                         @if($invoice->status === "BELUM LUNAS")
-                        <span class="badge bg-danger">Belum lunas</span>
+                            <span class="badge bg-danger">Belum lunas</span>
                         @endif
                         @if ($invoice->status === "LUNAS")
-                        <span class="badge bg-success">Lunas</span>
+                            <span class="badge bg-success">Lunas</span>
                         @endif
                     </td>
                     <td>
@@ -44,22 +44,21 @@
                             </button>
                             <div class="dropdown-menu">
                                 @if (request()->is('admin*'))
-                                <a href="{{route('admin.invoice.show', $invoice->id)}}" class="btn btn-secondary dropdown-item "><i class="fa fa-eye"></i> Detail</a>
-                                <a href="{{route('admin.invoice.payment', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-money-bill-wave"></i> Payment</a>
-                                <a href="{{route('admin.invoice.history', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-history"></i> History</a>
-                                <a href="{{route('admin.invoice.exportPdf', $invoice->id)}}" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
-                                <form action="{{route('admin.invoice.archive', $invoice->id)}}" method="POST">
-                                    @elseif (request()->is('manager*'))
+                                    <a href="{{route('admin.invoice.show', $invoice->id)}}" class="btn btn-secondary dropdown-item "><i class="fa fa-eye"></i> Detail</a>
+                                    <a href="{{route('admin.invoice.payment', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-money-bill-wave"></i> Payment</a>
+                                    <a href="{{route('admin.invoice.history', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-history"></i> History</a>
+                                    <a href="{{route('admin.invoice.exportPdf', $invoice->id)}}" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
+                                    <form action="{{route('admin.invoice.archive', $invoice->id)}}" method="POST">
+                                @elseif (request()->is('manager*'))
                                     <a href="{{route('manager.invoice.show', $invoice->id)}}" class="btn btn-secondary dropdown-item "><i class="fa fa-eye"></i> Detail</a>
                                     <a href="{{route('manager.invoice.payment', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-money-bill-wave"></i> Payment</a>
                                     <a href="{{route('manager.invoice.history', $invoice->id)}}" class="btn btn-primary dropdown-item "><i class="fa fa-history"></i> History</a>
                                     <a href="{{route('manager.invoice.exportPdf', $invoice->id)}}" class="btn btn-warning dropdown-item "><i class="fa fa-file-pdf"></i> Export PDF</a>
                                     <form action="{{route('manager.invoice.archive', $invoice->id)}}" method="POST">
-                                        @endif
-
-                                        @csrf
-                                        <button class="btn btn-success dropdown-item"><i class="fa fa-file"></i> Archive</button>
-                                    </form>
+                                @endif
+                                    @csrf
+                                    <button class="btn btn-success dropdown-item"><i class="fa fa-file"></i> Archive</button>
+                                </form>
                             </div>
                         </div>
                     </td>
